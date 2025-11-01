@@ -8,14 +8,14 @@ import { viewCountFormatter } from '@/lib/utils'
 
 export const WritingViews = ({ slug }) => {
   const viewData = useViewData(slug)
-  const { view_count } = viewData?.[0] ?? {}
+  const { count } = viewData?.[0] ?? {}
 
-  const formattedViewCount = viewCountFormatter.format(view_count)
+  const formattedViewCount = viewCountFormatter.format(count)
 
   return useMemo(
     () => (
       <LazyMotion features={domAnimation}>
-        {!view_count ? (
+        {!count ? (
           <m.span key={`${slug}-views-loading`} />
         ) : (
           <m.div

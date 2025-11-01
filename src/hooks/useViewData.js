@@ -9,7 +9,7 @@ export const useViewData = (slug) => {
   useEffect(() => {
     async function getViewData() {
       try {
-        const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, view_count')
+        const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, count')
         if (slug) supabaseQuery.eq('slug', slug)
         const { data: supabaseData } = await supabaseQuery
         if (supabaseData) setViewData(supabaseData)
