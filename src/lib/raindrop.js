@@ -3,14 +3,15 @@ import 'server-only'
 import { COLLECTION_IDS } from '@/lib/constants'
 
 const options = {
-  cache: 'force-cache',
+  cache: 'no-store',
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${process.env.NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN}`
   },
   next: {
-    revalidate: 60 * 60 * 24 * 2 // 2 days
+    // revalidate: 60 * 60 * 24 * 2 // 2 days
+    revalidate: 60 * 10
   },
   signal: AbortSignal.timeout(10000) // 10 second timeout to prevent hanging requests
 }
