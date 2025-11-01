@@ -57,14 +57,9 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold tracking-tight">{title}</span>
               <div className="flex items-center gap-2">
-                {(isWritingPath || isBookmarksPath) && (
+                {isWritingPath && (
                   <Button variant="outline" size="xs" asChild>
-                    <a
-                      href={isWritingPath ? '/writing.xml' : '/bookmarks.xml'}
-                      title="RSS feed"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={'/writing.xml'} title="RSS feed" target="_blank" rel="noopener noreferrer">
                       <RadioIcon size={16} className="mr-2" />
                       RSS feed
                     </a>

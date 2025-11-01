@@ -19,7 +19,7 @@ export default async function BookmarksLayout({ children }) {
   return (
     <>
       <div className="flex w-full">
-        <SideMenu title="Bookmarks" bookmarks={bookmarks} isInner>
+        <SideMenu title="Bookmarks" isInner>
           <Suspense fallback={<ScreenLoadingSpinner />}>
             <div className="flex flex-col gap-1 text-sm">
               {bookmarks?.map((bookmark) => {

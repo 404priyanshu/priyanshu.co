@@ -4,9 +4,13 @@ import { Suspense } from 'react'
 import { FloatingHeader } from '@/components/floating-header'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
-import { getPageSeo } from '@/lib/contentful'
 import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
+
+export const metadata = {
+  title: 'Bookmarks',
+  description: 'My curated collection of useful links and resources.'
+}
 
 async function fetchData() {
   const bookmarks = await getBookmarks()
@@ -14,12 +18,12 @@ async function fetchData() {
   return { bookmarks: sortedBookmarks }
 }
 
-export default async function Writing() {
+export default async function BookmarksPage() {
   const { bookmarks } = await fetchData()
 
   return (
     <ScrollArea className="lg:hidden">
-      <FloatingHeader title="Bookmarks" bookmarks={bookmarks} />
+      <FloatingHeader title="Bookmarks" />
       <Suspense fallback={<ScreenLoadingSpinner />}>
         {bookmarks?.map((bookmark) => {
           return (
@@ -36,27 +40,4 @@ export default async function Writing() {
       </Suspense>
     </ScrollArea>
   )
-}
-
-export async function generateMetadata() {
-  const seoData = await getPageSeo('bookmarks')
-  if (!seoData) return null
-
-  const {
-    seo: { title, description }
-  } = seoData
-  const siteUrl = '/bookmarks'
-
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      url: siteUrl
-    },
-    alternates: {
-      canonical: siteUrl
-    }
-  }
 }

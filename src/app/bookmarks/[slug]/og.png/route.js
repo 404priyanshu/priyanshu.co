@@ -32,7 +32,7 @@ export async function GET(_, props) {
     (
       <OpenGraphImage
         title={currentBookmark.title}
-        description={`A curated selection of various handpicked ${currentBookmark.title.toLowerCase()} bookmarks by Onur Şuyalçınkaya`}
+        description={`A curated selection of various handpicked ${currentBookmark.title.toLowerCase()} bookmarks by Priyanshu Singh`}
         icon={
           <svg
             xmlns="http://www.w3.org/2000/svg"

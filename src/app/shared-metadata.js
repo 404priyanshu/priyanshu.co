@@ -1,7 +1,7 @@
 export const sharedMetadata = {
-  title: 'Onur Şuyalçınkaya',
-  description: 'Software Engineer, DJ, writer, and minimalist, based in Amsterdam, The Netherlands',
-  url: 'https://onur.dev',
+  title: 'Priyanshu Singh',
+  description: 'Full Stack Developer, Open Source Enthusiast, based in India',
+  url: 'https://priyanshu.me',
   ogImage: {
     width: 1200,
     height: 630,

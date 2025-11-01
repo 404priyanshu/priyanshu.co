@@ -1,58 +1,86 @@
-import { getAllPageSlugs, getAllPosts } from '@/lib/contentful'
+import { getAllPosts } from '@/lib/markdown'
 import { getBookmarks } from '@/lib/raindrop'
 import { getSortedPosts } from '@/lib/utils'
 
 export default async function sitemap() {
-  const [allPosts, bookmarks, allPages] = await Promise.all([getAllPosts(), getBookmarks(), getAllPageSlugs()])
+  const siteURL = 'https://priyanshu.me' // Change to your domain
 
-  const sortedWritings = getSortedPosts(allPosts)
-  const writings = sortedWritings.map((post) => {
-    return {
-      url: `https://onur.dev/writing/${post.slug}`,
-      lastModified: post.sys.publishedAt,
-      changeFrequency: 'yearly',
-      priority: 0.5
-    }
-  })
+  try {
+    const [allPosts, bookmarks] = await Promise.all([getAllPosts(), getBookmarks()])
 
-  const mappedBookmarks = bookmarks.map((bookmark) => {
-    return {
-      url: `https://onur.dev/bookmarks/${bookmark.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1
-    }
-  })
+    // Writing/blog posts
+    const sortedWritings = getSortedPosts(allPosts)
+    const writings = sortedWritings.map((post) => {
+      return {
+        url: `${siteURL}/writing/${post.slug}`,
+        lastModified: new Date(post.date),
+        changeFrequency: 'monthly',
+        priority: 0.7
+      }
+    })
 
-  const pages = allPages.map((page) => {
-    let changeFrequency = 'yearly'
-    if (['writing', 'journey'].includes(page.slug)) changeFrequency = 'monthly'
-    if (['bookmarks'].includes(page.slug)) changeFrequency = 'daily'
+    // Bookmarks
+    const mappedBookmarks =
+      bookmarks?.map((bookmark) => {
+        return {
+          url: `${siteURL}/bookmarks/${bookmark.slug}`,
+          lastModified: new Date(),
+          changeFrequency: 'daily',
+          priority: 0.6
+        }
+      }) || []
 
-    let lastModified = page.sys.publishedAt
-    if (['writing', 'journey', 'bookmarks'].includes(page.slug)) lastModified = new Date()
+    // Static pages
+    const staticPages = [
+      {
+        url: siteURL,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 1
+      },
+      {
+        url: `${siteURL}/writing`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.9
+      },
+      {
+        url: `${siteURL}/journey`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.8
+      },
+      {
+        url: `${siteURL}/stack`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7
+      },
+      {
+        url: `${siteURL}/workspace`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7
+      },
+      {
+        url: `${siteURL}/bookmarks`,
+        lastModified: new Date(),
+        changeFrequency: 'daily',
+        priority: 0.8
+      }
+    ]
 
-    let priority = 0.5
-    if (['writing', 'journey'].includes(page.slug)) priority = 0.8
-    if (['bookmarks'].includes(page.slug)) priority = 1
-
-    return {
-      url: `https://onur.dev/${page.slug}`,
-      lastModified,
-      changeFrequency,
-      priority
-    }
-  })
-
-  return [
-    {
-      url: 'https://onur.dev',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 1
-    },
-    ...pages,
-    ...writings,
-    ...mappedBookmarks
-  ]
+    return [...staticPages, ...writings, ...mappedBookmarks]
+  } catch (error) {
+    console.error('Error generating sitemap:', error)
+    // Return at least the homepage if there's an error
+    return [
+      {
+        url: siteURL,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 1
+      }
+    ]
+  }
 }

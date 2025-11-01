@@ -4,7 +4,7 @@ export default function robots() {
       userAgent: '*',
       allow: '/'
     },
-    sitemap: 'https://onur.dev/sitemap.xml',
-    host: 'https://onur.dev'
+    sitemap: 'https://priyanshu.me/sitemap.xml',
+    host: 'https://priyanshu.me'
   }
 }

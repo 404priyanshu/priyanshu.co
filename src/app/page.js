@@ -7,7 +7,7 @@ import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
 import { Button } from '@/components/ui/button'
 import { WritingList } from '@/components/writing-list'
-import { getAllPosts } from '@/lib/contentful'
+import { getAllPosts } from '@/lib/markdown'
 import { getItemsByYear, getSortedPosts } from '@/lib/utils'
 
 async function fetchData() {
@@ -22,18 +22,14 @@ export default async function Home() {
 
   return (
     <ScrollArea useScrollAreaId>
-      <FloatingHeader scrollTitle="Onur Şuyalçınkaya" />
+      <FloatingHeader scrollTitle="Priyanshu Singh" />
       <div className="content-wrapper">
         <div className="content">
           <PageTitle title="Home" className="lg:hidden" />
           <p>
-            Hi 👋 I'm Onur (meaning "Honour" in English), a software engineer, dj, writer, and minimalist based in
-            Amsterdam, The Netherlands.
-          </p>
-          <p>
-            I develop things as a Senior Frontend Software Engineer. Previously, I worked as a Senior Frontend Software
-            Engineer at heycar, Frontend Software Engineer at Yemeksepeti, Fullstack Software Engineer at Sistas, Mobile
-            Developer at Tanbula, and Specialist at Apple.
+            Hi 👋 I'm Priyanshu, a software engineer. Dedicated to building responsive and user-friendly digital
+            interfaces. Connecting creative design with efficient technical implementation. and minimalist based in
+            India.
           </p>
           <Button asChild variant="link" className="inline px-0">
             <Link href="/writing">

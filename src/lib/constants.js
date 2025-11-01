@@ -14,8 +14,8 @@ import {
 export const PROFILES = {
   twitter: {
     title: 'X (Twitter)',
-    username: 'onurschu',
-    url: 'https://twitter.com/intent/user?screen_name=onurschu',
+    username: '404priyanshu',
+    url: 'https://x.com/404priyanshu',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -37,63 +37,31 @@ export const PROFILES = {
   },
   github: {
     title: 'GitHub',
-    url: 'https://github.com/suyalcinkaya',
+    url: 'https://github.com/404priyanshu',
     icon: <GithubIcon size={16} />
   },
   linkedin: {
     title: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/suyalcinkaya',
+    url: 'https://www.linkedin.com/in/404priyanshu',
     icon: <LinkedinIcon size={16} />
   },
   medium: {
     title: 'Medium',
-    url: 'https://suyalcinkaya.medium.com'
-  },
-  instagram: {
-    title: 'Instagram',
-    url: 'https://www.instagram.com/jgrmn',
-    icon: <InstagramIcon size={16} />
-  },
-  soundcloud: {
-    title: 'Soundcloud',
-    url: 'https://soundcloud.com/jagerman'
-  },
-  youtube: {
-    title: 'YouTube',
-    url: 'https://www.youtube.com/c/jagermanmusic',
-    icon: <YoutubeIcon size={16} />
+    url: 'https://404priyanshu.medium.com'
   },
   bluesky: {
     title: 'Bluesky',
-    url: 'https://staging.bsky.app/profile/onur.dev'
+    url: ''
   },
   readcv: {
     title: 'Read.cv',
-    url: 'https://read.cv/onur'
-  },
-  pinterest: {
-    title: 'Pinterest',
-    url: 'https://nl.pinterest.com/onurschu'
+    url: 'https://read.cv/'
   }
 }
 
 export const TWEETS_COLLECTION_ID = 15896982
 
-export const COLLECTION_IDS = [
-  18259129,
-  15968768,
-  23598938,
-  16949672,
-  15807896,
-  15807897,
-  15969648,
-  16338467,
-  TWEETS_COLLECTION_ID,
-  25589709,
-  17139082,
-  22029101,
-  39696243
-]
+export const COLLECTION_IDS = [47427580, 47605678, 48361748, 50080389, 51785230, 52320673]
 
 export const LINKS = [
   {

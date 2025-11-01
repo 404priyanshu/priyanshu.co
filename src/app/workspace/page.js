@@ -1,97 +1,40 @@
 import Image from 'next/image'
 
 import { FloatingHeader } from '@/components/floating-header'
-import { GradientBg4 } from '@/components/gradient-bg'
-import { Link } from '@/components/link'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { WORKSPACE_ITEMS } from '@/lib/constants'
-import { getPageSeo } from '@/lib/contentful'
-import { isExternalLink } from '@/lib/utils'
 
-export default async function Workspace() {
+export const metadata = {
+  title: 'Workspace',
+  description: 'My workspace setup and gear I use daily.'
+}
+
+export default function WorkspacePage() {
   return (
-    <ScrollArea>
-      <GradientBg4 />
-      <FloatingHeader title="Workspace" />
+    <ScrollArea useScrollAreaId>
+      <FloatingHeader scrollTitle="Workspace" />
       <div className="content-wrapper">
         <div className="content">
           <PageTitle title="Workspace" />
-          <figure>
-            <Image
-              src="/assets/workspace.avif"
-              alt="Workspace"
-              className="animate-reveal w-full object-cover"
-              width={766}
-              height={901}
-              loading="eager"
-              priority
-            />
-            <figcaption className="mt-2 text-center text-xs font-light break-all text-gray-500">Workspace</figcaption>
-          </figure>
-          <div className="mt-2 overflow-hidden rounded-lg border bg-white md:mt-8">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[300px] px-4">Product</TableHead>
-                  <TableHead className="min-w-[300px] px-4">Specs</TableHead>
-                  <TableHead className="min-w-[70px] px-4 text-right"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {WORKSPACE_ITEMS.map((item, itemIndex) => {
-                  const isExternal = isExternalLink(item.url)
+          <p className="mb-8">Here's my current workspace setup and the tools I use to build software.</p>
 
-                  return (
-                    <TableRow key={`workspace-item-${itemIndex}`}>
-                      <TableCell className="px-4 py-3 font-medium">{item.title}</TableCell>
-                      <TableCell className="px-4 py-3">{item.specs}</TableCell>
-                      <TableCell className="px-4 py-3 font-medium">
-                        <Link href={item.url}>{isExternal ? 'Buy' : 'Read'}</Link>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-              <TableCaption className="py-3">
-                For other cool stuff, check{' '}
-                <a
-                  href="https://some.wtf"
-                  className="link break-words after:content-['_↗']"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  some.wtf
-                </a>
-              </TableCaption>
-            </Table>
+          <div className="space-y-4">
+            {WORKSPACE_ITEMS.map((item) => (
+              <a
+                key={item.title}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-lg border p-4 transition-colors hover:bg-gray-50"
+              >
+                <h3 className="font-semibold">{item.title}</h3>
+                <p className="text-sm text-gray-600">{item.specs}</p>
+              </a>
+            ))}
           </div>
         </div>
       </div>
     </ScrollArea>
   )
-}
-
-export async function generateMetadata() {
-  const seoData = await getPageSeo('workspace')
-  if (!seoData) return null
-
-  const {
-    seo: { title, description }
-  } = seoData
-  const siteUrl = '/workspace'
-
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      url: siteUrl
-    },
-    alternates: {
-      canonical: siteUrl
-    }
-  }
 }
