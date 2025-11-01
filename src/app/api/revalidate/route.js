@@ -2,7 +2,7 @@ import { revalidatePath } from 'next/cache'
 
 import { CONTENT_TYPES } from '@/lib/constants'
 
-export const dynamic = 'auto' // https://www.reddit.com/r/nextjs/comments/14iu6td/revalidatepath_not_updating_generatestaticparams/
+export const dynamic = 'auto'
 
 const secret = `${process.env.NEXT_REVALIDATE_SECRET}`
 
@@ -56,6 +56,16 @@ export async function POST(request) {
       break
     case CONTENT_TYPES.LOGBOOK:
       revalidatePath('/journey')
+      break
+    // ADD THIS NEW CASE FOR BOOKMARKS
+    case 'BOOKMARK':
+    case 'bookmarks':
+      if (slug) {
+        // Revalidate specific bookmark collection
+        revalidatePath(`/bookmarks/${slug}`)
+      }
+      // Always revalidate the main bookmarks page
+      revalidatePath('/bookmarks')
       break
     default:
       return Response.json(
