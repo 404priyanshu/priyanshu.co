@@ -13,7 +13,7 @@ export const WritingListLayout = ({ list, isMobile }) => {
 
   const memoizedList = useMemo(() => {
     return list.map((post) => {
-      const viewCount = viewData?.find((item) => item.slug === post.slug)?.view_count
+      const viewCount = viewData?.find((item) => item.slug === post.slug)?.count
       const isActive = pathname === `/writing/${post.slug}`
 
       return <WritingLink key={post.slug} post={post} viewCount={viewCount} isMobile={isMobile} isActive={isActive} />
