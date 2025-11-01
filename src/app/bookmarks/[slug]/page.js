@@ -9,13 +9,24 @@ import { ScrollArea } from '@/components/scroll-area'
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
-export async function generateStaticParams() {
-  const bookmarks = await getBookmarks()
-  return bookmarks.map((bookmark) => ({ slug: bookmark.slug }))
-}
+// ADD THIS LINE - tells Next.js to render this page dynamically
+export const dynamic = 'force-dynamic'
+
+// REMOVE OR COMMENT OUT generateStaticParams
+// export async function generateStaticParams() {
+//   const bookmarks = await getBookmarks()
+//   return bookmarks.map((bookmark) => ({ slug: bookmark.slug }))
+// }
 
 async function fetchData(slug) {
   const bookmarks = await getBookmarks()
+
+  // Add null check
+  if (!bookmarks) {
+    console.error('Failed to fetch bookmarks')
+    notFound()
+  }
+
   const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
   if (!currentBookmark) notFound()
 
@@ -58,6 +69,15 @@ export async function generateMetadata(props) {
   const params = await props.params
   const { slug } = params
   const bookmarks = await getBookmarks()
+
+  // Add null check
+  if (!bookmarks) {
+    return {
+      title: 'Bookmarks',
+      description: 'Curated bookmarks collection'
+    }
+  }
+
   const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
   if (!currentBookmark) return null
 

@@ -3,17 +3,16 @@ import 'server-only'
 import { COLLECTION_IDS } from '@/lib/constants'
 
 const options = {
-  cache: 'no-store',
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${process.env.NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN}`
   },
   next: {
-    // revalidate: 60 * 60 * 24 * 2 // 2 days
-    revalidate: 60 * 10
+    revalidate: 60 * 10, // 10 minutes
+    tags: ['bookmarks']
   },
-  signal: AbortSignal.timeout(10000) // 10 second timeout to prevent hanging requests
+  signal: AbortSignal.timeout(10000)
 }
 
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
@@ -31,7 +30,13 @@ export const getBookmarkItems = async (id, pageIndex = 0) => {
           page: pageIndex,
           perpage: 50
         }),
-      options
+      {
+        ...options,
+        next: {
+          ...options.next,
+          tags: ['bookmarks', `bookmark-${id}`]
+        }
+      }
     )
 
     if (!response.ok) {
@@ -63,7 +68,13 @@ export const getBookmarks = async () => {
 
 export const getBookmark = async (id) => {
   try {
-    const response = await fetch(`${RAINDROP_API_URL}/collection/${id}`, options)
+    const response = await fetch(`${RAINDROP_API_URL}/collection/${id}`, {
+      ...options,
+      next: {
+        ...options.next,
+        tags: ['bookmarks', `bookmark-${id}`]
+      }
+    })
     return await response.json()
   } catch (error) {
     console.info(error)

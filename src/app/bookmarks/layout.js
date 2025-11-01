@@ -7,8 +7,17 @@ import { Toaster } from '@/components/ui/sonner'
 import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
+// ADD THIS LINE
+export const dynamic = 'force-dynamic'
+
 async function fetchData() {
   const bookmarks = await getBookmarks()
+
+  // Add null check
+  if (!bookmarks) {
+    return { bookmarks: [] }
+  }
+
   const sortedBookmarks = sortByProperty(bookmarks, 'title')
   return { bookmarks: sortedBookmarks }
 }
@@ -48,6 +57,5 @@ export default async function BookmarksLayout({ children }) {
 }
 
 export const viewport = {
-  //  To fix the zoom issue on mobile for the bookmark submit form
   maximumScale: 1
 }
