@@ -14,7 +14,7 @@ export const WritingList = ({ items }) => {
   const viewDataMap = useMemo(() => {
     const map = new Map()
     viewData?.forEach((item) => {
-      map.set(item.slug, item.view_count)
+      map.set(item.slug, item.count)
     })
     return map
   }, [viewData])
@@ -48,8 +48,8 @@ export const WritingList = ({ items }) => {
             const dateWithDayAndMonth = dateWithDayAndMonthFormatter.format(dateObj)
             const dateWithMonthAndYear = dateWithMonthAndYearFormatter.format(dateObj)
 
-            const view_count = viewDataMap.get(slug)
-            const formattedViewCount = view_count ? viewCountFormatter.format(view_count) : null
+            const count = viewDataMap.get(slug)
+            const formattedViewCount = count ? viewCountFormatter.format(count) : null
 
             return (
               <li key={slug} className="group/list-item grid grid-cols-6 p-0 group-hover/list-wrapper:text-gray-300">
