@@ -7,7 +7,6 @@ export async function POST(request) {
   return handleRequest(request)
 }
 
-// Add GET handler for debugging
 export async function GET(request) {
   return handleRequest(request)
 }
@@ -18,14 +17,19 @@ async function handleRequest(request) {
   console.log('NODE_ENV:', process.env.NODE_ENV)
   console.log('isDevelopment:', isDevelopment)
 
-  if (isDevelopment) {
-    console.log('❌ Blocked: Development mode')
-    return NextResponse.json({ error: 'Not available in development' }, { status: 400 })
-  }
+  // ADD DETAILED ENV CHECK
+  console.log('🔗 SUPABASE_URL:', process.env.SUPABASE_URL ? '✅ Set' : '❌ MISSING')
+  console.log('🔑 SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? '✅ Set' : '❌ MISSING')
+
+  // COMMENT OUT OR REMOVE THIS BLOCK FOR TESTING
+  // if (isDevelopment) {
+  //   console.log('❌ Blocked: Development mode')
+  //   return NextResponse.json({ error: 'Not available in development' }, { status: 400 })
+  // }
 
   const searchParams = request.nextUrl.searchParams
   const slug = searchParams.get('slug')
-  console.log('Slug received:', slug)
+  console.log('📝 Slug received:', slug)
 
   if (!slug) {
     console.log('❌ Error: Missing slug parameter')
@@ -37,15 +41,31 @@ async function handleRequest(request) {
     const { data, error } = await supabase.rpc('increment_view_count', { page_slug: slug })
 
     if (error) {
-      console.error('❌ Supabase error:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      console.error('❌ Supabase RPC error:', JSON.stringify(error, null, 2))
+      return NextResponse.json({ error: error.message, details: error }, { status: 500 })
     }
 
     console.log('✅ Success! View count incremented for slug:', slug)
+    console.log('✅ RPC returned:', data)
+
+    // Verify by reading back the count
+    const { data: verifyData, error: verifyError } = await supabase
+      .from('views')
+      .select('slug, count')
+      .eq('slug', slug)
+      .single()
+
+    if (verifyError) {
+      console.log('⚠️ Could not verify count:', verifyError.message)
+    } else {
+      console.log('✅ Current count for', slug, ':', verifyData.count)
+    }
+
     return NextResponse.json(
       {
         message: `View count incremented successfully for slug: ${slug}`,
-        data
+        data,
+        currentCount: verifyData
       },
       { status: 200 }
     )

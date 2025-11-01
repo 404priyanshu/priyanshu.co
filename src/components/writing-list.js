@@ -42,14 +42,17 @@ export const WritingList = ({ items }) => {
               title,
               slug,
               date,
-              sys: { firstPublishedAt }
+              sys = {} // Add default empty object to prevent errors
             } = item
+
+            const { firstPublishedAt } = sys
             const dateObj = new Date(date || firstPublishedAt)
             const dateWithDayAndMonth = dateWithDayAndMonthFormatter.format(dateObj)
             const dateWithMonthAndYear = dateWithMonthAndYearFormatter.format(dateObj)
 
-            const count = viewDataMap.get(slug)
-            const formattedViewCount = count ? viewCountFormatter.format(count) : null
+            // FIX: Rename 'count' to 'viewCount' to avoid conflicts
+            const viewCount = viewDataMap.get(slug)
+            const formattedViewCount = viewCount ? viewCountFormatter.format(viewCount) : null
 
             return (
               <li key={slug} className="group/list-item grid grid-cols-6 p-0 group-hover/list-wrapper:text-gray-300">
