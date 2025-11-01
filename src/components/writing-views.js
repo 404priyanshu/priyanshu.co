@@ -50,6 +50,6 @@ export const WritingViews = ({ slug }) => {
         )}
       </LazyMotion>
     ),
-    [slug, formattedViewCount, view_count]
+    [slug, formattedViewCount, count]
   )
 }
