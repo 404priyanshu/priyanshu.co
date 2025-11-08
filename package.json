@@ -17,9 +17,6 @@
     "outdated": "bun outdated",
     "revalidate": "./revalidate-bookmarks.sh production"
   },
-  "engines": {
-    "node": "20.x"
-  },
   "dependencies": {
     "@arcjet/ip": "^1.0.0-beta.2",
     "@hookform/resolvers": "^4.0.0",
