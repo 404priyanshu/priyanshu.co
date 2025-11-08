@@ -1,6 +1,7 @@
 # priyanshu.me
 
-My personal website and blog built with Next.js, featuring my writing, journey, tech stack, workspace setup, and curated bookmarks.
+My personal website and blog built with Next.js, featuring my writing, journey, tech stack, workspace setup, and curated
+bookmarks.
 
 ## ✨ Features
 
@@ -63,15 +64,17 @@ Blog posts are written in Markdown and stored in `content/writing/`:
 
 1. Create a new `.md` file in `content/writing/`
 2. Add frontmatter:
+
    ```markdown
    ---
-   title: "Your Post Title"
-   date: "2025-11-01"
-   description: "Brief description of your post"
+   title: 'Your Post Title'
+   date: '2025-11-01'
+   description: 'Brief description of your post'
    ---
 
    # Your content here...
    ```
+
 3. Save and the post will appear automatically!
 
 ## 🛠️ Tech Stack
@@ -109,6 +112,7 @@ Vercel will automatically deploy on every push to the main branch.
 ## 📄 License
 
 Feel free to fork this project and make it your own! If you use this code:
+
 - Give credit where it's due
 - Don't directly copy without modifications
 - Share your learnings with others

@@ -10,9 +10,10 @@ import { TWEETS_COLLECTION_ID } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 export const BookmarkList = ({ initialData, id }) => {
-  const [data, setData] = useState(initialData?.result ? initialData?.items : [])
+  const [data, setData] = useState(initialData?.items ?? [])
   const [pageIndex, setPageIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const loadMore = () => {
     if (!isReachingEnd && !isLoading) setPageIndex((prevPageIndex) => prevPageIndex + 1)
@@ -20,9 +21,24 @@ export const BookmarkList = ({ initialData, id }) => {
 
   const fetchInfiniteData = useCallback(async () => {
     setIsLoading(true)
-    const newData = await getBookmarkItemsByPageIndex(id, pageIndex)
-    if (newData.result) setData((prevData) => [...prevData, ...newData.items])
-    setIsLoading(false)
+    setError(null)
+    try {
+      const newData = await getBookmarkItemsByPageIndex(id, pageIndex)
+      if (!newData) {
+        throw new Error('No data returned from server')
+      }
+      if (newData.result && Array.isArray(newData.items)) {
+        setData((prevData) => [...prevData, ...newData.items])
+      } else {
+        console.error('Unexpected page shape:', newData)
+        throw new Error('Invalid data format received')
+      }
+    } catch (err) {
+      console.error('Failed to fetch bookmarks:', err)
+      setError(err.message || 'Failed to load bookmarks')
+    } finally {
+      setIsLoading(false)
+    }
   }, [id, pageIndex])
 
   useEffect(() => {
@@ -34,9 +50,9 @@ export const BookmarkList = ({ initialData, id }) => {
     const lastChunk = []
     data.forEach((element, index) => {
       if (index % 2 === 0) {
-        firstChunk.push(element)
+        firstChunk.push({ ...element, absoluteIndex: index })
       } else {
-        lastChunk.push(element)
+        lastChunk.push({ ...element, absoluteIndex: index })
       }
     })
     return [[...firstChunk], [...lastChunk]]
@@ -48,11 +64,8 @@ export const BookmarkList = ({ initialData, id }) => {
 
   const memoizedBookmarks = useMemo(() => {
     return data.map((bookmark, bookmarkIndex) => (
-      <div
-        key={`bookmark_${bookmarkIndex}`}
-        className={cn('grid gap-4', isTweetCollection ? 'h-fit' : 'place-content-start')}
-      >
-        <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmarkIndex} />
+      <div key={bookmark._id} className={cn('grid gap-4', isTweetCollection ? 'h-fit' : 'place-content-start')}>
+        <BookmarkCard bookmark={bookmark} order={bookmarkIndex} />
       </div>
     ))
   }, [data, isTweetCollection])
@@ -63,8 +76,8 @@ export const BookmarkList = ({ initialData, id }) => {
         key={`chunk_${chunkIndex}`}
         className={cn('grid gap-4', isTweetCollection ? 'h-fit' : 'place-content-start')}
       >
-        {chunk.map((bookmark, bookmarkIndex) => (
-          <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmarkIndex} />
+        {chunk.map((bookmark) => (
+          <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmark.absoluteIndex} />
         ))}
       </div>
     ))
@@ -74,6 +87,7 @@ export const BookmarkList = ({ initialData, id }) => {
     <div>
       <div className="flex flex-col gap-4 @lg:hidden">{memoizedBookmarks}</div>
       <div className="hidden @lg:grid @lg:grid-cols-2 @lg:gap-4">{memoizedChunks}</div>
+      {error && <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</div>}
       {data.length > 0 ? (
         <div className="mt-8 flex min-h-16 items-center justify-center text-sm lg:mt-12">
           {!isReachingEnd ? (
