@@ -1,7 +1,7 @@
 ---
-title: "My First Blog Post"
-date: "2025-01-15"
-description: "Welcome to my blog! This is my first post about web development and my journey."
+title: 'My First Blog Post'
+date: '2025-01-15'
+description: 'Welcome to my blog! This is my first post about web development and my journey.'
 ---
 
 # Hello World! 👋
@@ -25,10 +25,10 @@ Here's a simple JavaScript function:
 
 ```javascript
 function greet(name) {
-  return `Hello, ${name}!`;
+  return `Hello, ${name}!`
 }
 
-console.log(greet("Priyanshu"));
+console.log(greet('Priyanshu'))
 ```
 
 ## What's Next?
