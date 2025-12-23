@@ -36,6 +36,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -50,6 +51,10 @@
 
   html,
   body {
+    @apply bg-white;
+  }
+
+  [vaul-drawer-wrapper] {
     @apply bg-white;
   }
 
@@ -112,8 +117,8 @@
     @apply md:text-lg;
   }
 
-  h2 + h3 {
-    @apply mt-0!;
+  h2+h3 {
+    @apply !mt-0;
   }
 
   ol {
@@ -172,7 +177,7 @@
   }
 
   lite-youtube {
-    @apply max-w-full! overflow-hidden rounded-xl;
+    @apply !max-w-full overflow-hidden rounded-xl;
   }
 }
 
@@ -181,7 +186,7 @@
 }
 
 @utility content-wrapper {
-  @apply z-1 w-full px-6 pt-8 pb-8 lg:px-8 lg:pt-24 lg:pb-16;
+  @apply relative z-1 w-full px-6 pt-8 pb-8 lg:px-8 lg:pt-24 lg:pb-16;
 }
 
 @utility content {
@@ -223,13 +228,7 @@
   padding-right: env(safe-area-inset-right);
 }
 
-@utility bg-dots {
-  @apply bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px];
-}
 
-@utility bg-grid {
-  @apply bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px];
-}
 
 @keyframes reveal {
   0% {
@@ -237,10 +236,12 @@
     filter: brightness(1) blur(15px);
     scale: 1.0125;
   }
+
   10% {
     opacity: 1;
     filter: brightness(1.25) blur(10px);
   }
+
   100% {
     opacity: 1;
     filter: brightness(1) blur(0);

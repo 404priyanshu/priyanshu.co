@@ -9,14 +9,6 @@ import { ScrollArea } from '@/components/scroll-area'
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
-// ADD THIS LINE - tells Next.js to render this page dynamically
-export const dynamic = 'force-dynamic'
-
-// REMOVE OR COMMENT OUT generateStaticParams
-// export async function generateStaticParams() {
-//   const bookmarks = await getBookmarks()
-//   return bookmarks.map((bookmark) => ({ slug: bookmark.slug }))
-// }
 
 async function fetchData(slug) {
   const bookmarks = await getBookmarks()
@@ -46,7 +38,7 @@ export default async function CollectionPage(props) {
   const { bookmarks, currentBookmark, bookmarkItems } = await fetchData(slug)
 
   return (
-    <ScrollArea className="bg-grid" useScrollAreaId>
+    <ScrollArea useScrollAreaId>
       <FloatingHeader
         scrollTitle={currentBookmark.title}
         goBackLink="/bookmarks"

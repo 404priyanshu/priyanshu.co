@@ -12,8 +12,6 @@ export const metadata = {
   description: 'My curated collection of useful links and resources.'
 }
 
-// ADD THIS LINE
-export const dynamic = 'force-dynamic'
 
 async function fetchData() {
   const bookmarks = await getBookmarks()

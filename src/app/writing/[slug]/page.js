@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Markdown from 'markdown-to-jsx'
 import './post.css'
+import { Pre } from '@/components/mdx/pre'
 
 import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
@@ -60,7 +61,15 @@ export default async function WritingSlug({ params }) {
 
           {/* Add blog-post class to enable custom styles */}
           <article className="blog-post mx-auto max-w-none">
-            <Markdown>{post.content}</Markdown>
+            <Markdown
+              options={{
+                overrides: {
+                  pre: Pre
+                }
+              }}
+            >
+              {post.content}
+            </Markdown>
           </article>
         </div>
       </div>

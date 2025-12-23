@@ -7,8 +7,6 @@ import { Toaster } from '@/components/ui/sonner'
 import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
-// ADD THIS LINE
-export const dynamic = 'force-dynamic'
 
 async function fetchData() {
   const bookmarks = await getBookmarks()
@@ -44,7 +42,7 @@ export default async function BookmarksLayout({ children }) {
             </div>
           </Suspense>
         </SideMenu>
-        <div className="lg:bg-grid flex-1">{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
       <Toaster
         closeButton

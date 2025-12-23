@@ -26,7 +26,7 @@ const DrawerPortal = memo(DrawerPrimitive.Portal)
 const DrawerClose = memo(DrawerPrimitive.Close)
 
 const DrawerOverlay = memo(({ className, ...props }) => {
-  return <DrawerPrimitive.Overlay className={cn('fixed inset-0 z-50 bg-black/80', className)} {...props} />
+  return <DrawerPrimitive.Overlay className={cn('fixed inset-0 z-50 bg-black/40', className)} {...props} />
 })
 DrawerOverlay.displayName = 'DrawerOverlay'
 

@@ -6,16 +6,7 @@ import { COLLECTION_IDS } from '@/lib/constants'
 
 const DEFAULT_TIMEOUT = 30000 // 30s
 
-// Prefer server-only token, fallback to NEXT_PUBLIC for compatibility
 const token = process.env.RAINDROP_TOKEN || process.env.NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN
-
-// DEBUG: presence & length only (never log the token itself). Remove after verifying.
-try {
-  console.info('RAINDROP token present:', Boolean(token))
-  console.info('RAINDROP token length:', token ? token.length : 0)
-} catch (e) {
-  // ignore in restricted environments
-}
 
 const commonHeaders = {
   'Content-Type': 'application/json',
@@ -31,7 +22,7 @@ const baseFetchOptions = {
   }
 }
 
-async function safeFetch(url, opts = {}) {
+async function safeFetch(url, opts = {}, retries = 3, backoff = 1000) {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT)
 
@@ -40,6 +31,13 @@ async function safeFetch(url, opts = {}) {
     clearTimeout(timeout)
 
     if (!res.ok) {
+      // Handle rate limiting
+      if (res.status === 429 && retries > 0) {
+        console.warn(`Rate limited (429) for ${url}. Retrying in ${backoff}ms...`)
+        await new Promise((resolve) => setTimeout(resolve, backoff))
+        return safeFetch(url, opts, retries - 1, backoff * 2)
+      }
+
       let body = ''
       try {
         body = await res.text()
