@@ -9,7 +9,6 @@ import { ScrollArea } from '@/components/scroll-area'
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
-
 async function fetchData(slug) {
   const bookmarks = await getBookmarks()
 

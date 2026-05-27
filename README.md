@@ -42,6 +42,9 @@ bun dev
 
 The site will be available at `http://localhost:3000`
 
+This project is Bun-only. Commit `bun.lockb` whenever dependencies change and do not commit npm, Yarn, or pnpm
+lockfiles.
+
 ## 🔧 Environment Variables
 
 Create a `.env.local` file in the root directory:

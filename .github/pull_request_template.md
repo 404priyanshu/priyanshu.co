@@ -21,7 +21,7 @@ everyone.
 
 Did you remember to take care of the following?
 
-- [ ] `bun install` – for the new dependencies
-- [ ] Verify `bun.lockb` file when there is a package addition or update
+- [ ] `bun install` – for new dependencies
+- [ ] Verify `bun.lockb` when dependencies change and do not commit npm/Yarn/pnpm lockfiles
 - [ ] Perform a self-review
 - [ ] Provide comments, particularly in hard-to-understand areas

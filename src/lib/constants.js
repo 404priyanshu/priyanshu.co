@@ -2,13 +2,12 @@ import {
   ArmchairIcon,
   BookmarkIcon,
   GithubIcon,
-  InstagramIcon,
   LinkedinIcon,
   NavigationIcon,
   PencilLineIcon,
   SparklesIcon,
   Wand2Icon,
-  YoutubeIcon
+  BookOpenIcon
 } from 'lucide-react'
 
 export const PROFILES = {
@@ -93,6 +92,11 @@ export const LINKS = [
     href: '/bookmarks',
     label: 'Bookmarks',
     icon: <BookmarkIcon size={16} />
+  },
+  {
+    href: '/books',
+    label: 'Books',
+    icon: <BookOpenIcon size={16} />
   }
 ]
 

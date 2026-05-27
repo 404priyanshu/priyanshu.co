@@ -2,7 +2,11 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
+
+function isSafeRedirectPath(slug) {
+  return slug?.startsWith('/') && !slug.startsWith('//') && !slug.includes('\\')
+}
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams
@@ -15,5 +19,5 @@ export async function GET(request) {
   const slug = searchParams.get('slug')
   const draft = await draftMode()
   draft.enable()
-  redirect(slug ?? '/')
+  redirect(isSafeRedirectPath(slug) ? slug : '/')
 }

@@ -76,7 +76,7 @@ const Carousel = memo(({ orientation = 'horizontal', opts, setApi, plugins, clas
       return
     }
 
-    onSelect(api)
+    queueMicrotask(() => onSelect(api))
     api.on('reInit', onSelect)
     api.on('select', onSelect)
 

@@ -1,5 +1,7 @@
 .vscode
 .env
+.env*
+!.env.example
 
 # next.js
 /.next/
@@ -10,6 +12,9 @@
 /node_modules
 /.pnp
 .pnp.js
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
 
 # production
 /build

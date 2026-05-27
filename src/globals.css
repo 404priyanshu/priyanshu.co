@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-@plugin '@tailwindcss/container-queries';
 @plugin 'tailwindcss-animate';
 
 @theme static {
@@ -24,7 +23,7 @@
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
 
-  --animate-reveal: reveal 0.7s ease-in-out;
+  --animate-reveal: reveal 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /*
@@ -36,7 +35,6 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -117,7 +115,7 @@
     @apply md:text-lg;
   }
 
-  h2+h3 {
+  h2 + h3 {
     @apply !mt-0;
   }
 
@@ -228,8 +226,6 @@
   padding-right: env(safe-area-inset-right);
 }
 
-
-
 @keyframes reveal {
   0% {
     opacity: 0;
@@ -248,3 +244,74 @@
     scale: 1;
   }
 }
+
+@keyframes reveal-fast {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+    transform: scale(1.002);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.visited .animate-reveal {
+  animation: reveal-fast 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Cursor spotlight hover glow effects */
+@utility spotlight-card {
+  @apply relative overflow-hidden;
+}
+
+.spotlight-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: -1px;
+  z-index: 10;
+  opacity: 0;
+  border-radius: inherit;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(
+    400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(9, 9, 11, 0.05),
+    transparent 60%
+  );
+  border: 1px solid transparent;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+.spotlight-glow-bg {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  border-radius: inherit;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(
+    400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(9, 9, 11, 0.025),
+    transparent 70%
+  );
+}
+
+.spotlight-card:hover .spotlight-glow,
+.spotlight-card:hover .spotlight-glow-bg {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-glow,
+  .spotlight-glow-bg {
+    display: none !important;
+  }
+}
+
+

@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - edited
@@ -11,10 +11,12 @@ jobs:
   eslint:
     name: Lint Code
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - name: Install modules
-        run: bun install
+        run: bun install --frozen-lockfile
       - name: Run ESLint
         run: bun lint

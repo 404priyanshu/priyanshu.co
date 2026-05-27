@@ -4,7 +4,7 @@ date: '2025-01-15'
 description: 'Welcome to my blog! This is my first post about web development and my journey.'
 ---
 
-# Hello World! 👋
+# Hello World!
 
 This is my **first blog post** written in markdown. I'm excited to share my thoughts and experiences here.
 
@@ -37,4 +37,4 @@ Stay tuned for more posts about my development journey!
 
 ---
 
-Thanks for reading! 🚀
+Thanks for reading!

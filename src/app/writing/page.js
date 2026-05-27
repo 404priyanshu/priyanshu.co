@@ -27,10 +27,12 @@ export default async function Writing() {
           <Link
             key={post.slug}
             href={`/writing/${post.slug}`}
-            className="flex flex-col gap-1 border-b px-4 py-3 text-sm hover:bg-gray-100"
+            className="flex flex-col gap-2 border-b border-zinc-200 px-5 py-4 text-sm transition-colors hover:bg-zinc-50"
           >
-            <span className="font-medium">{post.title}</span>
-            <span className="text-slate-500">
+            <span className="font-sans text-[0.95rem] leading-snug font-medium tracking-tight text-zinc-950">
+              {post.title}
+            </span>
+            <span className="font-mono text-[0.68rem] tracking-[0.08em] text-zinc-500 uppercase">
               {new Date(post.date).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',

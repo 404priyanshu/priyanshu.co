@@ -6,7 +6,7 @@ import { COLLECTION_IDS } from '@/lib/constants'
 
 const DEFAULT_TIMEOUT = 30000 // 30s
 
-const token = process.env.RAINDROP_TOKEN || process.env.NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN
+const token = process.env.RAINDROP_TOKEN
 
 const commonHeaders = {
   'Content-Type': 'application/json',
@@ -33,7 +33,6 @@ async function safeFetch(url, opts = {}, retries = 3, backoff = 1000) {
     if (!res.ok) {
       // Handle rate limiting
       if (res.status === 429 && retries > 0) {
-        console.warn(`Rate limited (429) for ${url}. Retrying in ${backoff}ms...`)
         await new Promise((resolve) => setTimeout(resolve, backoff))
         return safeFetch(url, opts, retries - 1, backoff * 2)
       }
@@ -41,7 +40,7 @@ async function safeFetch(url, opts = {}, retries = 3, backoff = 1000) {
       let body = ''
       try {
         body = await res.text()
-      } catch (e) {
+      } catch {
         body = '<unable to read body>'
       }
       throw new Error(`HTTP ${res.status}: ${body}`)
@@ -62,6 +61,7 @@ export const getBookmarkItems = async (id, pageIndex = 0) => {
   if (typeof pageIndex !== 'number' || pageIndex < 0) {
     throw new Error('Invalid page index')
   }
+  if (!token) return { items: [] }
 
   try {
     const url =
@@ -88,6 +88,8 @@ export const getBookmarkItems = async (id, pageIndex = 0) => {
 }
 
 export const getBookmarks = async () => {
+  if (!token) return []
+
   try {
     const response = await safeFetch(`${RAINDROP_API_URL}/collections`, baseFetchOptions)
     const bookmarks = await response.json()
@@ -100,6 +102,8 @@ export const getBookmarks = async () => {
 }
 
 export const getBookmark = async (id) => {
+  if (!token) return null
+
   try {
     const response = await safeFetch(`${RAINDROP_API_URL}/collection/${id}`, {
       ...baseFetchOptions,

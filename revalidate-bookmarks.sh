@@ -44,7 +44,6 @@ fi
 
 # Make the request with verbose output
 echo "📤 Sending request to: $API_URL"
-echo "🔑 Using secret: ${NEXT_REVALIDATE_SECRET:0:10}..."
 echo ""
 
 RESPONSE=$(curl -L -v -s -w "\n%{http_code}" -X POST "$API_URL" \

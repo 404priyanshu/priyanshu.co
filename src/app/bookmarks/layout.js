@@ -7,7 +7,6 @@ import { Toaster } from '@/components/ui/sonner'
 import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
-
 async function fetchData() {
   const bookmarks = await getBookmarks()
 

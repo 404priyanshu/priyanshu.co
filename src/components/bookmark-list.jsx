@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowDownIcon } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { getBookmarkItemsByPageIndex } from '@/app/actions'
 import { BookmarkCard } from '@/components/bookmark-card'
@@ -15,35 +15,38 @@ export const BookmarkList = ({ initialData, id }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
+  const fetchInfiniteData = useCallback(
+    async (nextPageIndex) => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const newData = await getBookmarkItemsByPageIndex(id, nextPageIndex)
+        if (!newData) {
+          throw new Error('No data returned from server')
+        }
+        if (newData.result && Array.isArray(newData.items)) {
+          setData((prevData) => [...prevData, ...newData.items])
+        } else {
+          console.error('Unexpected page shape:', newData)
+          throw new Error('Invalid data format received')
+        }
+      } catch (err) {
+        console.error('Failed to fetch bookmarks:', err)
+        setError(err.message || 'Failed to load bookmarks')
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [id]
+  )
+
   const loadMore = () => {
-    if (!isReachingEnd && !isLoading) setPageIndex((prevPageIndex) => prevPageIndex + 1)
+    if (isReachingEnd || isLoading) return
+
+    const nextPageIndex = pageIndex + 1
+    setPageIndex(nextPageIndex)
+    fetchInfiniteData(nextPageIndex)
   }
-
-  const fetchInfiniteData = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const newData = await getBookmarkItemsByPageIndex(id, pageIndex)
-      if (!newData) {
-        throw new Error('No data returned from server')
-      }
-      if (newData.result && Array.isArray(newData.items)) {
-        setData((prevData) => [...prevData, ...newData.items])
-      } else {
-        console.error('Unexpected page shape:', newData)
-        throw new Error('Invalid data format received')
-      }
-    } catch (err) {
-      console.error('Failed to fetch bookmarks:', err)
-      setError(err.message || 'Failed to load bookmarks')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [id, pageIndex])
-
-  useEffect(() => {
-    if (pageIndex > 0) fetchInfiniteData()
-  }, [pageIndex, fetchInfiniteData])
 
   const getChunks = useCallback(() => {
     const firstChunk = []

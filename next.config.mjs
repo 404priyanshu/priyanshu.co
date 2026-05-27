@@ -1,5 +1,3 @@
-import { next } from '@million/lint'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   logging: {
@@ -11,6 +9,35 @@ const nextConfig = {
   images: {
     deviceSizes: [390, 435, 768, 1024, 1280],
     formats: ['image/avif']
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), payment=()'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          }
+        ]
+      }
+    ]
   },
   async redirects() {
     return [
@@ -106,4 +133,4 @@ const nextConfig = {
   transpilePackages: ['geist']
 }
 
-export default next({ rsc: true })(nextConfig)
+export default nextConfig

@@ -5,9 +5,22 @@ import { CONTENT_TYPES } from '@/lib/constants'
 export const dynamic = 'auto'
 
 const secret = `${process.env.NEXT_REVALIDATE_SECRET}`
+const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]{0,120}$/i
 
 export async function POST(request) {
-  const payload = await request.json()
+  let payload
+  try {
+    payload = await request.json()
+  } catch {
+    return Response.json(
+      {
+        revalidated: false,
+        now: Date.now(),
+        message: 'Invalid JSON payload'
+      },
+      { status: 400 }
+    )
+  }
 
   const requestHeaders = new Headers(request.headers)
   const revalidateSecret = requestHeaders.get('x-revalidate-secret')
@@ -23,6 +36,16 @@ export async function POST(request) {
   }
 
   const { contentTypeId, slug } = payload
+  if (slug && !SLUG_PATTERN.test(slug)) {
+    return Response.json(
+      {
+        revalidated: false,
+        now: Date.now(),
+        message: 'Invalid slug'
+      },
+      { status: 400 }
+    )
+  }
 
   switch (contentTypeId) {
     case CONTENT_TYPES.PAGE:

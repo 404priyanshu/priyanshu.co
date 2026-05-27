@@ -11,16 +11,10 @@ export const WritingListLayout = ({ list, isMobile }) => {
   const viewData = useViewData()
   const pathname = usePathname()
 
-  // Add this debug log
-  console.log('🔍 WritingListLayout - viewData:', viewData)
-  console.log('🔍 WritingListLayout - list:', list)
-
   const memoizedList = useMemo(() => {
     return list.map((post) => {
       const viewCount = viewData?.find((item) => item.slug === post.slug)?.count
       const isActive = pathname === `/writing/${post.slug}`
-
-      console.log(`📝 Post: ${post.slug}, viewCount: ${viewCount}`)
 
       return <WritingLink key={post.slug} post={post} viewCount={viewCount} isMobile={isMobile} isActive={isActive} />
     })

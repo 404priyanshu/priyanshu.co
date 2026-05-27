@@ -12,7 +12,6 @@ export const metadata = {
   description: 'My curated collection of useful links and resources.'
 }
 
-
 async function fetchData() {
   const bookmarks = await getBookmarks()
 

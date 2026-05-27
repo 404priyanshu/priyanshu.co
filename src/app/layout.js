@@ -1,13 +1,14 @@
 import '@/globals.css'
 
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
+// eslint-disable-next-line import/named
+import { GeistMono, GeistSans } from 'geist/font'
 import { EyeIcon } from 'lucide-react'
 import { draftMode } from 'next/headers'
 import Script from 'next/script'
 
 import { sharedMetadata } from '@/app/shared-metadata'
+import { CommandPalette } from '@/components/command-palette'
 import { MenuContent } from '@/components/menu-content'
 import { SideMenu } from '@/components/side-menu'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -22,10 +23,25 @@ export default async function RootLayout({ children }) {
     <html
       lang="en"
       data-theme="light"
+      data-scroll-behavior="smooth"
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
+        {/* Inline visited tracker to optimize navigation transitions */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (sessionStorage.getItem('pv_visited')) {
+                  document.documentElement.classList.add('visited');
+                } else {
+                  sessionStorage.setItem('pv_visited', 'true');
+                }
+              } catch (e) {}
+            `
+          }}
+        />
         {/* eslint-disable-next-line react/no-unknown-property */}
         <main vaul-drawer-wrapper="" className="min-h-screen">
           {isEnabled && (
@@ -43,6 +59,7 @@ export default async function RootLayout({ children }) {
             <div className="flex flex-1">{children}</div>
           </div>
         </main>
+        <CommandPalette />
         <TailwindIndicator />
         <SpeedInsights />
         <Script

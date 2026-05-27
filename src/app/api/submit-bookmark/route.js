@@ -11,7 +11,13 @@ const limiter = rateLimit({
 })
 
 export async function POST(req) {
-  const json = await req.json()
+  let json
+  try {
+    json = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON payload.' }, { status: 400 })
+  }
+
   const data = await formSchema.safeParse(json)
   if (!data.success) {
     const { error } = data
@@ -58,6 +64,12 @@ export async function POST(req) {
     )
 
     const res = await response.json()
+
+    if (!response.ok) {
+      console.error('Airtable bookmark submission failed:', response.status)
+      return NextResponse.json({ error: 'Error submitting bookmark.' }, { status: 502 })
+    }
+
     return NextResponse.json({ res })
   } catch (error) {
     console.info(error)

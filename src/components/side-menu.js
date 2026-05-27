@@ -26,7 +26,8 @@ const keyCodePathnameMapping = {
   Digit3: '/journey',
   Digit4: '/stack',
   Digit5: '/workspace',
-  Digit6: '/bookmarks'
+  Digit6: '/bookmarks',
+  Digit7: '/books'
 }
 
 export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
@@ -43,6 +44,9 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
   const isWritingPath = pathname.startsWith('/writing')
   const isBookmarksPath = pathname.startsWith('/bookmarks')
   const currentBookmark = bookmarks.find((bookmark) => `/bookmarks/${bookmark.slug}` === pathname)
+
+  const isBlogPost = pathname.startsWith('/writing/') && pathname !== '/writing'
+  const shouldHide = !isInner && isBlogPost
 
   const memoizedScrollArea = useMemo(
     () => (
@@ -75,6 +79,8 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
     ),
     [isInner, title, isWritingPath, isBookmarksPath, bookmarks, currentBookmark, children]
   )
+
+  if (shouldHide) return null
 
   return memoizedScrollArea
 }
