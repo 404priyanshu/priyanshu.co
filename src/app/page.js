@@ -6,7 +6,6 @@ import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
-import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { WritingList } from '@/components/writing-list'
 import { getAllPosts } from '@/lib/markdown'
 import { getItemsByYear, getSortedPosts } from '@/lib/utils'
@@ -50,7 +49,7 @@ export default async function Home() {
               Expertise & Foundations
             </span>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <SpotlightCard className="border-zinc-150 space-y-2 rounded-xl border bg-white p-4 transition-colors hover:border-zinc-300">
+              <div className="border-zinc-150 space-y-2 rounded-xl border bg-white p-4 transition-colors duration-200 hover:border-zinc-300 hover:bg-zinc-50/50">
                 <div className="flex items-center gap-2 text-zinc-800">
                   <Code size={15} className="text-zinc-500" />
                   <h3 className="text-sm font-semibold tracking-tight">Backend & AWS Cloud</h3>
@@ -59,9 +58,9 @@ export default async function Home() {
                   Designing scalable server architectures, constructing robust APIs, and deploying secure, resilient
                   cloud networks using AWS.
                 </p>
-              </SpotlightCard>
+              </div>
 
-              <SpotlightCard className="border-zinc-150 space-y-2 rounded-xl border bg-white p-4 transition-colors hover:border-zinc-300">
+              <div className="border-zinc-150 space-y-2 rounded-xl border bg-white p-4 transition-colors duration-200 hover:border-zinc-300 hover:bg-zinc-50/50">
                 <div className="flex items-center gap-2 text-zinc-800">
                   <Cpu size={15} className="text-zinc-500" />
                   <h3 className="text-sm font-semibold tracking-tight">Algorithms & Logic</h3>
@@ -70,7 +69,7 @@ export default async function Home() {
                   Deep-diving into computational problem-solving, data structures, and optimizing algorithmic
                   performance using Python.
                 </p>
-              </SpotlightCard>
+              </div>
             </div>
           </div>
 
