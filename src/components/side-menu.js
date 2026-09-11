@@ -45,9 +45,6 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
   const isBookmarksPath = pathname.startsWith('/bookmarks')
   const currentBookmark = bookmarks.find((bookmark) => `/bookmarks/${bookmark.slug}` === pathname)
 
-  const isBlogPost = pathname.startsWith('/writing/') && pathname !== '/writing'
-  const shouldHide = !isInner && isBlogPost
-
   const memoizedScrollArea = useMemo(
     () => (
       <ScrollArea
@@ -79,8 +76,6 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
     ),
     [isInner, title, isWritingPath, isBookmarksPath, bookmarks, currentBookmark, children]
   )
-
-  if (shouldHide) return null
 
   return memoizedScrollArea
 }

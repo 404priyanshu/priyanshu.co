@@ -40,9 +40,11 @@ export async function generateMetadata({ params }) {
 // Custom H2 component to add click-to-copy anchor links
 const CustomH2 = ({ children, ...props }) => {
   const text = Array.isArray(children)
-    ? children.map(c => typeof c === 'string' ? c : c?.props?.children || '').join('')
-    : (typeof children === 'string' ? children : '')
-  
+    ? children.map((c) => (typeof c === 'string' ? c : c?.props?.children || '')).join('')
+    : typeof children === 'string'
+      ? children
+      : ''
+
   const id = text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -52,7 +54,7 @@ const CustomH2 = ({ children, ...props }) => {
     <h2 id={id} {...props}>
       <a href={`#${id}`} className="group/heading inline-flex items-center gap-1.5 no-underline hover:no-underline">
         <span>{children}</span>
-        <span className="heading-anchor select-none text-zinc-400 opacity-0 group-hover/heading:opacity-100 transition-opacity font-normal text-sm">
+        <span className="heading-anchor text-sm font-normal text-zinc-400 opacity-0 transition-opacity select-none group-hover/heading:opacity-100">
           #
         </span>
       </a>
@@ -63,9 +65,11 @@ const CustomH2 = ({ children, ...props }) => {
 // Custom H3 component to add click-to-copy anchor links
 const CustomH3 = ({ children, ...props }) => {
   const text = Array.isArray(children)
-    ? children.map(c => typeof c === 'string' ? c : c?.props?.children || '').join('')
-    : (typeof children === 'string' ? children : '')
-  
+    ? children.map((c) => (typeof c === 'string' ? c : c?.props?.children || '')).join('')
+    : typeof children === 'string'
+      ? children
+      : ''
+
   const id = text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -75,7 +79,7 @@ const CustomH3 = ({ children, ...props }) => {
     <h3 id={id} {...props}>
       <a href={`#${id}`} className="group/heading inline-flex items-center gap-1.5 no-underline hover:no-underline">
         <span>{children}</span>
-        <span className="heading-anchor select-none text-zinc-400 opacity-0 group-hover/heading:opacity-100 transition-opacity font-normal text-sm">
+        <span className="heading-anchor text-sm font-normal text-zinc-400 opacity-0 transition-opacity select-none group-hover/heading:opacity-100">
           #
         </span>
       </a>
@@ -117,38 +121,27 @@ export default async function WritingSlug({ params }) {
   }
 
   return (
-    <ScrollArea className="bg-white text-zinc-950 animate-reveal" useScrollAreaId>
+    <ScrollArea className="animate-reveal bg-white text-zinc-950" useScrollAreaId>
       <ScrollProgress />
-      <FloatingHeader scrollTitle={post.title} goBackLink="/writing" />
-      <div className="content-wrapper lg:pt-20">
+      <FloatingHeader scrollTitle={post.title} goBackLink="/writing" backLabel="Writing" />
+      <nav
+        aria-label="Article navigation"
+        className="sticky top-0 z-10 hidden min-h-16 shrink-0 items-center gap-6 border-b border-zinc-200 bg-white px-8 lg:flex"
+      >
+        <Link
+          href="/writing"
+          className="inline-flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <ArrowLeft size={16} aria-hidden="true" /> Back to writing
+        </Link>
+        <span className="truncate text-xs text-zinc-400">{post.title}</span>
+      </nav>
+      <div className="content-wrapper lg:pt-12">
         {/* Double-column grid for reading layout & side content */}
-        <div className="mx-auto flex max-w-[70rem] gap-12 items-start justify-center">
-          
+        <div className="mx-auto flex max-w-[70rem] items-start justify-center gap-12">
           {/* Left Main Article Content */}
-          <div className="w-full max-w-[46rem] shrink-0">
+          <div className="w-full max-w-[46rem] min-w-0 flex-1">
             <header className="mb-8 border-b border-zinc-100 pb-6">
-              {/* Quick minimalist desktop breadcrumbs and website page links */}
-              <div className="mb-8 hidden lg:flex items-center justify-between select-none">
-                <Link 
-                  href="/writing" 
-                  className="group inline-flex items-center gap-1.5 text-xs font-mono font-semibold tracking-widest text-zinc-400 hover:text-zinc-950 uppercase transition-colors"
-                >
-                  <ArrowLeft size={12} className="group-hover:-translate-x-0.5 transition-transform" />
-                  Writing
-                </Link>
-                <nav className="flex items-center gap-4 text-xs font-medium text-zinc-400">
-                  <Link href="/" className="hover:text-zinc-950 transition-colors">Home</Link>
-                  <span className="text-zinc-200">/</span>
-                  <Link href="/journey" className="hover:text-zinc-950 transition-colors">Journey</Link>
-                  <span className="text-zinc-200">/</span>
-                  <Link href="/stack" className="hover:text-zinc-950 transition-colors">Stack</Link>
-                  <span className="text-zinc-200">/</span>
-                  <Link href="/workspace" className="hover:text-zinc-950 transition-colors">Workspace</Link>
-                  <span className="text-zinc-200">/</span>
-                  <Link href="/bookmarks" className="hover:text-zinc-950 transition-colors">Bookmarks</Link>
-                </nav>
-              </div>
-
               <div className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.7rem] leading-5 tracking-[0.14em] text-zinc-400 uppercase">
                 <time dateTime={post.date}>{dateString}</time>
                 <span aria-hidden="true" className="text-zinc-200">
@@ -163,7 +156,7 @@ export default async function WritingSlug({ params }) {
                 {post.title}
               </h1>
               {post.description && (
-                <p className="mt-6 text-base md:text-lg leading-relaxed text-zinc-500 font-normal">
+                <p className="mt-6 text-base leading-relaxed font-normal text-zinc-500 md:text-lg">
                   {post.description}
                 </p>
               )}
@@ -185,23 +178,22 @@ export default async function WritingSlug({ params }) {
 
             {/* Back button at the bottom of post */}
             <div className="mt-16 border-t border-zinc-100 pt-8">
-              <Link 
-                href="/writing" 
-                className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
+              <Link
+                href="/writing"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900"
               >
-                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
                 Back to writing
               </Link>
             </div>
           </div>
 
           {/* Right Sticky Sidebar (Desktop only) */}
-          <aside className="sticky top-28 hidden xl:block w-56 shrink-0 space-y-8 select-none">
-            
+          <aside className="sticky top-24 hidden w-56 shrink-0 space-y-8 select-none min-[1440px]:block">
             {/* Dynamic Metadata details */}
-            <div className="rounded-xl border border-zinc-100 bg-zinc-50/50 p-5 space-y-4">
+            <div className="space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-5">
               <div className="space-y-3">
-                <span className="text-[10px] font-mono font-semibold text-zinc-400 uppercase tracking-widest block">
+                <span className="block font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">
                   Metadata
                 </span>
                 <div className="space-y-2">
@@ -220,7 +212,7 @@ export default async function WritingSlug({ params }) {
             {/* Sticky Table of Contents */}
             {headings.length > 0 && (
               <div className="space-y-3 pl-1">
-                <span className="text-[10px] font-mono font-semibold text-zinc-400 uppercase tracking-widest block">
+                <span className="block font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">
                   On this page
                 </span>
                 <nav className="space-y-2.5 border-l border-zinc-100 pl-3 text-[13px] leading-normal">
@@ -228,7 +220,7 @@ export default async function WritingSlug({ params }) {
                     <a
                       key={heading.id}
                       href={`#${heading.id}`}
-                      className="block font-medium text-zinc-400 hover:text-zinc-950 transition-colors py-0.5"
+                      className="block py-0.5 font-medium text-zinc-400 transition-colors hover:text-zinc-950"
                     >
                       {heading.text}
                     </a>
@@ -237,7 +229,6 @@ export default async function WritingSlug({ params }) {
               </div>
             )}
           </aside>
-
         </div>
       </div>
     </ScrollArea>
