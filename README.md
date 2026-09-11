@@ -1,4 +1,4 @@
-# priyanshu.me
+# priyanshu.co
 
 My personal website and blog built with Next.js, featuring my writing, journey, tech stack, workspace setup, and curated
 bookmarks.
@@ -30,8 +30,8 @@ bookmarks.
 
 ```bash
 # Clone the repository
-git clone https://github.com/404priyanshu/priyanshu.me.git
-cd priyanshu.me
+git clone https://github.com/404priyanshu/priyanshu.co.git
+cd priyanshu.co
 
 # Install dependencies
 bun install
@@ -128,7 +128,7 @@ Found a bug or have a suggestion? Feel free to open an issue or submit a pull re
 
 ## 📫 Contact
 
-- Website: [priyanshu.me](https://priyanshu.me)
+- Website: [priyanshu.co](https://priyanshu.co)
 - GitHub: [@404priyanshu](https://github.com/404priyanshu)
 - Twitter: [@404priyanshu](https://twitter.com/404priyanshu)
 

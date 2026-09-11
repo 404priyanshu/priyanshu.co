@@ -3,7 +3,7 @@ import { getBookmarks } from '@/lib/raindrop'
 import { getSortedPosts } from '@/lib/utils'
 
 export default async function sitemap() {
-  const siteURL = 'https://priyanshu.me'
+  const siteURL = 'https://priyanshu.co'
 
   try {
     const allPosts = await getAllPosts()

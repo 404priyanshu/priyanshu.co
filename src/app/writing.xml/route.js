@@ -9,7 +9,7 @@ export async function GET() {
   const allPosts = getAllPosts()
   const sortedPosts = getSortedPosts(allPosts)
   const date = new Date()
-  const siteURL = 'https://priyanshu.me' // Change this to your domain
+  const siteURL = 'https://priyanshu.co'
   const author = {
     name: 'Priyanshu Singh',
     link: siteURL

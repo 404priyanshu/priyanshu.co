@@ -19,7 +19,7 @@ SLUG=${2:-}
 
 # Set API URL based on environment
 if [ "$ENV" = "production" ] || [ "$ENV" = "prod" ]; then
-  API_URL="https://priyanshu.me/api/revalidate"
+  API_URL="https://priyanshu.co/api/revalidate"
   echo "🌐 Revalidating PRODUCTION bookmarks..."
 else
   API_URL="http://localhost:3000/api/revalidate"

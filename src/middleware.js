@@ -9,7 +9,7 @@ export function middleware(request, event) {
   async function sendAnalytics() {
     const URL =
       process.env.NODE_ENV === 'production'
-        ? 'https://priyanshu.me/api/increment-views'
+        ? 'https://priyanshu.co/api/increment-views'
         : 'http://localhost:3000/api/increment-views'
 
     try {

@@ -74,7 +74,7 @@ export default async function RootLayout({ children }) {
 }
 
 export const metadata = {
-  metadataBase: new URL('https://priyanshu.me'),
+  metadataBase: new URL('https://priyanshu.co'),
   robots: {
     index: true,
     follow: true
@@ -84,7 +84,7 @@ export const metadata = {
     template: `%s — ${sharedMetadata.title}`
   },
   description: sharedMetadata.description,
-  keywords: ['Priyanshu Singh', 'Priyanshu', 'priyanshu me', 'priyanshu.me'],
+  keywords: ['Priyanshu Singh', 'Priyanshu', 'priyanshu co', 'priyanshu.co'],
   openGraph: {
     title: {
       default: sharedMetadata.title,
@@ -93,7 +93,7 @@ export const metadata = {
     description: sharedMetadata.description,
     alt: sharedMetadata.title,
     type: 'website',
-    url: 'https://priyanshu.me',
+    url: 'https://priyanshu.co',
     siteName: sharedMetadata.title,
     locale: 'en_IE'
   },
