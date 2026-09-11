@@ -20,6 +20,10 @@ async function handleRequest(request) {
     return NextResponse.json({ error: 'Invalid slug parameter' }, { status: 400 })
   }
 
+  if (!supabase) {
+    return NextResponse.json({ message: 'View tracking is disabled', disabled: true }, { status: 200 })
+  }
+
   try {
     const { data, error } = await supabase.rpc('increment_view_count', { page_slug: slug })
 

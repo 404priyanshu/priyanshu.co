@@ -7,6 +7,8 @@ export const useViewData = (slug) => {
   const [viewData, setViewData] = useState(null)
 
   useEffect(() => {
+    if (!supabase) return
+
     async function getViewData() {
       try {
         const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, count')
@@ -22,6 +24,8 @@ export const useViewData = (slug) => {
   }, [slug])
 
   useEffect(() => {
+    if (!supabase) return
+
     function handleRealtimeChange(payload) {
       if (payload?.new?.slug) {
         setViewData((prev) => {
