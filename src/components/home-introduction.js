@@ -40,7 +40,7 @@ export function HomeIntroduction() {
           </span>
         </div>
         <div className={styles.artwork} aria-hidden="true">
-          <Image src="/assets/classvault-paper-archive.avif" alt="" priority width={1024} height={1024} sizes="240px" />
+          <Image src="/assets/classvault-paper-archive.avif" alt="" priority width={1254} height={1254} sizes="240px" />
         </div>
         <span className={styles.domain}>classvault.in</span>
       </a>
