@@ -17,15 +17,21 @@ import {
   Wand2
 } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 
 import { cn } from '@/lib/utils'
+
+const subscribeToNothing = () => () => {}
 
 export const CommandPalette = () => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const [mounted, setMounted] = useState(false)
+  const isClient = useSyncExternalStore(
+    subscribeToNothing,
+    () => true,
+    () => false
+  )
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -35,86 +41,32 @@ export const CommandPalette = () => {
   const inputRef = useRef(null)
   const listRef = useRef(null)
 
-  // Prevent Next.js hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   // Fetch blogs metadata on mount
   useEffect(() => {
-    if (!mounted) return
     fetch('/api/posts')
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setPosts(data)
       })
       .catch((err) => console.error('Failed to load posts for command palette:', err))
-  }, [mounted])
+  }, [])
 
-  // Reset query and selected index when palette toggled
+  // Opening resets the query and focuses the input. Done here rather than in
+  // an effect so no setState runs during the open render.
+  const openPalette = useCallback(() => {
+    setQuery('')
+    setSelectedIndex(0)
+    setIsOpen(true)
+    setTimeout(() => inputRef.current?.focus(), 50)
+  }, [])
+
+  // Lock background scroll while the palette is open
   useEffect(() => {
-    if (isOpen) {
-      setQuery('')
-      setSelectedIndex(0)
-      // Focus input on open
-      setTimeout(() => inputRef.current?.focus(), 50)
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
   }, [isOpen])
-
-  // Setup Keyboard Listeners
-  useEffect(() => {
-    if (!mounted) return
-
-    const handleKeyDown = (e) => {
-      // Toggle on Cmd+K or Ctrl+K
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault()
-        setIsOpen((prev) => !prev)
-        return
-      }
-
-      // Toggle on '/' or 'k' when not focusing input elements
-      const activeEl = document.activeElement
-      const isInputFocused =
-        activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)
-
-      if (!isInputFocused && !isOpen) {
-        if (e.key === '/' || e.key === 'k') {
-          e.preventDefault()
-          setIsOpen(true)
-          return
-        }
-      }
-
-      // Modal navigation shortcuts
-      if (!isOpen) return
-
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        setIsOpen(false)
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        setSelectedIndex((prev) => (prev + 1) % filteredItems.length)
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length)
-      } else if (e.key === 'Enter') {
-        e.preventDefault()
-        if (filteredItems[selectedIndex]) {
-          handleSelect(filteredItems[selectedIndex])
-        }
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [mounted, isOpen, selectedIndex, posts])
 
   // Scroll selected element into view
   useEffect(() => {
@@ -226,20 +178,70 @@ export const CommandPalette = () => {
   }, [posts, staticItems, actionItems, socialItems, query])
 
   // Handle action/selection
-  const handleSelect = (item) => {
-    if (item.actionType === 'copy') {
-      navigator.clipboard.writeText(window.location.origin + pathname)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } else if (item.isExternal) {
-      window.open(item.url, '_blank', 'noopener,noreferrer')
-    } else {
-      router.push(item.url)
-    }
-    setIsOpen(false)
-  }
+  const handleSelect = useCallback(
+    (item) => {
+      if (item.actionType === 'copy') {
+        navigator.clipboard.writeText(window.location.origin + pathname)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } else if (item.isExternal) {
+        window.open(item.url, '_blank', 'noopener,noreferrer')
+      } else {
+        router.push(item.url)
+      }
+      setIsOpen(false)
+    },
+    [pathname, router]
+  )
 
-  if (!mounted) return null
+  // Setup Keyboard Listeners
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Toggle on Cmd+K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        isOpen ? setIsOpen(false) : openPalette()
+        return
+      }
+
+      // Toggle on '/' or 'k' when not focusing input elements
+      const activeEl = document.activeElement
+      const isInputFocused =
+        activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)
+
+      if (!isInputFocused && !isOpen) {
+        if (e.key === '/' || e.key === 'k') {
+          e.preventDefault()
+          openPalette()
+          return
+        }
+      }
+
+      // Modal navigation shortcuts
+      if (!isOpen) return
+
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setIsOpen(false)
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setSelectedIndex((prev) => (prev + 1) % filteredItems.length)
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length)
+      } else if (e.key === 'Enter') {
+        e.preventDefault()
+        if (filteredItems[selectedIndex]) {
+          handleSelect(filteredItems[selectedIndex])
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, selectedIndex, filteredItems, handleSelect, openPalette])
+
+  if (!isClient) return null
 
   return (
     <>
