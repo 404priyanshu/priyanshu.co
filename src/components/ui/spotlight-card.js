@@ -17,12 +17,7 @@ export const SpotlightCard = ({ children, className, ...props }) => {
   }
 
   return (
-    <div
-      ref={cardRef}
-      onPointerMove={handlePointerMove}
-      className={cn('spotlight-card group', className)}
-      {...props}
-    >
+    <div ref={cardRef} onPointerMove={handlePointerMove} className={cn('spotlight-card group', className)} {...props}>
       {/* Glowing border highlight */}
       <div className="spotlight-glow" aria-hidden="true" />
       {/* Glowing background highlight */}

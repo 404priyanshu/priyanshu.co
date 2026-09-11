@@ -1,13 +1,13 @@
 import {
   ArmchairIcon,
   BookmarkIcon,
+  BookOpenIcon,
   GithubIcon,
   LinkedinIcon,
   NavigationIcon,
   PencilLineIcon,
   SparklesIcon,
-  Wand2Icon,
-  BookOpenIcon
+  Wand2Icon
 } from 'lucide-react'
 
 export const PROFILES = {

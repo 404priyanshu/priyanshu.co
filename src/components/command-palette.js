@@ -1,37 +1,37 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Search,
-  Sparkles,
-  FileText,
-  Compass,
-  Wand2,
-  Laptop,
   Bookmark,
   BookOpen,
-  Command,
-  Copy,
   Check,
+  ChevronRight,
+  Command,
+  Compass,
+  Copy,
   ExternalLink,
-  ChevronRight
+  FileText,
+  Laptop,
+  Search,
+  Sparkles,
+  Wand2
 } from 'lucide-react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
 export const CommandPalette = () => {
   const router = useRouter()
   const pathname = usePathname()
-  
+
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [posts, setPosts] = useState([])
   const [copied, setCopied] = useState(false)
-  
+
   const inputRef = useRef(null)
   const listRef = useRef(null)
 
@@ -82,10 +82,7 @@ export const CommandPalette = () => {
       // Toggle on '/' or 'k' when not focusing input elements
       const activeEl = document.activeElement
       const isInputFocused =
-        activeEl &&
-        (activeEl.tagName === 'INPUT' ||
-          activeEl.tagName === 'TEXTAREA' ||
-          activeEl.isContentEditable)
+        activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)
 
       if (!isInputFocused && !isOpen) {
         if (e.key === '/' || e.key === 'k') {
@@ -169,9 +166,30 @@ export const CommandPalette = () => {
   // Social profiles catalog
   const socialItems = useMemo(
     () => [
-      { id: 'social-x', title: 'X (Twitter)', url: 'https://x.com/404priyanshu', icon: <ExternalLink size={16} />, category: 'Social Profiles', isExternal: true },
-      { id: 'social-github', title: 'GitHub Profile', url: 'https://github.com/404priyanshu', icon: <ExternalLink size={16} />, category: 'Social Profiles', isExternal: true },
-      { id: 'social-linkedin', title: 'LinkedIn Profile', url: 'https://www.linkedin.com/in/404priyanshu', icon: <ExternalLink size={16} />, category: 'Social Profiles', isExternal: true }
+      {
+        id: 'social-x',
+        title: 'X (Twitter)',
+        url: 'https://x.com/404priyanshu',
+        icon: <ExternalLink size={16} />,
+        category: 'Social Profiles',
+        isExternal: true
+      },
+      {
+        id: 'social-github',
+        title: 'GitHub Profile',
+        url: 'https://github.com/404priyanshu',
+        icon: <ExternalLink size={16} />,
+        category: 'Social Profiles',
+        isExternal: true
+      },
+      {
+        id: 'social-linkedin',
+        title: 'LinkedIn Profile',
+        url: 'https://www.linkedin.com/in/404priyanshu',
+        icon: <ExternalLink size={16} />,
+        category: 'Social Profiles',
+        isExternal: true
+      }
     ],
     []
   )
@@ -195,11 +213,7 @@ export const CommandPalette = () => {
 
     if (!query) {
       // Return navigation, actions, and top 2 blogs by default
-      return [
-        ...staticItems,
-        ...blogItems.slice(0, 3),
-        ...actionItems
-      ]
+      return [...staticItems, ...blogItems.slice(0, 3), ...actionItems]
     }
 
     const cleanQuery = query.toLowerCase().trim()
@@ -232,11 +246,11 @@ export const CommandPalette = () => {
       {/* Floating command button trigger */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 hidden lg:flex items-center gap-2 rounded-full border border-zinc-200 bg-white/95 px-3 py-2 text-zinc-500 shadow-md backdrop-blur-md hover:bg-zinc-50 hover:text-zinc-900 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer font-sans"
+        className="fixed right-6 bottom-6 z-40 hidden cursor-pointer items-center gap-2 rounded-full border border-zinc-200 bg-white/95 px-3 py-2 font-sans text-zinc-500 shadow-md backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-zinc-50 hover:text-zinc-900 active:scale-95 lg:flex"
         aria-label="Open Command Palette"
       >
         <Command size={14} className="text-zinc-400" />
-        <span className="text-[10px] font-mono tracking-wider font-semibold text-zinc-500">⌘K</span>
+        <span className="font-mono text-[10px] font-semibold tracking-wider text-zinc-500">⌘K</span>
       </button>
 
       {/* Glassmorphic Command Overlay */}
@@ -258,11 +272,11 @@ export const CommandPalette = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: -10 }}
               transition={{ type: 'spring', duration: 0.35, bounce: 0.05 }}
-              className="relative w-full max-w-lg overflow-hidden rounded-xl border border-zinc-200 bg-white/98 shadow-2xl backdrop-blur-md flex flex-col max-h-[50vh]"
+              className="relative flex max-h-[50vh] w-full max-w-lg flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white/98 shadow-2xl backdrop-blur-md"
             >
               {/* Search Header Bar */}
-              <div className="relative border-b border-zinc-150">
-                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+              <div className="border-zinc-150 relative border-b">
+                <Search size={18} className="absolute top-1/2 left-4 -translate-y-1/2 text-zinc-400" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -272,13 +286,13 @@ export const CommandPalette = () => {
                     setSelectedIndex(0)
                   }}
                   placeholder="Type a command or search posts..."
-                  className="w-full border-none bg-transparent py-4 pl-12 pr-12 text-[14px] text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:ring-0"
+                  className="w-full border-none bg-transparent py-4 pr-12 pl-12 text-[14px] text-zinc-900 placeholder-zinc-400 focus:ring-0 focus:outline-hidden"
                 />
-                
+
                 {query && (
                   <button
                     onClick={() => setQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-md bg-zinc-100 px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 rounded-md bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600"
                   >
                     Clear
                   </button>
@@ -286,40 +300,31 @@ export const CommandPalette = () => {
               </div>
 
               {/* List Scroll Panel */}
-              <div
-                ref={listRef}
-                className="overflow-y-auto p-2 scrollbar-thin select-none max-h-[35vh]"
-              >
+              <div ref={listRef} className="max-h-[35vh] scrollbar-thin overflow-y-auto p-2 select-none">
                 {filteredItems.length === 0 ? (
-                  <div className="py-8 text-center text-xs text-zinc-400 font-mono">
-                    No results found for "{query}"
-                  </div>
+                  <div className="py-8 text-center font-mono text-xs text-zinc-400">No results found for "{query}"</div>
                 ) : (
                   filteredItems.map((item, index) => {
                     const isSelected = index === selectedIndex
-                    
+
                     return (
                       <div
                         key={item.id}
                         onClick={() => handleSelect(item)}
                         onPointerMove={() => setSelectedIndex(index)}
                         className={cn(
-                          'group flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors cursor-pointer text-sm',
+                          'group flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors',
                           isSelected ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-50'
                         )}
                       >
                         <div className="flex items-center gap-3">
-                          <span className={cn(isSelected ? 'text-white' : 'text-zinc-500')}>
-                            {item.icon}
-                          </span>
+                          <span className={cn(isSelected ? 'text-white' : 'text-zinc-500')}>{item.icon}</span>
                           <div className="flex flex-col">
-                            <span className="font-medium tracking-tight leading-none">
-                              {item.title}
-                            </span>
+                            <span className="leading-none font-medium tracking-tight">{item.title}</span>
                             {item.subtitle && (
                               <span
                                 className={cn(
-                                  'text-[10px] mt-1 font-mono tracking-tight leading-none',
+                                  'mt-1 font-mono text-[10px] leading-none tracking-tight',
                                   isSelected ? 'text-zinc-300' : 'text-zinc-400'
                                 )}
                               >
@@ -332,7 +337,7 @@ export const CommandPalette = () => {
                         <div className="flex items-center gap-2">
                           <span
                             className={cn(
-                              'rounded-sm px-1.5 py-0.5 text-[9px] font-mono font-medium tracking-wider uppercase',
+                              'rounded-sm px-1.5 py-0.5 font-mono text-[9px] font-medium tracking-wider uppercase',
                               isSelected ? 'bg-zinc-800 text-zinc-300' : 'bg-zinc-100 text-zinc-400'
                             )}
                           >
@@ -342,7 +347,7 @@ export const CommandPalette = () => {
                             size={12}
                             className={cn(
                               'transition-transform duration-200',
-                              isSelected ? 'text-zinc-400 translate-x-0.5' : 'text-zinc-300'
+                              isSelected ? 'translate-x-0.5 text-zinc-400' : 'text-zinc-300'
                             )}
                           />
                         </div>
@@ -353,20 +358,20 @@ export const CommandPalette = () => {
               </div>
 
               {/* Command Footer */}
-              <div className="flex items-center justify-between border-t border-zinc-150 bg-zinc-50 px-4 py-2 text-[10px] font-mono text-zinc-400 select-none">
+              <div className="border-zinc-150 flex items-center justify-between border-t bg-zinc-50 px-4 py-2 font-mono text-[10px] text-zinc-400 select-none">
                 <div className="flex items-center gap-4">
                   <span>
-                    <kbd className="rounded-sm bg-white border px-1 py-0.5 font-sans">↑↓</kbd> to navigate
+                    <kbd className="rounded-sm border bg-white px-1 py-0.5 font-sans">↑↓</kbd> to navigate
                   </span>
                   <span>
-                    <kbd className="rounded-sm bg-white border px-1.5 py-0.5 font-sans">↵</kbd> to select
+                    <kbd className="rounded-sm border bg-white px-1.5 py-0.5 font-sans">↵</kbd> to select
                   </span>
                   <span>
-                    <kbd className="rounded-sm bg-white border px-1 py-0.5 font-sans">esc</kbd> to close
+                    <kbd className="rounded-sm border bg-white px-1 py-0.5 font-sans">esc</kbd> to close
                   </span>
                 </div>
                 {copied && (
-                  <span className="flex items-center gap-1 text-green-600 font-semibold">
+                  <span className="flex items-center gap-1 font-semibold text-green-600">
                     <Check size={10} /> Copied!
                   </span>
                 )}

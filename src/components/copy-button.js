@@ -22,7 +22,7 @@ export function CopyButton({ text, className }) {
       disabled={isCopied}
       onClick={copy}
       className={cn(
-        'relative inline-flex h-7 w-7 items-center justify-center rounded-md border border-zinc-850 bg-transparent text-zinc-400 transition-all hover:bg-zinc-800 hover:text-zinc-100 focus:outline-hidden cursor-pointer',
+        'border-zinc-850 relative inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border bg-transparent text-zinc-400 transition-all hover:bg-zinc-800 hover:text-zinc-100 focus:outline-hidden',
         isCopied &&
           'border-green-900/50 bg-green-900/20 text-green-400 hover:border-green-900/50 hover:bg-green-900/20 hover:text-green-400',
         className

@@ -14,22 +14,31 @@ export function Pre({ children, ...props }) {
 
   // Format language display nicely
   const displayLang = lang
-    ? lang.toUpperCase() === 'JS' ? 'JavaScript' :
-      lang.toUpperCase() === 'TS' ? 'TypeScript' :
-      lang.toUpperCase() === 'JSX' ? 'React JSX' :
-      lang.toUpperCase() === 'TSX' ? 'React TSX' :
-      lang.toUpperCase() === 'HTML' ? 'HTML' :
-      lang.toUpperCase() === 'CSS' ? 'CSS' :
-      lang.toUpperCase() === 'JSON' ? 'JSON' :
-      lang.toUpperCase() === 'BASH' ? 'Bash' :
-      lang.toUpperCase() === 'SH' ? 'Shell' :
-      lang.charAt(0).toUpperCase() + lang.slice(1)
+    ? lang.toUpperCase() === 'JS'
+      ? 'JavaScript'
+      : lang.toUpperCase() === 'TS'
+        ? 'TypeScript'
+        : lang.toUpperCase() === 'JSX'
+          ? 'React JSX'
+          : lang.toUpperCase() === 'TSX'
+            ? 'React TSX'
+            : lang.toUpperCase() === 'HTML'
+              ? 'HTML'
+              : lang.toUpperCase() === 'CSS'
+                ? 'CSS'
+                : lang.toUpperCase() === 'JSON'
+                  ? 'JSON'
+                  : lang.toUpperCase() === 'BASH'
+                    ? 'Bash'
+                    : lang.toUpperCase() === 'SH'
+                      ? 'Shell'
+                      : lang.charAt(0).toUpperCase() + lang.slice(1)
     : ''
 
   return (
     <div className="my-6 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 shadow-md">
       {/* Header bar */}
-      <div className="flex items-center justify-between border-b border-zinc-850 bg-zinc-900/60 px-4 py-2 select-none">
+      <div className="border-zinc-850 flex items-center justify-between border-b bg-zinc-900/60 px-4 py-2 select-none">
         {/* Left macOS window controls */}
         <div className="flex items-center gap-1.5">
           <span className="size-2.5 rounded-full bg-[#ff5f56]/90" />
@@ -40,7 +49,7 @@ export function Pre({ children, ...props }) {
         {/* Center/Right Info and Actions */}
         <div className="flex items-center gap-3">
           {displayLang && (
-            <span className="font-mono text-[10px] font-medium text-zinc-400 uppercase tracking-widest">
+            <span className="font-mono text-[10px] font-medium tracking-widest text-zinc-400 uppercase">
               {displayLang}
             </span>
           )}
@@ -49,10 +58,12 @@ export function Pre({ children, ...props }) {
       </div>
 
       {/* Code body */}
-      <pre {...props} className="group relative !my-0 !border-0 !bg-transparent !py-4 !px-4 overflow-x-auto text-[13px] leading-relaxed">
+      <pre
+        {...props}
+        className="group relative !my-0 overflow-x-auto !border-0 !bg-transparent !px-4 !py-4 text-[13px] leading-relaxed"
+      >
         {children}
       </pre>
     </div>
   )
 }
-

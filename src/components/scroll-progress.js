@@ -12,12 +12,13 @@ export function ScrollProgress() {
     if (!scrollArea || !barRef.current) return
 
     // Detect native CSS scroll timeline support
-    const hasCSSScrollTimeline = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('animation-timeline', 'scroll()')
+    const hasCSSScrollTimeline =
+      typeof CSS !== 'undefined' && CSS.supports && CSS.supports('animation-timeline', 'scroll()')
 
     if (hasCSSScrollTimeline) {
       // Set scroll timeline on the scrollPort container
       scrollArea.style.scrollTimeline = '--post-scroll block'
-      
+
       // Drive progress bar animation using the container timeline
       barRef.current.style.animationName = 'grow-progress'
       barRef.current.style.animationTimeline = '--post-scroll'
@@ -45,13 +46,10 @@ export function ScrollProgress() {
   }, [])
 
   return (
-    <div 
-      className="sticky top-0 left-0 right-0 z-50 h-[3px] w-full bg-zinc-100/60 overflow-hidden" 
-      aria-hidden="true"
-    >
+    <div className="sticky top-0 right-0 left-0 z-50 h-[3px] w-full overflow-hidden bg-zinc-100/60" aria-hidden="true">
       <div
         ref={barRef}
-        className="h-full w-full bg-gradient-to-r from-zinc-400 via-zinc-700 to-zinc-950 origin-[0%_50%] scale-x-0"
+        className="h-full w-full origin-[0%_50%] scale-x-0 bg-gradient-to-r from-zinc-400 via-zinc-700 to-zinc-950"
         style={{
           animationName: 'none',
           willChange: 'transform'

@@ -81,29 +81,29 @@ export default function StackPage() {
     <ScrollArea useScrollAreaId>
       <FloatingHeader scrollTitle="Stack" />
       <div className="content-wrapper">
-        <div className="content space-y-6 animate-reveal">
+        <div className="content animate-reveal space-y-6">
           <PageTitle title="Stack" />
           <p className="text-[13.5px] leading-relaxed text-zinc-500">
             Here is my go-to list of tools & software that I enjoy using and have helped me level up my skills.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {STACK_ITEMS.map((item) => (
               <SpotlightCard
                 key={item.name}
-                className="p-4 border border-zinc-150 rounded-xl bg-white hover:border-zinc-300 transition-colors shadow-xs"
+                className="border-zinc-150 rounded-xl border bg-white p-4 shadow-xs transition-colors hover:border-zinc-300"
               >
                 <div className="space-y-1">
                   <a
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-900 font-semibold text-[13.5px] inline-flex items-center gap-0.5 hover:underline decoration-zinc-350"
+                    className="decoration-zinc-350 inline-flex items-center gap-0.5 text-[13.5px] font-semibold text-zinc-900 hover:underline"
                   >
                     {item.name}
-                    <span className="text-[10px] text-zinc-400 font-normal no-underline select-none">↗</span>
+                    <span className="text-[10px] font-normal text-zinc-400 no-underline select-none">↗</span>
                   </a>
-                  <p className="text-zinc-500 text-[12px] leading-relaxed m-0">{item.desc}</p>
+                  <p className="m-0 text-[12px] leading-relaxed text-zinc-500">{item.desc}</p>
                 </div>
               </SpotlightCard>
             ))}

@@ -12,32 +12,32 @@ export default async function JourneyPage() {
     <ScrollArea useScrollAreaId>
       <FloatingHeader scrollTitle="Journey" />
       <div className="content-wrapper">
-        <div className="content space-y-8 animate-reveal">
+        <div className="content animate-reveal space-y-8">
           <PageTitle title="Journey" />
-          
-          <div className="relative border-l border-zinc-150 pl-6 ml-16 space-y-12 py-2 select-none">
-            
+
+          <div className="border-zinc-150 relative ml-16 space-y-12 border-l py-2 pl-6 select-none">
             {/* Timeline Item 1 */}
             <div className="relative">
               {/* Year Marker on the left */}
-              <span className="absolute -left-[5.5rem] top-0.5 text-[11px] font-mono font-bold text-zinc-950 text-right w-12">
+              <span className="absolute top-0.5 -left-[5.5rem] w-12 text-right font-mono text-[11px] font-bold text-zinc-950">
                 2025
               </span>
-              
+
               {/* Blue timeline node dot */}
-              <span className="absolute -left-[1.82rem] top-1.5 size-2 rounded-full bg-blue-600 ring-4 ring-white" />
-              
+              <span className="absolute top-1.5 -left-[1.82rem] size-2 rounded-full bg-blue-600 ring-4 ring-white" />
+
               <div className="space-y-3">
-                <h3 className="font-semibold text-[14px] text-zinc-950 tracking-tight leading-none">
+                <h3 className="text-[14px] leading-none font-semibold tracking-tight text-zinc-950">
                   Just got myself a new Tesla Model Y Juniper
                 </h3>
-                <p className="text-[13px] text-zinc-500 leading-normal font-normal max-w-[65ch]">
-                  Just hit another milestone after buying a house. I'm super excited and totally in love with my very first car.
+                <p className="max-w-[65ch] text-[13px] leading-normal font-normal text-zinc-500">
+                  Just hit another milestone after buying a house. I'm super excited and totally in love with my very
+                  first car.
                 </p>
-                <img 
-                  src="/assets/tesla_model_y.png" 
+                <img
+                  src="/assets/tesla_model_y.png"
                   alt="Sleek dark stealth grey Tesla Model Y Juniper parked in driveway"
-                  className="rounded-xl border border-zinc-150 shadow-xs max-w-full md:max-w-lg h-auto"
+                  className="border-zinc-150 h-auto max-w-full rounded-xl border shadow-xs md:max-w-lg"
                   loading="lazy"
                 />
               </div>
@@ -46,24 +46,24 @@ export default async function JourneyPage() {
             {/* Timeline Item 2 */}
             <div className="relative">
               {/* Blue timeline node dot */}
-              <span className="absolute -left-[1.82rem] top-1.5 size-2 rounded-full bg-blue-600 ring-4 ring-white" />
-              
+              <span className="absolute top-1.5 -left-[1.82rem] size-2 rounded-full bg-blue-600 ring-4 ring-white" />
+
               <div className="space-y-3">
-                <h3 className="font-semibold text-[14px] text-zinc-950 tracking-tight leading-none">
+                <h3 className="text-[14px] leading-none font-semibold tracking-tight text-zinc-950">
                   Got my very first 3D printer
                 </h3>
-                <p className="text-[13px] text-zinc-500 leading-normal font-normal max-w-[65ch]">
-                  I got my very first 3D printer: Bambu Lab A1 Mini. Already printed a desk drawer organizer inspired by Scott Ju-Yan. Totally satisfied!
+                <p className="max-w-[65ch] text-[13px] leading-normal font-normal text-zinc-500">
+                  I got my very first 3D printer: Bambu Lab A1 Mini. Already printed a desk drawer organizer inspired by
+                  Scott Ju-Yan. Totally satisfied!
                 </p>
-                <img 
-                  src="/assets/desk_3d_printer.png" 
+                <img
+                  src="/assets/desk_3d_printer.png"
                   alt="Minimalist wooden desk workspace corner showcasing a mini 3D printer"
-                  className="rounded-xl border border-zinc-150 shadow-xs max-w-full md:max-w-lg h-auto"
+                  className="border-zinc-150 h-auto max-w-full rounded-xl border shadow-xs md:max-w-lg"
                   loading="lazy"
                 />
               </div>
             </div>
-
           </div>
         </div>
       </div>
