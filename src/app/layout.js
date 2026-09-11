@@ -1,5 +1,6 @@
 import '@/globals.css'
 
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 // eslint-disable-next-line import/named
 import { GeistMono, GeistSans } from 'geist/font'
@@ -61,6 +62,7 @@ export default async function RootLayout({ children }) {
         </main>
         <CommandPalette />
         <TailwindIndicator />
+        <Analytics />
         <SpeedInsights />
         <Script
           src="https://unpkg.com/@tinybirdco/flock.js"
