@@ -7,7 +7,7 @@ export async function GET(request) {
   const searchParams = request.nextUrl.searchParams
   const secret = searchParams.get('secret')
 
-  if (secret !== process.env.CONTENTFUL_PREVIEW_SECRET) {
+  if (secret !== process.env.DRAFT_MODE_SECRET) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
   }
 
