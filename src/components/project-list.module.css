@@ -4,19 +4,49 @@
 }
 
 .project {
+  --project-surface: #fff;
+  --project-border: #e9e9eb;
+  --project-title: #202023;
+  --project-copy: #626268;
+  --project-muted: #68686e;
+  --project-domain: #717178;
+  --project-period: #96969c;
+  --project-glow: rgb(91 95 215 / 16%);
+  --project-glow-warm: rgb(255 225 126 / 19%);
+  --project-glow-green: rgb(169 214 136 / 12%);
+
   position: relative;
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   align-items: center;
-  min-height: 158px;
-  padding: 20px 24px;
+  min-height: 144px;
+  padding: 16px 22px;
   overflow: hidden;
   isolation: isolate;
-  border: 1px solid #e9e9eb;
+  border: 1px solid var(--project-border);
   border-radius: 10px;
-  background: #f8f8f9;
-  color: #202023;
+  background: var(--project-surface);
+  color: var(--project-title);
   text-decoration: none;
+}
+
+.project::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow:
+    inset 12px 0 32px -10px var(--project-glow),
+    inset 0 12px 32px -10px var(--project-glow),
+    inset -12px 0 32px -10px var(--project-glow-warm),
+    inset 0 -12px 32px -10px var(--project-glow-green);
+  content: '';
+  pointer-events: none;
+}
+
+.project[data-theme='classvault'] {
+  --project-border: rgb(91 95 215 / 24%);
+  --project-period: #5b5fd7;
 }
 
 .project:focus-visible {
@@ -32,13 +62,14 @@
 .status {
   display: block;
   margin-bottom: 6px;
-  color: #68686e;
+  color: var(--project-muted);
   font-family: var(--font-geist-mono), monospace;
   font-size: 9px;
 }
 
 .projectCopy h3 {
   margin: 0 0 6px;
+  color: var(--project-title);
   font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.05em;
@@ -46,13 +77,13 @@
 }
 
 .period {
-  color: #96969c;
+  color: var(--project-period);
 }
 
 .projectCopy p {
   max-width: 310px;
   margin: 0;
-  color: #626268;
+  color: var(--project-copy);
   font-size: 11px;
   line-height: 1.55;
   text-wrap: pretty;
@@ -62,17 +93,17 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 13px;
+  margin-top: 10px;
   font-size: 10px;
   font-weight: 500;
 }
 
 .artwork {
   position: absolute;
-  top: 0;
+  top: calc(50% - 68px);
   right: 20px;
-  width: 150px;
-  height: 150px;
+  width: 128px;
+  height: 128px;
   mix-blend-mode: multiply;
   pointer-events: none;
 }
@@ -89,12 +120,16 @@
   position: absolute;
   right: 18px;
   bottom: 11px;
-  color: #717178;
+  color: var(--project-domain);
   font-family: var(--font-geist-mono), monospace;
   font-size: 8px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .project {
+    transition: border-color 260ms ease;
+  }
+
   .artwork,
   .projectLink svg {
     transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -103,6 +138,11 @@
   .project:hover .artwork,
   .project:focus-visible .artwork {
     transform: translateY(-3px) rotate(-2deg);
+  }
+
+  .project:hover,
+  .project:focus-visible {
+    border-color: rgb(91 95 215 / 40%);
   }
 
   .project:hover .projectLink svg,
@@ -117,8 +157,9 @@
 
 @media (max-width: 600px) {
   .project {
-    min-height: 142px;
-    padding: 18px 126px 18px 18px;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 134px;
+    padding: 14px 116px 14px 16px;
   }
 
   .projectCopy h3 {
@@ -133,14 +174,14 @@
   }
 
   .projectLink {
-    margin-top: 11px;
+    margin-top: 9px;
   }
 
   .artwork {
-    top: 7px;
+    top: calc(50% - 56px);
     right: 4px;
-    width: 122px;
-    height: 122px;
+    width: 104px;
+    height: 104px;
   }
 
   .domain {

@@ -10,7 +10,8 @@ const projects = [
     description: 'A better place for college notes, study plans, and getting through the semester together.',
     url: 'https://classvault.in',
     domain: 'classvault.in',
-    image: '/assets/classvault-paper-archive.avif'
+    image: '/assets/classvault-paper-archive-color-dithered.avif',
+    theme: 'classvault'
   }
 ]
 
@@ -21,6 +22,7 @@ export function ProjectList() {
         <a
           key={project.url}
           className={styles.project}
+          data-theme={project.theme}
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
@@ -38,7 +40,14 @@ export function ProjectList() {
             </span>
           </div>
           <div className={styles.artwork} aria-hidden="true">
-            <Image src={project.image} alt="" priority width={1254} height={1254} sizes="150px" />
+            <Image
+              src={project.image}
+              alt=""
+              priority
+              width={1254}
+              height={1254}
+              sizes="(max-width: 600px) 104px, 128px"
+            />
           </div>
           <span className={styles.domain}>{project.domain}</span>
         </a>
