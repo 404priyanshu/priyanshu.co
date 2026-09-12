@@ -35,7 +35,7 @@ export default async function JourneyPage() {
                   first car.
                 </p>
                 <img
-                  src="/assets/tesla_model_y.png"
+                  src="/assets/tesla_model_y.avif"
                   alt="Sleek dark stealth grey Tesla Model Y Juniper parked in driveway"
                   className="border-zinc-150 h-auto max-w-full rounded-xl border shadow-xs md:max-w-lg"
                   loading="lazy"
@@ -57,7 +57,7 @@ export default async function JourneyPage() {
                   Scott Ju-Yan. Totally satisfied!
                 </p>
                 <img
-                  src="/assets/desk_3d_printer.png"
+                  src="/assets/desk_3d_printer.avif"
                   alt="Minimalist wooden desk workspace corner showcasing a mini 3D printer"
                   className="border-zinc-150 h-auto max-w-full rounded-xl border shadow-xs md:max-w-lg"
                   loading="lazy"

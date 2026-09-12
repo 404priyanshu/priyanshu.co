@@ -20,7 +20,7 @@ export default function WorkspacePage() {
           {/* Main workspace featured image (Silver MacBook Air M1 open on a clean desk) */}
           <div className="space-y-2 select-none">
             <img
-              src="/assets/macbook_air_m1.png"
+              src="/assets/macbook_air_m1.avif"
               alt="Silver MacBook Air M1 open on a clean wooden desk setup"
               className="border-zinc-150 max-h-[460px] w-full rounded-xl border object-cover shadow-sm"
               loading="lazy"
