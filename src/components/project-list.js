@@ -44,8 +44,8 @@ export function ProjectList() {
               src={project.image}
               alt=""
               priority
-              width={1254}
-              height={1254}
+              width={512}
+              height={512}
               sizes="(max-width: 600px) 104px, 128px"
             />
           </div>
