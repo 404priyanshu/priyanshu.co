@@ -5,6 +5,8 @@ const TweetCard = dynamic(() => import('@/components/tweet-card/tweet-card').the
 import { TWEETS_COLLECTION_ID } from '@/lib/constants'
 import { withRef } from '@/lib/utils'
 
+const FALLBACK_COVER = '/assets/fallback.avif'
+
 export const BookmarkCard = ({ bookmark, order }) => {
   if (bookmark.link && bookmark.collectionId === TWEETS_COLLECTION_ID) {
     const match = bookmark.link.match(/\/status\/(\d+)/) ?? []
@@ -23,7 +25,7 @@ export const BookmarkCard = ({ bookmark, order }) => {
     >
       <span className="aspect-1200/630 overflow-hidden rounded-lg">
         <img
-          src={bookmark.cover || '/assets/fallback.avif'}
+          src={bookmark.cover || FALLBACK_COVER}
           alt={bookmark.title}
           width={1200}
           height={630}
@@ -31,7 +33,17 @@ export const BookmarkCard = ({ bookmark, order }) => {
           className="animate-reveal aspect-1200/630 rounded-lg border bg-cover bg-center bg-no-repeat object-cover"
           onError={(e) => {
             e.target.onerror = null
-            e.target.src = '/assets/fallback.avif'
+            e.target.src = FALLBACK_COVER
+          }}
+          // onError only fires once React has hydrated. Covers are hotlinked
+          // from the bookmarked sites and some have since 404'd, so the error
+          // usually happens before that — the ref runs on mount and catches
+          // any image that already failed.
+          ref={(node) => {
+            if (node && node.complete && node.naturalWidth === 0 && node.src !== FALLBACK_COVER) {
+              node.onerror = null
+              node.src = FALLBACK_COVER
+            }
           }}
           // eslint-disable-next-line react/no-unknown-property
           nopin="nopin"
