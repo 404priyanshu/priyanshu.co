@@ -2,6 +2,8 @@ import { cx } from 'classix'
 import { cache } from 'react'
 import { twMerge } from 'tailwind-merge'
 
+import { sharedMetadata } from '@/app/shared-metadata'
+
 /**
  * Combines and merges multiple CSS class names or values using the classix and tailwind-merge libraries.
  * This function takes any number of arguments and passes them to the cx function from classix,
@@ -152,4 +154,27 @@ export const getItemsByYear = (items) => {
 
     return acc
   }, [])
+}
+
+/**
+ * Appends the referral parameter to an outbound link.
+ *
+ * Uses URL so an existing query string survives and any ref already on the
+ * link is replaced rather than duplicated — several bookmarks are stored with
+ * `?ref=onur.dev` from the site this was forked from, and naive concatenation
+ * produced links with two `?` in them.
+ *
+ * @param href - The absolute URL to tag.
+ * @returns - The URL carrying ref=<site domain>, or the input unchanged if it cannot be parsed.
+ */
+export const withRef = (href) => {
+  if (!href) return href
+
+  try {
+    const url = new URL(href)
+    url.searchParams.set('ref', new URL(sharedMetadata.url).hostname)
+    return url.toString()
+  } catch {
+    return href
+  }
 }

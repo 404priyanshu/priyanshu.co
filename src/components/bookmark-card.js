@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 
 const TweetCard = dynamic(() => import('@/components/tweet-card/tweet-card').then((mod) => mod.TweetCard))
 import { TWEETS_COLLECTION_ID } from '@/lib/constants'
+import { withRef } from '@/lib/utils'
 
 export const BookmarkCard = ({ bookmark, order }) => {
   if (bookmark.link && bookmark.collectionId === TWEETS_COLLECTION_ID) {
@@ -15,7 +16,7 @@ export const BookmarkCard = ({ bookmark, order }) => {
     <a
       key={bookmark._id}
       className="thumbnail-shadow flex aspect-auto min-w-0 cursor-pointer flex-col gap-4 overflow-hidden rounded-xl bg-white p-4 transition-colors duration-300 hover:bg-gray-100"
-      href={`${bookmark.link}?ref=priyanshu.co`}
+      href={withRef(bookmark.link)}
       target="_blank"
       rel="noopener noreferrer"
       data-bookmark-order={order}
