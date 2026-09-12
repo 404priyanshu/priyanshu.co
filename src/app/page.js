@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { FloatingHeader } from '@/components/floating-header'
 import { HomeIntroduction } from '@/components/home-introduction'
 import { PageTitle } from '@/components/page-title'
+import { ProjectList } from '@/components/project-list'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
 import { WritingList } from '@/components/writing-list'
@@ -30,6 +31,17 @@ export default async function Home() {
           <PageTitle title="Home" className="lg:hidden" />
 
           <HomeIntroduction />
+
+          {/* Projects Section */}
+          <section className="space-y-4 border-t border-zinc-100 pt-4" aria-labelledby="projects-heading">
+            <h2
+              id="projects-heading"
+              className="font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase select-none"
+            >
+              Projects
+            </h2>
+            <ProjectList />
+          </section>
 
           {/* Writing Section */}
           <div className="space-y-4 border-t border-zinc-100 pt-4">
