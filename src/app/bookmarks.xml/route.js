@@ -41,9 +41,7 @@ export async function GET() {
         content: bookmark.excerpt,
         image: bookmark.cover,
         date: new Date(bookmark.created),
-        updated: new Date(bookmark.lastUpdate),
-        author: [author],
-        contributor: [author]
+        updated: new Date(bookmark.lastUpdate)
       })
     })
   }

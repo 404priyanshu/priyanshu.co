@@ -35,8 +35,7 @@ export async function GET() {
       title: post.title,
       description: post.description || '',
       link: `${siteURL}/writing/${post.slug}`,
-      date: new Date(post.date),
-      author: [author]
+      date: new Date(post.date)
     })
   })
 
