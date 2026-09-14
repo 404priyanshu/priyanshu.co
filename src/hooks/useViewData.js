@@ -1,60 +1,45 @@
 import { useEffect, useState } from 'react'
 
-import { SUPABASE_TABLE_NAME } from '@/lib/constants'
-import supabase from '@/lib/supabase/public'
-
 export const useViewData = (slug) => {
-  const [viewData, setViewData] = useState(null)
+  const [viewData, setViewData] = useState({ slug, data: null, status: 'loading' })
 
   useEffect(() => {
-    if (!supabase) return
+    const controller = new AbortController()
+    let pending = false
 
     async function getViewData() {
+      if (pending || document.visibilityState === 'hidden') return
+      pending = true
+
       try {
-        const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, count')
-        if (slug) supabaseQuery.eq('slug', slug)
-        const { data: supabaseData } = await supabaseQuery
-        if (supabaseData) setViewData(supabaseData)
-      } catch (error) {
-        console.info('Error fetching view data from Supabase:', error)
+        const query = slug ? `?slug=${encodeURIComponent(slug)}` : ''
+        const response = await fetch(`/api/views${query}`, {
+          cache: 'no-store',
+          signal: controller.signal
+        })
+        if (!response.ok) throw new Error('Unable to fetch view counts')
+        const data = await response.json()
+        if (!Array.isArray(data)) throw new Error('Invalid view count response')
+        if (!controller.signal.aborted) setViewData({ slug, data, status: 'ready' })
+      } catch {
+        if (!controller.signal.aborted) setViewData({ slug, data: null, status: 'error' })
+      } finally {
+        pending = false
       }
     }
 
     getViewData()
-  }, [slug])
-
-  useEffect(() => {
-    if (!supabase) return
-
-    function handleRealtimeChange(payload) {
-      if (payload?.new?.slug) {
-        setViewData((prev) => {
-          if (!prev) return null
-          const index = prev.findIndex((item) => item.slug === payload.new.slug)
-          index !== -1 ? (prev[index] = payload.new) : prev.push(payload.new)
-          return [...prev]
-        })
-      }
-    }
-
-    const channel = supabase
-      .channel('supabase_realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: SUPABASE_TABLE_NAME,
-          ...(slug && { filter: `slug=eq.${slug}` })
-        },
-        handleRealtimeChange
-      )
-      .subscribe()
+    const interval = setInterval(getViewData, 30000)
+    window.addEventListener('focus', getViewData)
+    document.addEventListener('visibilitychange', getViewData)
 
     return () => {
-      supabase.removeChannel(channel)
+      controller.abort()
+      clearInterval(interval)
+      window.removeEventListener('focus', getViewData)
+      document.removeEventListener('visibilitychange', getViewData)
     }
   }, [slug])
 
-  return viewData
+  return viewData.slug === slug ? viewData : { data: null, status: 'loading' }
 }

@@ -8,7 +8,7 @@ import { useViewData } from '@/hooks/useViewData'
 import { cn, dateWithDayAndMonthFormatter, dateWithMonthAndYearFormatter, viewCountFormatter } from '@/lib/utils'
 
 export const WritingList = ({ items }) => {
-  const viewData = useViewData()
+  const { data: viewData, status: viewStatus } = useViewData()
 
   // Preprocess viewData into a map for efficient lookups
   const viewDataMap = useMemo(() => {
@@ -50,9 +50,15 @@ export const WritingList = ({ items }) => {
             const dateWithDayAndMonth = dateWithDayAndMonthFormatter.format(dateObj)
             const dateWithMonthAndYear = dateWithMonthAndYearFormatter.format(dateObj)
 
-            // FIX: Rename 'count' to 'viewCount' to avoid conflicts
-            const viewCount = viewDataMap.get(slug)
-            const formattedViewCount = viewCount ? viewCountFormatter.format(viewCount) : null
+            const viewCount = viewDataMap.get(slug) ?? 0
+            const formattedViewCount =
+              viewStatus === 'ready' ? viewCountFormatter.format(viewCount) : viewStatus === 'loading' ? '...' : 'N/A'
+            const viewLabel =
+              viewStatus === 'ready'
+                ? `${formattedViewCount} views`
+                : viewStatus === 'loading'
+                  ? 'Loading views'
+                  : 'Views unavailable'
 
             return (
               <li key={slug} className="group/list-item grid grid-cols-6 p-0 group-hover/list-wrapper:text-gray-300">
@@ -83,7 +89,8 @@ export const WritingList = ({ items }) => {
                         <m.span
                           key={`${slug}-views`}
                           className="flex justify-end tabular-nums"
-                          title={`${formattedViewCount} views`}
+                          title={viewLabel}
+                          aria-label={viewLabel}
                           {...animationProps}
                         >
                           {formattedViewCount}
@@ -98,7 +105,7 @@ export const WritingList = ({ items }) => {
         </ul>
       )
     })
-  }, [animationProps, items, viewDataMap])
+  }, [animationProps, items, viewDataMap, viewStatus])
 
   return useMemo(
     () => (
