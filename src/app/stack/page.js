@@ -10,14 +10,44 @@ export const metadata = {
 
 const STACK_ITEMS = [
   {
+    name: 'Ghostty',
+    link: 'https://ghostty.org',
+    desc: 'My main terminal, where I run commands and work on projects.'
+  },
+  {
+    name: 'Zed',
+    link: 'https://zed.dev',
+    desc: 'My main code editor and where I do most of my coding these days.'
+  },
+  {
+    name: 'tldraw',
+    link: 'https://www.tldraw.com',
+    desc: 'My replacement for Excalidraw. I use it to sketch ideas and draw things out.'
+  },
+  {
+    name: 'Dia',
+    link: 'https://www.diabrowser.com',
+    desc: "A browser I'm testing right now. It'll probably become my main browser in the near future."
+  },
+  {
+    name: 'Cloudflare WARP',
+    link: 'https://one.one.one.one',
+    desc: 'I use WARP to encrypt my internet traffic through Cloudflare.'
+  },
+  {
+    name: 'LM Studio',
+    link: 'https://lmstudio.ai',
+    desc: 'Where I run and test local LLMs on my own machine.'
+  },
+  {
+    name: 'OpenCode',
+    link: 'https://opencode.ai',
+    desc: 'An open-source AI coding agent I use in the terminal.'
+  },
+  {
     name: 'One Hunter',
     link: 'https://github.com/one-hunter/theme',
     desc: 'My most recently used theme, inspired by Vercel Theme ▲ and One Dark Pro.'
-  },
-  {
-    name: 'Hyper',
-    link: 'https://hyper.is',
-    desc: 'A terminal built on web technologies.'
   },
   {
     name: '1Password',
