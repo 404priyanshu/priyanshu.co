@@ -4,7 +4,6 @@ import {
   BookOpenIcon,
   GithubIcon,
   LinkedinIcon,
-  NavigationIcon,
   PencilLineIcon,
   SparklesIcon,
   Wand2Icon
@@ -72,11 +71,6 @@ export const LINKS = [
     href: '/writing',
     label: 'Writing',
     icon: <PencilLineIcon size={16} />
-  },
-  {
-    href: '/journey',
-    label: 'Journey',
-    icon: <NavigationIcon size={16} />
   },
   {
     href: '/stack',
