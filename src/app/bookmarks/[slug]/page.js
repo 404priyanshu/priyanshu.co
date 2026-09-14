@@ -22,19 +22,23 @@ async function fetchData(slug) {
   if (!currentBookmark) notFound()
 
   const sortedBookmarks = sortByProperty(bookmarks, 'title')
-  const bookmarkItems = await getBookmarkItems(currentBookmark._id)
 
   return {
     bookmarks: sortedBookmarks,
-    currentBookmark,
-    bookmarkItems
+    currentBookmark
   }
+}
+
+async function BookmarkItems({ id }) {
+  const bookmarkItems = await getBookmarkItems(id)
+
+  return <BookmarkList id={id} initialData={bookmarkItems} />
 }
 
 export default async function CollectionPage(props) {
   const params = await props.params
   const { slug } = params
-  const { bookmarks, currentBookmark, bookmarkItems } = await fetchData(slug)
+  const { bookmarks, currentBookmark } = await fetchData(slug)
 
   return (
     <ScrollArea useScrollAreaId>
@@ -48,7 +52,7 @@ export default async function CollectionPage(props) {
         <div className="content @container">
           <PageTitle title={currentBookmark.title} />
           <Suspense fallback={<ScreenLoadingSpinner />}>
-            <BookmarkList id={currentBookmark._id} initialData={bookmarkItems} />
+            <BookmarkItems id={currentBookmark._id} />
           </Suspense>
         </div>
       </div>
@@ -70,7 +74,7 @@ export async function generateMetadata(props) {
   }
 
   const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
-  if (!currentBookmark) return null
+  if (!currentBookmark) notFound()
 
   const siteUrl = `/bookmarks/${currentBookmark.slug}`
   const seoTitle = `${currentBookmark.title} | Bookmarks`
