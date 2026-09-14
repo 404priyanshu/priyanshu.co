@@ -6,7 +6,6 @@ import {
   BookOpen,
   Check,
   ChevronRight,
-  Command,
   Compass,
   Copy,
   ExternalLink,
@@ -247,12 +246,22 @@ export const CommandPalette = () => {
     <>
       {/* Floating command button trigger */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="fixed right-6 bottom-6 z-40 hidden cursor-pointer items-center gap-2 rounded-full border border-zinc-200 bg-white/95 px-3 py-2 font-sans text-zinc-500 shadow-md backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-zinc-50 hover:text-zinc-900 active:scale-95 lg:flex"
+        type="button"
+        onClick={openPalette}
+        className="fixed right-6 bottom-6 z-40 hidden h-11 cursor-pointer items-center gap-2.5 rounded-full border border-zinc-200/80 bg-white/95 pr-2.5 pl-4 font-sans text-zinc-600 shadow-[0_2px_8px_-2px_rgb(0_0_0/0.12)] backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950 hover:shadow-[0_4px_12px_-3px_rgb(0_0_0/0.16)] focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-4 active:bg-zinc-100 lg:flex"
         aria-label="Open Command Palette"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
       >
-        <Command size={14} className="text-zinc-400" />
-        <span className="font-mono text-[10px] font-semibold tracking-wider text-zinc-500">⌘K</span>
+        <Search size={16} strokeWidth={1.75} aria-hidden="true" />
+        <span className="text-sm font-medium">Search</span>
+        <kbd
+          aria-hidden="true"
+          className="ml-1 flex h-6 items-center gap-0.5 rounded-md border border-zinc-200/80 bg-zinc-50 px-1.5 font-sans text-[11px] leading-none font-medium text-zinc-500"
+        >
+          <span>⌘</span>
+          <span>K</span>
+        </kbd>
       </button>
 
       {/* Glassmorphic Command Overlay */}
