@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
@@ -18,6 +20,17 @@ const BOOKS = [
     link: 'https://www.manning.com/books/grokking-algorithms-second-edition',
     synopsis:
       'An absolute masterclass in visual learning. This book breaks down complex computer science concepts—like recursion, tree traversal, dynamic programming, and search algorithms—into highly intuitive, hand-drawn diagrams and clear explanations. It is an essential resource for any engineer looking to develop a deep, visual intuition for computational complexity and fundamental data structures.'
+  },
+  {
+    title: 'Data Structures and Algorithms Made Easy',
+    edition: 'Fifth Edition',
+    author: 'Narasimha Karumanchi',
+    status: 'Completed',
+    statusColor: 'bg-green-500/10 text-green-600 border-green-500/20',
+    link: 'https://books.google.com/books?id=LIUQvgAACAAJ',
+    cover: 'https://covers.openlibrary.org/b/isbn/9788193245279-L.jpg',
+    synopsis:
+      'A practical problem-solving guide to core data structures and algorithms, with multiple approaches to many problems and clear complexity trade-offs. Its coverage spans recursion, linked lists, stacks, queues, trees, heaps, graphs, sorting, searching, hashing, greedy methods, divide and conquer, and dynamic programming, making it especially useful for interview preparation and structured revision.'
   }
 ]
 
@@ -39,49 +52,55 @@ export default function BooksPage() {
                 key={book.title}
                 className="border-zinc-150 flex flex-col gap-6 rounded-xl border bg-white p-5 shadow-xs transition-all duration-300 hover:border-zinc-300 hover:shadow-sm md:flex-row"
               >
-                {/* Visual Mock Book Cover Natively Rendered in CSS */}
-                <div
-                  className="relative mx-auto flex h-44 w-32 shrink-0 flex-col justify-between overflow-hidden rounded-lg border border-zinc-800 bg-gradient-to-br from-indigo-950 via-slate-900 to-black p-3.5 shadow-md select-none md:mx-0"
-                  aria-hidden="true"
-                >
-                  {/* Left Spine Overlay */}
-                  <div className="absolute top-0 bottom-0 left-0 w-1.5 border-r border-zinc-700/30 bg-black/45" />
-
-                  {/* Spine Highlight */}
-                  <div className="absolute top-0 bottom-0 left-1.5 w-[1px] bg-white/10" />
-
-                  {/* Geometric Algo Art Grid overlay */}
-                  <div className="absolute inset-0 bg-[radial-gradient(#818cf8_1px,transparent_1px)] [background-size:12px_12px] opacity-15" />
-
-                  {/* Top: Edition & Spine details */}
-                  <div className="z-10 text-right font-mono text-[6px] tracking-widest text-zinc-500 uppercase">
-                    {book.edition}
+                {book.cover ? (
+                  <div className="relative mx-auto h-44 w-32 shrink-0 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-950 shadow-md md:mx-0">
+                    <Image src={book.cover} alt={`${book.title} cover`} fill sizes="128px" className="object-contain" />
                   </div>
+                ) : (
+                  /* Visual Mock Book Cover Natively Rendered in CSS */
+                  <div
+                    className="relative mx-auto flex h-44 w-32 shrink-0 flex-col justify-between overflow-hidden rounded-lg border border-zinc-800 bg-gradient-to-br from-indigo-950 via-slate-900 to-black p-3.5 shadow-md select-none md:mx-0"
+                    aria-hidden="true"
+                  >
+                    {/* Left Spine Overlay */}
+                    <div className="absolute top-0 bottom-0 left-0 w-1.5 border-r border-zinc-700/30 bg-black/45" />
 
-                  {/* Center Graphic: Algorithms Node Connection Visual */}
-                  <div className="z-10 my-2 flex flex-col items-center justify-center gap-1.5">
-                    <span className="text-center font-mono text-[8px] leading-normal font-bold tracking-widest text-zinc-300">
-                      GROKKING
-                    </span>
-                    <span className="text-center font-sans text-[10px] leading-none font-black tracking-tight text-indigo-400 uppercase">
-                      ALGORITHMS
-                    </span>
+                    {/* Spine Highlight */}
+                    <div className="absolute top-0 bottom-0 left-1.5 w-[1px] bg-white/10" />
 
-                    {/* Visual graph connectivity drawing */}
-                    <div className="mt-2 flex w-full items-center justify-center gap-1.5 border-y border-zinc-800/80 py-1.5">
-                      <span className="size-1 rounded-full bg-indigo-400" />
-                      <div className="h-[1px] w-6 bg-zinc-800" />
-                      <span className="size-1 rounded-full bg-zinc-500" />
-                      <div className="bg-zinc-850 h-[1px] w-4" />
-                      <span className="size-1 rounded-full bg-indigo-500" />
+                    {/* Geometric Algo Art Grid overlay */}
+                    <div className="absolute inset-0 bg-[radial-gradient(#818cf8_1px,transparent_1px)] [background-size:12px_12px] opacity-15" />
+
+                    {/* Top: Edition & Spine details */}
+                    <div className="z-10 text-right font-mono text-[6px] tracking-widest text-zinc-500 uppercase">
+                      {book.edition}
+                    </div>
+
+                    {/* Center Graphic: Algorithms Node Connection Visual */}
+                    <div className="z-10 my-2 flex flex-col items-center justify-center gap-1.5">
+                      <span className="text-center font-mono text-[8px] leading-normal font-bold tracking-widest text-zinc-300">
+                        GROKKING
+                      </span>
+                      <span className="text-center font-sans text-[10px] leading-none font-black tracking-tight text-indigo-400 uppercase">
+                        ALGORITHMS
+                      </span>
+
+                      {/* Visual graph connectivity drawing */}
+                      <div className="mt-2 flex w-full items-center justify-center gap-1.5 border-y border-zinc-800/80 py-1.5">
+                        <span className="size-1 rounded-full bg-indigo-400" />
+                        <div className="h-[1px] w-6 bg-zinc-800" />
+                        <span className="size-1 rounded-full bg-zinc-500" />
+                        <div className="bg-zinc-850 h-[1px] w-4" />
+                        <span className="size-1 rounded-full bg-indigo-500" />
+                      </div>
+                    </div>
+
+                    {/* Bottom: Author name */}
+                    <div className="z-10 text-center font-mono text-[6px] tracking-widest text-zinc-400 uppercase">
+                      A. BHARGAVA
                     </div>
                   </div>
-
-                  {/* Bottom: Author name */}
-                  <div className="z-10 text-center font-mono text-[6px] tracking-widest text-zinc-400 uppercase">
-                    A. BHARGAVA
-                  </div>
-                </div>
+                )}
 
                 {/* Book Details and Synopsis */}
                 <div className="flex flex-1 flex-col justify-between space-y-4 py-0.5">

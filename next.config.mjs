@@ -8,7 +8,14 @@ const nextConfig = {
   trailingSlash: false,
   images: {
     deviceSizes: [390, 435, 768, 1024, 1280],
-    formats: ['image/avif']
+    formats: ['image/avif'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org',
+        pathname: '/b/isbn/**'
+      }
+    ]
   },
   async headers() {
     return [
