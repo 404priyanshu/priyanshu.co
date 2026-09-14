@@ -26,7 +26,7 @@ export async function GET(_, props) {
     getBoldFont()
   ])
   const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
-  if (!currentBookmark) return null
+  if (!currentBookmark) return new Response('Not found', { status: 404 })
 
   return new ImageResponse(
     <OpenGraphImage
