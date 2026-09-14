@@ -39,6 +39,7 @@ export const CommandPalette = () => {
 
   const inputRef = useRef(null)
   const listRef = useRef(null)
+  const shouldScrollSelection = useRef(false)
 
   // Fetch blogs metadata on mount
   useEffect(() => {
@@ -53,10 +54,11 @@ export const CommandPalette = () => {
   // Opening resets the query and focuses the input. Done here rather than in
   // an effect so no setState runs during the open render.
   const openPalette = useCallback(() => {
+    shouldScrollSelection.current = false
     setQuery('')
     setSelectedIndex(0)
     setIsOpen(true)
-    setTimeout(() => inputRef.current?.focus(), 50)
+    setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50)
   }, [])
 
   // Lock background scroll while the palette is open
@@ -67,13 +69,15 @@ export const CommandPalette = () => {
     }
   }, [isOpen])
 
-  // Scroll selected element into view
+  // Only keyboard navigation should scroll; hovering must leave the list still.
   useEffect(() => {
-    if (!isOpen || !listRef.current) return
+    if (!isOpen || !listRef.current || !shouldScrollSelection.current) return
+    shouldScrollSelection.current = false
     const container = listRef.current
     const selectedElement = container.children[selectedIndex]
     if (!selectedElement) return
 
+    // The list is positioned so row offsets are relative to this scroll container.
     const containerTop = container.scrollTop
     const containerBottom = containerTop + container.clientHeight
     const elemTop = selectedElement.offsetTop
@@ -224,9 +228,13 @@ export const CommandPalette = () => {
         setIsOpen(false)
       } else if (e.key === 'ArrowDown') {
         e.preventDefault()
+        if (!filteredItems.length) return
+        shouldScrollSelection.current = true
         setSelectedIndex((prev) => (prev + 1) % filteredItems.length)
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
+        if (!filteredItems.length) return
+        shouldScrollSelection.current = true
         setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length)
       } else if (e.key === 'Enter') {
         e.preventDefault()
@@ -293,8 +301,10 @@ export const CommandPalette = () => {
                   type="text"
                   value={query}
                   onChange={(e) => {
+                    shouldScrollSelection.current = false
                     setQuery(e.target.value)
                     setSelectedIndex(0)
+                    if (listRef.current) listRef.current.scrollTop = 0
                   }}
                   placeholder="Type a command or search posts..."
                   className="w-full border-none bg-transparent py-4 pr-12 pl-12 text-[14px] text-zinc-900 placeholder-zinc-400 focus:ring-0 focus:outline-hidden"
@@ -302,7 +312,13 @@ export const CommandPalette = () => {
 
                 {query && (
                   <button
-                    onClick={() => setQuery('')}
+                    onClick={() => {
+                      shouldScrollSelection.current = false
+                      setQuery('')
+                      setSelectedIndex(0)
+                      if (listRef.current) listRef.current.scrollTop = 0
+                      inputRef.current?.focus({ preventScroll: true })
+                    }}
                     className="absolute top-1/2 right-4 -translate-y-1/2 rounded-md bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600"
                   >
                     Clear
@@ -311,7 +327,10 @@ export const CommandPalette = () => {
               </div>
 
               {/* List Scroll Panel */}
-              <div ref={listRef} className="max-h-[35vh] scrollbar-thin overflow-y-auto p-2 select-none">
+              <div
+                ref={listRef}
+                className="relative max-h-[35vh] scrollbar-thin overflow-y-auto overscroll-contain p-2 select-none"
+              >
                 {filteredItems.length === 0 ? (
                   <div className="py-8 text-center font-mono text-xs text-zinc-400">No results found for "{query}"</div>
                 ) : (
@@ -322,7 +341,10 @@ export const CommandPalette = () => {
                       <div
                         key={item.id}
                         onClick={() => handleSelect(item)}
-                        onPointerMove={() => setSelectedIndex(index)}
+                        onPointerMove={() => {
+                          shouldScrollSelection.current = false
+                          setSelectedIndex(index)
+                        }}
                         className={cn(
                           'group flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors',
                           isSelected ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-50'
