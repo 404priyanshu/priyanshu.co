@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # Workflow actions only. The npm/bun side is deliberately absent: Dependabot
+  # reads the text-based bun.lock, not the binary bun.lockb this repo still
+  # uses, so it would raise PRs that bump package.json and leave the lockfile
+  # stale, failing `bun install --frozen-lockfile` in ci.yml.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - '*'
