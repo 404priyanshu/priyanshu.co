@@ -135,7 +135,7 @@ const nextConfig = {
     webVitalsAttribution: ['FCP', 'LCP', 'CLS', 'FID', 'TTFB', 'INP']
   },
   eslint: {
-    ignoreDuringBuilds: true
+    ignoreDuringBuilds: false
   },
   transpilePackages: ['geist']
 }
