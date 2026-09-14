@@ -1,10 +1,11 @@
 import './post.css'
 
-import { ArrowLeft, Clock, FileText } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import Markdown from 'markdown-to-jsx'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { ArticleToc } from '@/components/article-toc'
 import { FloatingHeader } from '@/components/floating-header'
 import { Pre } from '@/components/mdx/pre'
 import { ScrollArea } from '@/components/scroll-area'
@@ -57,8 +58,11 @@ const CustomH2 = ({ children, ...props }) => {
     .replace(/(^-|-$)/g, '')
 
   return (
-    <h2 id={id} {...props}>
-      <a href={`#${id}`} className="group/heading inline-flex items-center gap-1.5 no-underline hover:no-underline">
+    <h2 {...props} id={id}>
+      <a
+        href={`#${id}`}
+        className="section-link group/heading inline-flex items-center gap-1.5 no-underline hover:no-underline"
+      >
         <span>{children}</span>
         <span className="heading-anchor text-sm font-normal text-zinc-400 opacity-0 transition-opacity select-none group-hover/heading:opacity-100">
           #
@@ -82,8 +86,11 @@ const CustomH3 = ({ children, ...props }) => {
     .replace(/(^-|-$)/g, '')
 
   return (
-    <h3 id={id} {...props}>
-      <a href={`#${id}`} className="group/heading inline-flex items-center gap-1.5 no-underline hover:no-underline">
+    <h3 {...props} id={id}>
+      <a
+        href={`#${id}`}
+        className="section-link group/heading inline-flex items-center gap-1.5 no-underline hover:no-underline"
+      >
         <span>{children}</span>
         <span className="heading-anchor text-sm font-normal text-zinc-400 opacity-0 transition-opacity select-none group-hover/heading:opacity-100">
           #
@@ -102,6 +109,10 @@ export default async function WritingSlug({ params }) {
   }
 
   const dateString = getDateTimeFormat(post.date)
+  // The page header already renders the title; keep the source Markdown intact.
+  const content = post.content.replace(/^\s*# ([^\n]+)\r?\n/, (heading, title) =>
+    title.trim() === post.title.trim() ? '' : heading
+  )
 
   // 1. Calculate reading time & word count
   const wordCount = post.content.split(/\s+/).filter(Boolean).length
@@ -140,20 +151,21 @@ export default async function WritingSlug({ params }) {
         >
           <ArrowLeft size={16} aria-hidden="true" /> Back to writing
         </Link>
-        <span className="truncate text-xs text-zinc-400">{post.title}</span>
       </nav>
       <div className="content-wrapper lg:pt-12">
         {/* Double-column grid for reading layout & side content */}
         <div className="mx-auto flex max-w-[70rem] items-start justify-center gap-12">
           {/* Left Main Article Content */}
           <div className="w-full max-w-[46rem] min-w-0 flex-1">
-            <header className="mb-8 border-b border-zinc-100 pb-6">
+            <header className="mb-10">
               <div className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.7rem] leading-5 tracking-[0.14em] text-zinc-400 uppercase">
                 <time dateTime={post.date}>{dateString}</time>
                 <span aria-hidden="true" className="text-zinc-200">
                   /
                 </span>
                 <span>Priyanshu Singh</span>
+                <span aria-hidden="true">·</span>
+                <span>{readingTime} min read</span>
               </div>
               <h1
                 id="writing-post-title"
@@ -162,7 +174,7 @@ export default async function WritingSlug({ params }) {
                 {post.title}
               </h1>
               {post.description && (
-                <p className="mt-6 text-base leading-relaxed font-normal text-zinc-500 md:text-lg">
+                <p className="mt-5 mb-0 text-base leading-relaxed font-normal text-zinc-500 md:text-lg">
                   {post.description}
                 </p>
               )}
@@ -170,7 +182,10 @@ export default async function WritingSlug({ params }) {
 
             <article className="blog-post" aria-labelledby="writing-post-title">
               <Markdown
+                className="blog-content"
                 options={{
+                  wrapper: 'div',
+                  forceWrapper: true,
                   overrides: {
                     pre: Pre,
                     h2: CustomH2,
@@ -178,7 +193,7 @@ export default async function WritingSlug({ params }) {
                   }
                 }}
               >
-                {post.content}
+                {content}
               </Markdown>
             </article>
 
@@ -194,47 +209,12 @@ export default async function WritingSlug({ params }) {
             </div>
           </div>
 
-          {/* Right Sticky Sidebar (Desktop only) */}
-          <aside className="sticky top-24 hidden w-56 shrink-0 space-y-8 select-none min-[1440px]:block">
-            {/* Dynamic Metadata details */}
-            <div className="space-y-4 rounded-xl border border-zinc-100 bg-zinc-50/50 p-5">
-              <div className="space-y-3">
-                <span className="block font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">
-                  Metadata
-                </span>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2.5 text-[13px] font-medium text-zinc-600">
-                    <Clock size={14} className="text-zinc-400" />
-                    <span>{readingTime} min read</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 text-[13px] font-medium text-zinc-600">
-                    <FileText size={14} className="text-zinc-400" />
-                    <span>{wordCount.toLocaleString()} words</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Sticky Table of Contents */}
-            {headings.length > 0 && (
-              <div className="space-y-3 pl-1">
-                <span className="block font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">
-                  On this page
-                </span>
-                <nav className="space-y-2.5 border-l border-zinc-100 pl-3 text-[13px] leading-normal">
-                  {headings.map((heading) => (
-                    <a
-                      key={heading.id}
-                      href={`#${heading.id}`}
-                      className="block py-0.5 font-medium text-zinc-400 transition-colors hover:text-zinc-950"
-                    >
-                      {heading.text}
-                    </a>
-                  ))}
-                </nav>
-              </div>
-            )}
-          </aside>
+          {/* Keep the reading outline alongside the article without a second metadata panel. */}
+          {headings.length > 0 && (
+            <aside className="sticky top-24 hidden max-h-[calc(100dvh-8rem)] w-56 shrink-0 overflow-y-auto min-[1440px]:block">
+              <ArticleToc headings={headings} />
+            </aside>
+          )}
         </div>
       </div>
     </ScrollArea>
