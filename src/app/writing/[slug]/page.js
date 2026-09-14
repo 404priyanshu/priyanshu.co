@@ -12,6 +12,12 @@ import { ScrollProgress } from '@/components/scroll-progress'
 import { getAllPostSlugs, getPostBySlug } from '@/lib/markdown'
 import { getDateTimeFormat } from '@/lib/utils'
 
+// Posts are markdown files in the repo, so generateStaticParams below already
+// enumerates every slug that can exist. Without this, an unknown slug renders
+// on demand and the notFound() result gets cached as a prerender, which serves
+// the not-found page with a 200 — a soft 404 crawlers will index.
+export const dynamicParams = false
+
 export async function generateStaticParams() {
   const allPosts = getAllPostSlugs()
   return allPosts.map((post) => ({ slug: post.slug }))
