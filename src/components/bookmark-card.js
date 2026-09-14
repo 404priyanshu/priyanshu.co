@@ -39,8 +39,10 @@ export const BookmarkCard = ({ bookmark, order }) => {
           // from the bookmarked sites and some have since 404'd, so the error
           // usually happens before that — the ref runs on mount and catches
           // any image that already failed.
+          // getAttribute, not node.src — the property resolves to an absolute
+          // URL, so comparing it against the relative path never matches.
           ref={(node) => {
-            if (node && node.complete && node.naturalWidth === 0 && node.src !== FALLBACK_COVER) {
+            if (node && node.complete && node.naturalWidth === 0 && node.getAttribute('src') !== FALLBACK_COVER) {
               node.onerror = null
               node.src = FALLBACK_COVER
             }
