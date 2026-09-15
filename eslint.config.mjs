@@ -1,35 +1,23 @@
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat'
-import { FlatCompat } from '@eslint/eslintrc'
 import eslint from '@eslint/js'
 import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
 import _import from 'eslint-plugin-import'
-import prettier from 'eslint-plugin-prettier'
+import prettierRecommended from 'eslint-plugin-prettier/recommended'
 import react from 'eslint-plugin-react'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import globals from 'globals'
-import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: eslint.configs.recommended,
-  allConfig: eslint.configs.all
-})
-
-const patchedConfig = [
-  // eslint-config-next ships flat config from v16, so it is spread directly.
-  // Routing it through FlatCompat throws "Converting circular structure to JSON".
+const config = [
+  // eslint-config-next ships flat config from v16 and owns the react,
+  // react-hooks, import and jsx-a11y plugins. Redeclaring any of them below is
+  // a "Cannot redefine plugin" error, so their recommended rules are spread as
+  // bare rules instead.
   ...nextCoreWebVitals,
-  ...fixupConfigRules(compat.extends('eslint:recommended', 'plugin:prettier/recommended')),
+  eslint.configs.recommended,
+  prettierRecommended,
   {
     files: ['**/*.js?(x)'],
-    // react, react-hooks, import and jsx-a11y all come from eslint-config-next's
-    // flat config; redeclaring them here is a "Cannot redefine plugin" error.
     plugins: {
-      'simple-import-sort': simpleImportSort,
-      prettier: fixupPluginRules(prettier)
+      'simple-import-sort': simpleImportSort
     },
     languageOptions: {
       globals: {
@@ -61,8 +49,6 @@ const patchedConfig = [
       }
     },
     rules: {
-      // Pulled in as bare rules rather than via their recommended configs,
-      // which would redeclare the react and import plugins.
       ...react.configs.flat.recommended.rules,
       ..._import.flatConfigs.recommended.rules,
       'no-console': ['error', { allow: ['error', 'info'] }],
@@ -82,9 +68,8 @@ const patchedConfig = [
     rules: {
       'import/no-anonymous-default-export': 'off'
     }
-  }
+  },
+  { ignores: ['.next/*'] }
 ]
-
-const config = [...patchedConfig, { ignores: ['.next/*'] }]
 
 export default config
