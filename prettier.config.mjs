@@ -6,7 +6,6 @@ export default {
   singleQuote: true,
   trailingComma: 'none',
   bracketSpacing: true,
-  jsxBracketSameLine: false,
   proseWrap: 'always',
   plugins: ['prettier-plugin-tailwindcss'],
   tailwindFunctions: ['cn', 'cva']
