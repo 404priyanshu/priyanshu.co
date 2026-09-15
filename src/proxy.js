@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export function middleware(request, event) {
+export function proxy(request, event) {
   const { pathname } = request.nextUrl
 
   const writingSlug = pathname.match(/^\/writing\/([^/]+)$/)?.[1]

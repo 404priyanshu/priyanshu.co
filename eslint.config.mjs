@@ -1,6 +1,7 @@
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat'
 import { FlatCompat } from '@eslint/eslintrc'
 import eslint from '@eslint/js'
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
 import _import from 'eslint-plugin-import'
 import prettier from 'eslint-plugin-prettier'
 import react from 'eslint-plugin-react'
@@ -18,22 +19,16 @@ const compat = new FlatCompat({
 })
 
 const patchedConfig = [
-  ...fixupConfigRules(
-    compat.extends(
-      'next',
-      'next/core-web-vitals',
-      'eslint:recommended',
-      'plugin:react/recommended',
-      'plugin:prettier/recommended',
-      'plugin:import/recommended'
-    )
-  ),
+  // eslint-config-next ships flat config from v16, so it is spread directly.
+  // Routing it through FlatCompat throws "Converting circular structure to JSON".
+  ...nextCoreWebVitals,
+  ...fixupConfigRules(compat.extends('eslint:recommended', 'plugin:prettier/recommended')),
   {
     files: ['**/*.js?(x)'],
+    // react, react-hooks, import and jsx-a11y all come from eslint-config-next's
+    // flat config; redeclaring them here is a "Cannot redefine plugin" error.
     plugins: {
-      react: fixupPluginRules(react),
       'simple-import-sort': simpleImportSort,
-      import: fixupPluginRules(_import),
       prettier: fixupPluginRules(prettier)
     },
     languageOptions: {
@@ -66,6 +61,10 @@ const patchedConfig = [
       }
     },
     rules: {
+      // Pulled in as bare rules rather than via their recommended configs,
+      // which would redeclare the react and import plugins.
+      ...react.configs.flat.recommended.rules,
+      ..._import.flatConfigs.recommended.rules,
       'no-console': ['error', { allow: ['error', 'info'] }],
       'react/no-unescaped-entities': 0,
       'react/react-in-jsx-scope': 'off',

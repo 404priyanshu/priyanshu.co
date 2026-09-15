@@ -134,9 +134,6 @@ const nextConfig = {
     optimizePackageImports: ['framer-motion', '@supabase/supabase-js', 'react-tweet'],
     webVitalsAttribution: ['FCP', 'LCP', 'CLS', 'FID', 'TTFB', 'INP']
   },
-  eslint: {
-    ignoreDuringBuilds: false
-  },
   // og.png reads these at request time through a relative path the tracer
   // cannot follow, so they would not otherwise reach the serverless bundle.
   outputFileTracingIncludes: {
