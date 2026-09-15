@@ -12,11 +12,6 @@ export const size = {
   height: sharedMetadata.ogImage.height
 }
 
-export async function generateStaticParams() {
-  const bookmarks = await getBookmarks()
-  return bookmarks.map((bookmark) => ({ slug: bookmark.slug }))
-}
-
 export async function GET(_, props) {
   const params = await props.params
   const { slug } = params
