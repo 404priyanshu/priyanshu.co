@@ -1,3 +1,25 @@
+// 'unsafe-inline' is unavoidable in script-src: the App Router serializes RSC
+// payloads into inline <script> tags on every page. Nonces would work, but only
+// by forcing every route to render per-request, which would undo the static
+// prerendering the site depends on. style-src needs it for the inline style
+// attributes framer-motion and next/image emit.
+// img-src has to allow any https origin because bookmark cover images are
+// hotlinked straight from the sites they point at.
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "frame-src 'none'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  'upgrade-insecure-requests'
+].join('; ')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   logging: {
@@ -22,6 +44,10 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: contentSecurityPolicy
+          },
           {
             key: 'X-Frame-Options',
             value: 'DENY'
