@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { ArticleToc } from '@/components/article-toc'
+import { BiasVarianceEquation, BiasVarianceTargets, BiasVarianceTradeoff } from '@/components/bias-variance-visuals'
 import { FloatingHeader } from '@/components/floating-header'
 import { Pre } from '@/components/mdx/pre'
 import { ScrollArea } from '@/components/scroll-area'
@@ -138,7 +139,7 @@ export default async function WritingSlug({ params }) {
   }
 
   return (
-    <ScrollArea className="animate-reveal bg-white text-zinc-950" useScrollAreaId>
+    <ScrollArea className="animate-reveal min-w-0 bg-white text-zinc-950" useScrollAreaId>
       <ScrollProgress />
       <FloatingHeader scrollTitle={post.title} goBackLink="/writing" backLabel="Writing" />
       <nav
@@ -187,6 +188,9 @@ export default async function WritingSlug({ params }) {
                   wrapper: 'div',
                   forceWrapper: true,
                   overrides: {
+                    BiasVarianceEquation,
+                    BiasVarianceTargets,
+                    BiasVarianceTradeoff,
                     pre: Pre,
                     h2: CustomH2,
                     h3: CustomH3
