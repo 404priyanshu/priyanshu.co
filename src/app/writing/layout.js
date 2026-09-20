@@ -1,3 +1,13 @@
-export default function WritingLayout({ children }) {
-  return <div className="min-w-0 flex-1">{children}</div>
+import { WritingShell } from '@/components/writing-shell'
+import { getAllPosts } from '@/lib/markdown'
+import { getDateTimeFormat, getSortedPosts } from '@/lib/utils'
+
+export default async function WritingLayout({ children }) {
+  const posts = getSortedPosts(await getAllPosts()).map(({ slug, title, date }) => ({
+    slug,
+    title,
+    date,
+    displayDate: getDateTimeFormat(date)
+  }))
+  return <WritingShell posts={posts}>{children}</WritingShell>
 }

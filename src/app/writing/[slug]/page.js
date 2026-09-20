@@ -140,20 +140,9 @@ export default async function WritingSlug({ params }) {
   }
 
   return (
-    <ScrollArea className="animate-reveal min-w-0 bg-white text-zinc-950" useScrollAreaId>
+    <ScrollArea className="min-w-0 bg-white text-zinc-950" useScrollAreaId>
       <ScrollProgress />
       <FloatingHeader scrollTitle={post.title} goBackLink="/writing" backLabel="Writing" />
-      <nav
-        aria-label="Article navigation"
-        className="sticky top-0 z-10 hidden min-h-16 shrink-0 items-center gap-6 border-b border-zinc-200 bg-white px-8 lg:flex"
-      >
-        <Link
-          href="/writing"
-          className="inline-flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          <ArrowLeft size={16} aria-hidden="true" /> Back to writing
-        </Link>
-      </nav>
       <div className="content-wrapper lg:pt-12">
         {/* Double-column grid for reading layout & side content */}
         <div className="mx-auto flex max-w-[70rem] items-start justify-center gap-12">
@@ -216,7 +205,7 @@ export default async function WritingSlug({ params }) {
 
           {/* Keep the reading outline alongside the article without a second metadata panel. */}
           {headings.length > 0 && (
-            <aside className="sticky top-24 hidden max-h-[calc(100dvh-8rem)] w-56 shrink-0 overflow-y-auto min-[1440px]:block">
+            <aside className="sticky top-24 hidden max-h-[calc(100dvh-8rem)] w-48 shrink-0 overflow-y-auto min-[1900px]:block">
               <ArticleToc headings={headings} />
             </aside>
           )}
