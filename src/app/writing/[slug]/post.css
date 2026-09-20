@@ -369,9 +369,51 @@
   fill: none;
   stroke-linecap: round;
   stroke-width: 3;
-  stroke-dasharray: 900;
-  stroke-dashoffset: 900;
-  animation: bv-draw-curve 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.bv-tradeoff[data-playing='true'] .bv-tradeoff__path {
+  animation: bv-draw-curve 1.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.bv-tradeoff__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 1rem 1.25rem 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.bv-tradeoff__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--curve-color);
+}
+
+.bv-tradeoff__legend span::before {
+  content: '';
+  width: 1rem;
+  height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.bv-tradeoff__legend button {
+  margin-left: auto;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #d4d4d8;
+  border-radius: 0.4rem;
+  color: #3f3f46;
+  cursor: pointer;
+}
+
+.bv-tradeoff__legend button:focus-visible {
+  outline: 2px solid #6259c7;
+  outline-offset: 3px;
 }
 
 .bv-tradeoff__path--bias {
@@ -380,13 +422,19 @@
 
 .bv-tradeoff__path--variance {
   stroke: #d85a30;
-  animation-delay: 0.18s;
 }
 
 .bv-tradeoff__path--error {
   stroke: #18181b;
   stroke-width: 4;
-  animation-delay: 0.36s;
+}
+
+.bv-tradeoff[data-playing='true'] .bv-tradeoff__path--variance {
+  animation-delay: 0.3s;
+}
+
+.bv-tradeoff[data-playing='true'] .bv-tradeoff__path--error {
+  animation-delay: 0.8s;
 }
 
 .bv-tradeoff__sweet-line {
@@ -401,7 +449,10 @@
   stroke-width: 3;
   transform-box: fill-box;
   transform-origin: center;
-  animation: bv-marker-pulse 2.6s ease-in-out infinite;
+}
+
+.bv-tradeoff[data-playing='true'] .bv-tradeoff__marker {
+  animation: bv-marker-arrive 0.5s ease-out 2.4s both;
 }
 
 .bv-tradeoff__labels {
@@ -425,26 +476,28 @@
 }
 
 @keyframes bv-draw-curve {
+  from {
+    stroke-dashoffset: 1;
+  }
   to {
     stroke-dashoffset: 0;
   }
 }
 
-@keyframes bv-marker-pulse {
-  0%,
-  100% {
+@keyframes bv-marker-arrive {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
     opacity: 1;
     transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.45);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bv-tradeoff__path,
-  .bv-tradeoff__marker {
+  .bv-tradeoff[data-playing='true'] .bv-tradeoff__path,
+  .bv-tradeoff[data-playing='true'] .bv-tradeoff__marker {
     animation: none;
   }
 
@@ -506,7 +559,7 @@
   }
 
   .bv-tradeoff__labels {
-    font-size: 16px;
+    font-size: 24px;
   }
 }
 

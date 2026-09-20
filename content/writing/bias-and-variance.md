@@ -2,162 +2,149 @@
 title: 'Bias and Variance: Two Ways a Model Can Be Wrong'
 date: '2026-09-20'
 description:
-  'A visual guide to underfitting, overfitting, the bias–variance decomposition, and what train and validation errors
-  reveal about a model.'
+  'A model can miss the pattern or memorize the noise. How to tell which one you have, with animated targets, a tradeoff
+  graph, and practical fixes.'
 ---
 
-A model can fail in two fundamentally different ways. It can be **consistently wrong**, because its assumptions are too
-rigid, or **unreliably right**, because small changes in its training data produce large changes in its predictions.
+Suppose you’re building a model to predict house prices. You give it floor area, train it on a few hundred sales, and
+get a result that looks suspiciously good. On the training data, practically every prediction lands.
 
-These are bias and variance. Understanding the difference turns “the model performs badly” into a diagnosis you can act
-on.
+Then you try some houses it hasn’t seen. Apparently a second bathroom can now knock half a million off the price.
+
+Before adding another layer, it helps to ask what went wrong. Did the model miss a real pattern? Or did it get far too
+attached to the particular houses you showed it?
+
+Those questions lead to **bias** and **variance**. The names sound abstract. The mistakes are very familiar.
 
 ## Start with the target
 
-Imagine repeating the same experiment: sample a new training set, fit the model, and make a prediction for the same
-input. Each purple dot below is the result of one fitted model. The bullseye is the true value we want to predict.
+Imagine training the same kind of model many times, each time with a fresh sample of data. Ask every fitted model to
+price **the same house**. Each purple dot below represents one prediction. The bullseye represents the true average
+price for those inputs, rather than one noisy sale.
 
 <ArticleFigure
   src="/assets/bias-variance-target-analogy.svg"
-  alt="Four animated targets comparing low and high bias with low and high variance"
-  caption="Each purple dot is a model trained on a different sample. The orange ring is the true target."
+  alt="Four targets comparing predictions clustered near the truth, scattered around it, clustered away from it, and scattered away from it"
+  caption="Different training samples, the same prediction task. Bias is the offset of the average; variance is the spread around that average."
   width="680"
   height="440"
 />
 
-The two dimensions are independent:
+A tight cluster off to one side means the models agree. Unfortunately, they agree on the wrong answer. That’s high bias
+and low variance.
 
-- **Bias asks where the centre of the shots lands.** If their average is far from the bullseye, the learning procedure
-  is systematically wrong.
-- **Variance asks how far the shots spread.** A wide cloud means the fitted model depends heavily on which examples
-  happened to appear in the training set.
+A wide cloud centred on the bullseye means the predictions average out nicely, but any individual model might be way
+off. That’s low bias and high variance. “Correct on average” is limited comfort when you only get to deploy one model.
 
-The best case is the top-left target: predictions are centred on the truth and tightly grouped. The bottom-right is the
-worst of both worlds: the models disagree with one another and are wrong on average.
+The top-left target is where we’d like to be: close to the truth, without depending too much on the luck of the sample.
+And yes, you can have both high bias and high variance. They aren’t mutually exclusive personality types.
 
-## Bias is error from assumptions
+## Bias: the model won’t bend
 
-Bias appears when a model is not flexible enough to represent the real relationship between inputs and outcomes. A
-straight line fitted to a strongly curved pattern is the classic example. Even with an enormous training set, the line
-cannot bend.
+Say house prices rise with floor area, but the relationship curves. Our model only knows how to draw a straight line. It
+will find the best straight line it can. It will still miss the curve.
 
-That is why high bias is associated with **underfitting**. The model leaves useful structure unexplained, so training
-error is high and validation error is usually high as well.
+Give it a million more houses and it can become very certain about that line. The missing bend doesn’t appear by magic.
+That’s the useful intuition behind **high bias**: a systematic difference between the average prediction and the true
+relationship.
 
-Common sources include:
+An overly simple model is one cause. Heavy regularization can also restrict a model enough to produce underfitting. In
+practice, missing features or unfinished training can produce similarly disappointing errors, so check those too.
 
-- a model class that is too simple;
-- features that omit important information;
-- regularization that is too strong;
-- optimization that stops before the model has learned the available signal.
+The clue is that the model struggles even on its training data. It hasn’t learned enough of the pattern to do well on
+examples it has already met.
 
-More data can make the estimate of the same inadequate model more precise, but it cannot remove a restriction built into
-the model itself.
+## Variance: the model remembers too much
 
-## Variance is error from sensitivity
+Now give a decision tree enough freedom to keep splitting. It might discover that a particular combination of floor
+area, postcode, and bathroom count identifies one unusually expensive sale.
 
-Variance appears when a model follows the details of its training sample too closely. A deep decision tree might split
-on a few unusual observations. A high-degree polynomial might twist to pass through nearly every point. Change the
-sample slightly and those choices change too.
+That helps its training score. Whether it helps price the next house is another matter.
 
-That is **overfitting**: training error is very low, but error rises on unseen data. The model has learned both signal
-and sample-specific noise.
+Train the tree on a different sample and those splits may change dramatically. That sensitivity is **variance**: how
+much the prediction at a fixed input changes across training sets. It isn’t simply how much house prices vary.
 
-High variance is encouraged by:
+Overfitting often shows up as low training error and much higher validation error. Think of a student who memorized the
+answer key and is mildly offended that the exam contains new questions.
 
-- a very flexible model relative to the amount of data;
-- noisy, redundant, or high-dimensional features;
-- weak regularization;
-- unstable fitting procedures.
+More representative data often helps here. A pattern supported by three peculiar sales has a harder time surviving
+contact with three thousand ordinary ones.
 
-Unlike bias, variance often _does_ improve with more representative data. Every additional example makes it harder for
-an accidental quirk to control the fitted model.
+## The equation earns its keep
 
-## The decomposition
-
-For squared-error regression, expected test error at an input \(x\) separates into three terms:
+For squared-error regression, we can be precise about this:
 
 <BiasVarianceEquation />
 
-The expectation is over all the training sets we might have sampled and over the noise in a new observation. The
-decomposition tells us that prediction error has three sources, not one.
+This is expected error at a fixed input x, averaging over fresh training sets and a new outcome. The three pieces are
+squared bias, variance, and noise that remains unpredictable from the available inputs.
 
-To see where it comes from, write the data-generating process as \(y = f(x) + ε\), where \(E[ε] = 0\) and \(Var[ε] =
-σ²\). Then add and subtract the average prediction \(E[f̂(x)]\):
+Here’s the short derivation. Write the outcome as y = f(x) + ε, where f(x) is the true conditional mean. Assume the new
+observation’s noise has mean zero, variance σ², and is independent of the training sample. Add and subtract the average
+fitted prediction:
 
 ```text
 y − f̂(x) = [f(x) − E[f̂(x)]] + [E[f̂(x)] − f̂(x)] + ε
 ```
 
-Square both sides and take expectations. The cross-terms disappear: the noise has mean zero, and the fitted model's
-deviation from its own average also has mean zero. What remains is squared bias, variance, and noise.
+Square it and take expectations. The cross-terms vanish under those assumptions. What’s left is exactly the three terms
+above. If noise varies with x, use its variance at that x.
 
-The last term matters. **Irreducible noise** is randomness or missing information no model can predict from the
-available inputs. A better model can reduce bias or variance, but it cannot push expected test error below this noise
-floor.
+The noise term is a useful reality check. Two otherwise similar houses can sell for different amounts because of
+circumstances your inputs don’t capture. A more elaborate model can’t predict information it doesn’t have. “Irreducible”
+means relative to the information available; better inputs can change what’s predictable.
 
-## Why there is a tradeoff
+## Where complexity helps, then hurts
 
-Increasing model complexity—deeper trees, higher polynomial degree, more parameters—usually gives the model more ways to
-match the underlying signal. Bias falls. But that same freedom gives it more ways to follow accidental patterns in the
-sample. Variance rises.
+A more flexible model can capture the bend our straight line missed. It can also chase quirks in the sample. In the
+classical picture, squared bias falls as complexity increases, variance rises, and their sum plus noise reaches a
+minimum somewhere in between.
+
+Watch the curves draw below. The black curve is their sum, including a constant noise floor; its lowest point is the
+best balance **for this illustration**.
 
 <BiasVarianceTradeoff />
 
-The useful quantity is not either curve in isolation. It is their sum, plus irreducible noise. In the classical picture,
-that sum is U-shaped: a simple model underfits on the left, a complex model overfits on the right, and the best expected
-generalization lies somewhere between them.
+There’s no rule saying the minimum must sit where bias and variance cross. The symmetric example here happens to work
+out that way. In a real problem, you estimate useful complexity with validation data.
 
-This curve is a mental model, not a universal law. Modern over-parameterized systems can show phenomena such as double
-descent. The operational lesson still survives: choose complexity by performance on data the model did not train on.
+Also, don’t turn the U-shape into a religion. Some modern models show **double descent**, where test error improves
+again beyond the point at which the model can fit the training data.
+[Belkin and colleagues’ paper](https://doi.org/10.1073/pnas.1903070116) explains why the textbook curve doesn’t cover
+every regime. “Bigger always overfits” is too neat a story.
 
-## Diagnose the problem from errors
+## Read the errors before changing the model
 
-Compare training performance with validation performance. The **level** of training error and the **gap** between the
-two curves answer different questions.
+Training error tells you how well the model fits what it has seen. Validation error tells you how well that performance
+travels. Look at both, using the same metric and a meaningful baseline.
 
-| Pattern                                               | Likely diagnosis        | What it means                                            |
-| ----------------------------------------------------- | ----------------------- | -------------------------------------------------------- |
-| High training error, high validation error, small gap | High bias               | The model cannot fit even the training signal            |
-| Low training error, much higher validation error      | High variance           | The model fits the sample but does not generalize        |
-| Low training error, low validation error, small gap   | Good fit                | The learned pattern transfers to unseen data             |
-| Both errors remain high after reasonable changes      | Noise or missing signal | The inputs may not contain enough predictive information |
+| What you see                                          | What to investigate                                                        |
+| ----------------------------------------------------- | -------------------------------------------------------------------------- |
+| Training and validation errors are both poor          | Underfitting, weak features, optimization trouble, or substantial noise    |
+| Training error is low; validation error is much worse | Overfitting, but also a possible mismatch between the two datasets         |
+| Both errors are good, with a small gap                | A promising fit; check that leakage hasn’t made the task artificially easy |
 
-Learning curves add another clue. If validation error keeps improving as the training set grows, collecting more data
-may reduce variance. If both curves flatten at a similarly poor value, more examples alone are unlikely to fix the
-model's bias.
+These are clues, not direct measurements of bias and variance. One train/validation split doesn’t give you the
+repeated-training experiment from the targets.
 
-Always make this comparison on a validation set that reflects deployment. A distribution mismatch can look like variance
-even when the deeper problem is that training and production represent different worlds.
+For our house model, a random split might also be the wrong test. If deployment means pricing next year’s sales,
+validate on later sales. A model that recognizes yesterday’s market isn’t automatically ready for tomorrow’s.
 
-## What moves each term
+## What I’d try next
 
-For a **high-bias** model, increase its ability to learn signal:
+If the model can’t fit the training signal, check the inputs and training process first. Does it know the location, or
+are we asking floor area to explain the entire housing market? Then try a more expressive model, useful interactions, or
+less regularization. More data alone won’t teach a straight line to curve.
 
-- use a more expressive model or add interactions;
-- engineer features that expose relevant structure;
-- reduce regularization;
-- train longer or improve optimization;
-- revisit labels and the problem formulation.
+If training looks great but validation doesn’t, try stronger regularization, a simpler fit, or more representative
+examples. Bagging can help unstable models: averaging several trees can reduce the effect of any one tree’s peculiar
+decisions, especially when their errors aren’t too correlated.
 
-For a **high-variance** model, make the learned solution more stable:
+Change something specific, compare validation results, and keep notes. Cross-validation can make that comparison less
+dependent on a lucky split; it doesn’t itself cure overfitting. Keep a separate test set for the final evaluation rather
+than consulting it after every experiment.
 
-- collect more representative training examples;
-- strengthen regularization or simplify the model;
-- remove noisy features or reduce dimensionality;
-- use bagging or an ensemble that averages unstable fits;
-- use cross-validation to tune complexity rather than trusting one split.
+The question I’d keep coming back to is: **does the model need more freedom to learn the pattern, or less freedom to
+chase the noise?**
 
-Some interventions affect both terms. Better features can lower bias without a large variance penalty. Bagging can lower
-variance while preserving the expressiveness of individual models. Regularization deliberately adds a little bias when
-the reduction in variance is larger.
-
-## Keep the mental model simple
-
-When a model disappoints, ask two questions:
-
-1. **Is it wrong in the same direction across plausible training sets?** That is bias.
-2. **Would a different sample produce a meaningfully different model?** That is variance.
-
-Bias is about the centre of the predictions. Variance is about their spread. Generalization depends on controlling both,
-and validation data is how we find the balance we cannot observe from training error alone.
+That won’t solve every bad model. It will give your next experiment a reason to exist beyond “perhaps another layer.”
