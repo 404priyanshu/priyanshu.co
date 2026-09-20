@@ -17,7 +17,13 @@ on.
 Imagine repeating the same experiment: sample a new training set, fit the model, and make a prediction for the same
 input. Each purple dot below is the result of one fitted model. The bullseye is the true value we want to predict.
 
-<BiasVarianceTargets />
+<ArticleFigure
+  src="/assets/bias-variance-target-analogy.svg"
+  alt="Four animated targets comparing low and high bias with low and high variance"
+  caption="Each purple dot is a model trained on a different sample. The orange ring is the true target."
+  width="680"
+  height="440"
+/>
 
 The two dimensions are independent:
 

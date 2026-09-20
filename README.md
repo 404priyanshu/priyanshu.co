@@ -63,26 +63,29 @@ NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_token
 
 ## 📝 Adding Blog Posts
 
-Blog posts are written in Markdown and stored in `content/writing/`:
+Blog posts are written in Markdown and stored in `content/writing/`. The scaffold command creates valid frontmatter,
+copies supplied assets, and adds reusable figure snippets:
 
-1. Create a new `.md` file in `content/writing/`
-2. Add frontmatter:
+```bash
+bun run blog:new -- \
+  --slug your-post-slug \
+  --title "Your Post Title" \
+  --description "A short search and social description." \
+  --asset /absolute/path/to/optional-image.svg
+```
 
-   ```markdown
-   ---
-   title: 'Your Post Title'
-   date: '2025-11-01'
-   description: 'Brief description of your post'
-   ---
+Then edit `content/writing/your-post-slug.md` and validate it:
 
-   # Your content here...
-   ```
+```bash
+bun run blog:check -- your-post-slug
+```
 
-3. Save and the post will appear automatically!
+Use `bun run blog:verify` when shared article rendering or custom interactive visuals change. See
+[`content/README.md`](content/README.md) for media examples and the complete publishing workflow.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 15](https://nextjs.org) (App Router)
+- **Framework**: [Next.js 16](https://nextjs.org) (App Router)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com)
 - **Content**: Markdown files (local)

@@ -7,6 +7,9 @@
     "url": "https://priyanshu.co"
   },
   "scripts": {
+    "blog:check": "node scripts/blog-check.mjs",
+    "blog:new": "node scripts/blog-new.mjs",
+    "blog:verify": "bun run blog:check && bun run build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

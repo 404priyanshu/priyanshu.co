@@ -23,3 +23,5 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Run ESLint
         run: bun lint
+      - name: Validate blog posts
+        run: bun run blog:check

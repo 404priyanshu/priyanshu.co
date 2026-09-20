@@ -5,9 +5,12 @@
 // attributes framer-motion and next/image emit.
 // img-src has to allow any https origin because bookmark cover images are
 // hotlinked straight from the sites they point at.
+const scriptSources = ["'self'", "'unsafe-inline'"]
+if (process.env.NODE_ENV === 'development') scriptSources.push("'unsafe-eval'")
+
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src ${scriptSources.join(' ')}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self'",

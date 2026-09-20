@@ -1,17 +1,3 @@
-export function BiasVarianceTargets() {
-  return (
-    <figure className="bv-visual bv-targets">
-      <img
-        alt="Four animated targets comparing low and high bias with low and high variance"
-        src="/assets/bias-variance-target-analogy.svg"
-      />
-      <figcaption>
-        Each purple dot is a model trained on a different sample. The orange ring is the true target.
-      </figcaption>
-    </figure>
-  )
-}
-
 export function BiasVarianceEquation() {
   return (
     <figure className="bv-equation">
