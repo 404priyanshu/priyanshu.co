@@ -34,8 +34,18 @@ const isPrivateAddress = (ip) => {
   if (isIP(ip) === 4) return isPrivateIPv4(ip)
 
   const address = ip.toLowerCase()
-  const mapped = address.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/)
-  if (mapped) return isPrivateIPv4(mapped[1])
+  const dotted = address.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/)
+  if (dotted) return isPrivateIPv4(dotted[1])
+
+  // IPv6 forms that embed an IPv4 address: mapped (::ffff:), the deprecated
+  // compatible form (::) and NAT64 (64:ff9b::). The URL parser rewrites
+  // [::ffff:127.0.0.1] as [::ffff:7f00:1], so the hex spelling has to be caught
+  // here or it would pass as a public address.
+  const embedded = address.match(/^(?:::ffff:|::|64:ff9b::)([0-9a-f]{1,4}):([0-9a-f]{1,4})$/)
+  if (embedded) {
+    const [high, low] = embedded.slice(1).map((group) => parseInt(group, 16))
+    return isPrivateIPv4(`${high >> 8}.${high & 255}.${low >> 8}.${low & 255}`)
+  }
 
   return (
     address === '::' ||
