@@ -42,10 +42,10 @@ export const SubmitBookmarkForm = memo(({ className, setFormOpen, bookmarks, cur
           },
           body: JSON.stringify({ ...values })
         })
-        const data = await response.json()
+        const data = await response.json().catch(() => ({}))
 
         if (!response.ok) {
-          throw new Error(data.error)
+          throw new Error(typeof data.error === 'string' ? data.error : 'Error submitting bookmark.')
         }
 
         form.reset()

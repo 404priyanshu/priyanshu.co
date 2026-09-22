@@ -23,8 +23,10 @@ export async function POST(req) {
 
   const data = await formSchema.safeParse(json)
   if (!data.success) {
-    const { error } = data
-    return NextResponse.json({ error }, { status: 400 })
+    // The form shows `error` in a toast, so send the first message rather than
+    // the ZodError itself, which would render as [object Object].
+    const message = data.error.issues[0]?.message ?? 'Invalid submission.'
+    return NextResponse.json({ error: message }, { status: 400 })
   }
 
   if (isbot(req.headers.get('User-Agent'))) {
