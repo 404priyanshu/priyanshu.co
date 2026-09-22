@@ -3,6 +3,9 @@ import { isbot } from 'isbot'
 import { NextResponse } from 'next/server'
 
 import { formSchema } from '@/components/submit-bookmark/utils'
+import { moderateBookmark } from '@/lib/moderation'
+import { getPagePreview } from '@/lib/page-preview'
+import { getBookmarks } from '@/lib/raindrop'
 import rateLimit from '@/lib/rate-limit'
 
 const limiter = rateLimit({
@@ -44,6 +47,20 @@ export async function POST(req) {
   try {
     const { url, email, type } = data.data
 
+    const [preview, bookmarks] = await Promise.all([getPagePreview(url), getBookmarks()])
+    const moderation = await moderateBookmark({
+      url,
+      preview,
+      collections: bookmarks.map((bookmark) => bookmark.title)
+    })
+    console.info('Bookmark moderation:', JSON.stringify({ url, ...moderation }))
+
+    if (moderation?.decision === 'reject') {
+      return NextResponse.json({ error: "This link doesn't look like something I'd bookmark." }, { status: 422 })
+    }
+
+    // Opt-in, so the submission keeps working against a table without the column.
+    const moderationField = process.env.AIRTABLE_MODERATION_FIELD
     const response = await fetch(
       `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_BOOKMARKS_TABLE_ID}`,
       {
@@ -57,7 +74,8 @@ export async function POST(req) {
             URL: url,
             Email: email,
             Date: new Date().toISOString(),
-            Type: type || 'Other'
+            Type: type || moderation?.suggestedCollection || 'Other',
+            ...(moderationField && moderation && { [moderationField]: JSON.stringify(moderation) })
           }
         })
       }
