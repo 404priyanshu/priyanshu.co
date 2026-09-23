@@ -47,9 +47,10 @@ Fetching whatever URL a stranger typed into a form is a whole problem of its own
 <ArticleFigure
   src="/assets/writing/moderating-bookmarks-with-jev/moderation-flow.svg"
   alt="Flow of a bookmark submission: validate, fetch a page preview, ask Jev three questions in one request, apply the policy in code, then reject, flag for review, or accept. An unreadable page continues with the URL only, and a missing key or API error skips moderation."
-  caption="Both dashed paths rejoin the normal flow. If moderation can't run, the submission goes through exactly as it did before."
-  width="600"
-  height="640"
+  caption="Both fallbacks rejoin the normal flow. If moderation can't run, the submission goes through exactly as it did before."
+  width="520"
+  height="420"
+  size="compact"
 />
 
 ## Three questions, one request
@@ -121,8 +122,9 @@ So the thresholds are lopsided on purpose:
   src="/assets/writing/moderating-bookmarks-with-jev/spam-thresholds.svg"
   alt="A spam probability scale from 0 to 1. Below 0.5 is accept, 0.5 to 0.9 is review, and 0.9 to 1 is reject. A wrong accept costs a row to delete; a wrong reject turns away a real link. Rejecting needs a readable page."
   caption="The reject band is deliberately narrow. Everything uncertain lands in review, where I make the call."
-  width="600"
-  height="330"
+  width="520"
+  height="232"
+  size="compact"
 />
 
 ```js

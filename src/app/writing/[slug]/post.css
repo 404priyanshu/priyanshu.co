@@ -287,6 +287,11 @@
   background: #fafafa;
 }
 
+.blog-post .article-figure--compact img {
+  max-width: 520px;
+  margin-inline: auto;
+}
+
 .blog-post .article-figure figcaption,
 .blog-post .bv-visual figcaption {
   margin: 0;

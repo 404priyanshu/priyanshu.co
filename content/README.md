@@ -42,6 +42,9 @@ Use the reusable figure component for images, GIFs, and animated SVGs:
 />
 ```
 
+Add `size="compact"` for diagrams drawn at around 520px wide. It caps the image at that width instead of stretching it
+across the column, which keeps diagram text close to body size on desktop.
+
 Animated SVGs keep their internal CSS or SMIL animation. Prefer `width` and `height` when known to prevent layout shift.
 Plain Markdown images remain supported when a caption is unnecessary.
 
