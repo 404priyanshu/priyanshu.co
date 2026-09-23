@@ -1,8 +1,6 @@
 import './post.css'
 
-import { ArrowLeft } from 'lucide-react'
 import Markdown from 'markdown-to-jsx'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { ArticleFigure } from '@/components/article-figure'
@@ -10,10 +8,12 @@ import { ArticleToc } from '@/components/article-toc'
 import { BiasVarianceEquation, BiasVarianceTradeoff } from '@/components/bias-variance-visuals'
 import { FloatingHeader } from '@/components/floating-header'
 import { Pre } from '@/components/mdx/pre'
+import { PostNavigation } from '@/components/post-navigation'
 import { ScrollArea } from '@/components/scroll-area'
 import { ScrollProgress } from '@/components/scroll-progress'
-import { getAllPostSlugs, getPostBySlug } from '@/lib/markdown'
-import { getDateTimeFormat } from '@/lib/utils'
+import { ShareButton, SharePost } from '@/components/share-post'
+import { getAllPosts, getAllPostSlugs, getPostBySlug } from '@/lib/markdown'
+import { getDateTimeFormat, getSortedPosts } from '@/lib/utils'
 
 // Posts are markdown files in the repo, so generateStaticParams below already
 // enumerates every slug that can exist. Without this, an unknown slug renders
@@ -111,6 +111,13 @@ export default async function WritingSlug({ params }) {
   }
 
   const dateString = getDateTimeFormat(post.date)
+
+  // Newest first, so the next index is the older post.
+  const posts = getSortedPosts(getAllPosts())
+  const index = posts.findIndex((item) => item.slug === post.slug)
+  const toLink = (item) => item && { slug: item.slug, title: item.title }
+  const newer = toLink(posts[index - 1])
+  const older = toLink(posts[index + 1])
   // The page header already renders the title; keep the source Markdown intact.
   const content = post.content.replace(/^\s*# ([^\n]+)\r?\n/, (heading, title) =>
     title.trim() === post.title.trim() ? '' : heading
@@ -157,6 +164,7 @@ export default async function WritingSlug({ params }) {
                 <span>Priyanshu Singh</span>
                 <span aria-hidden="true">·</span>
                 <span>{readingTime} min read</span>
+                <ShareButton slug={post.slug} title={post.title} className="ml-auto" />
               </div>
               <h1
                 id="writing-post-title"
@@ -191,16 +199,10 @@ export default async function WritingSlug({ params }) {
               </Markdown>
             </article>
 
-            {/* Back button at the bottom of post */}
-            <div className="mt-16 border-t border-zinc-100 pt-8">
-              <Link
-                href="/writing"
-                className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900"
-              >
-                <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-                Back to writing
-              </Link>
-            </div>
+            <footer className="mt-16 space-y-8 border-t border-zinc-100 pt-8">
+              <SharePost slug={post.slug} title={post.title} />
+              <PostNavigation older={older} newer={newer} />
+            </footer>
           </div>
 
           {/* Keep the reading outline alongside the article without a second metadata panel. */}

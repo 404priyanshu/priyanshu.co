@@ -2,7 +2,8 @@
 
 import { Radio } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
 import { cn } from '@/lib/utils'
@@ -11,6 +12,20 @@ export function WritingShell({ posts, children }) {
   const pathname = usePathname()
   const isIndex = pathname === '/writing'
   const selected = isIndex ? posts[0]?.slug : pathname.split('/').pop()
+  const router = useRouter()
+  const latest = posts[0]?.slug
+
+  // On desktop /writing shows the latest post beside the list, so give it that
+  // post's URL; otherwise the address bar says /writing and can't be shared.
+  // Phones keep /writing, where it's the list on its own.
+  useEffect(() => {
+    if (!isIndex || !latest) return
+    const desktop = window.matchMedia('(min-width: 1024px)')
+    const openLatest = () => desktop.matches && router.replace(`/writing/${latest}`, { scroll: false })
+    openLatest()
+    desktop.addEventListener('change', openLatest)
+    return () => desktop.removeEventListener('change', openLatest)
+  }, [isIndex, latest, router])
 
   return (
     <div className="flex min-w-0 flex-1">
