@@ -8,10 +8,21 @@ export function HomeIntroduction() {
   return (
     <section aria-labelledby="intro-heading" className={styles.intro}>
       <div className={styles.identity}>
-        <Image src="/assets/me.jpg" alt="" priority width={36} height={36} className={styles.portrait} />
+        {/* The sidebar already shows the photo and name on desktop; phones hide the sidebar. */}
+        <Image
+          src="/assets/me.jpg"
+          alt=""
+          priority
+          width={36}
+          height={36}
+          className={`${styles.portrait} ${styles.mobileOnly}`}
+        />
         <p>
-          <span>Priyanshu Singh</span>
-          <span className={styles.role}>Software engineer, India</span>
+          <span className={styles.mobileOnly}>Priyanshu Singh</span>
+          <span className={styles.role}>
+            <span className={styles.statusDot} aria-hidden="true" />
+            Based in India · Building ClassVault
+          </span>
         </p>
       </div>
 
