@@ -104,28 +104,6 @@ export const getSortedPosts = cache((posts) => {
 })
 
 /**
- * Creates an instance of the DateTimeFormat object with 'en-US' locale,
- * specifying the format to include the month and year in a two-digit and numeric format, respectively.
- * This formatter can be used to format date objects into a string representation with only the month and year.
- */
-export const dateWithMonthAndYearFormatter = Intl.DateTimeFormat('en-US', {
-  month: '2-digit',
-  year: 'numeric',
-  timeZone: 'UTC'
-})
-
-/**
- * Creates an instance of the DateTimeFormat object with 'tr-TR' locale,
- * specifying the format to include the day and month in a two-digit format.
- * This formatter can be used to format date objects into a string representation with the day and month included.
- */
-export const dateWithDayAndMonthFormatter = Intl.DateTimeFormat('tr-TR', {
-  day: '2-digit',
-  month: '2-digit',
-  timeZone: 'UTC'
-})
-
-/**
  * Initializes an instance of `Intl.NumberFormat` named `viewCountFormatter`
  * with the 'nl-NL' locale for formatting view counts.
  *
@@ -135,26 +113,6 @@ export const dateWithDayAndMonthFormatter = Intl.DateTimeFormat('tr-TR', {
  * console.log(formattedCount); // Output: "1.000.000"
  */
 export const viewCountFormatter = new Intl.NumberFormat('nl-NL')
-
-/**
- * Function to group items by year based on the provided date.
- *
- * @param items - The array of items to be grouped by year.
- * @returns - An array of arrays, each containing items grouped by year.
- */
-export const getItemsByYear = (items) => {
-  return items.reduce((acc, item) => {
-    const year = new Date(item.date || item.sys.firstPublishedAt).getFullYear()
-    const yearArr = acc.find((item) => item[0] === year)
-    if (!yearArr) {
-      acc.push([year, [item]])
-    } else {
-      yearArr[1].push(item)
-    }
-
-    return acc
-  }, [])
-}
 
 /**
  * Appends the referral parameter to an outbound link.
