@@ -2,7 +2,7 @@ import 'server-only'
 
 import { choice, noul, TypeSafeClient } from '@typesafe-ai/sdk'
 
-// Rejecting a genuine submission is worse than letting spam into the Airtable
+// Rejecting a genuine submission is worse than letting spam into the submissions
 // inbox, which gets reviewed by hand anyway, so the bar for rejecting is high.
 const SPAM_REJECT = 0.9
 const SPAM_REVIEW = 0.5
