@@ -83,10 +83,14 @@ export async function POST(req) {
       }
     )
 
-    const res = await response.json()
+    const res = await response.json().catch(() => null)
 
     if (!response.ok) {
-      console.error('Airtable bookmark submission failed:', response.status)
+      // Airtable reports the cause as `error: "NOT_FOUND"` or
+      // `error: { type, message }`. Log that, not the whole body, so a bad base
+      // or table ID is distinguishable from a token without access.
+      const { type, message } = typeof res?.error === 'string' ? { type: res.error } : (res?.error ?? {})
+      console.error('Airtable bookmark submission failed:', response.status, type ?? 'unknown', message ?? '')
       return NextResponse.json({ error: 'Error submitting bookmark.' }, { status: 502 })
     }
 
