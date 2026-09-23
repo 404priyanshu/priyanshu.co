@@ -346,13 +346,15 @@ export const CommandPalette = () => {
                           setSelectedIndex(index)
                         }}
                         className={cn(
-                          'group flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors',
+                          'group flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors',
                           isSelected ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-50'
                         )}
                       >
-                        <div className="flex items-center gap-3">
-                          <span className={cn(isSelected ? 'text-white' : 'text-zinc-500')}>{item.icon}</span>
-                          <div className="flex flex-col">
+                        <div className="flex min-w-0 flex-1 items-center gap-3">
+                          <span className={cn('shrink-0', isSelected ? 'text-white' : 'text-zinc-500')}>
+                            {item.icon}
+                          </span>
+                          <div className="flex min-w-0 flex-col">
                             <span className="leading-none font-medium tracking-tight">{item.title}</span>
                             {item.subtitle && (
                               <span
@@ -367,10 +369,10 @@ export const CommandPalette = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex shrink-0 items-center gap-2">
                           <span
                             className={cn(
-                              'rounded-sm px-1.5 py-0.5 font-mono text-[9px] font-medium tracking-wider uppercase',
+                              'rounded-sm px-1.5 py-0.5 font-mono text-[9px] font-medium tracking-wider whitespace-nowrap uppercase',
                               isSelected ? 'bg-zinc-800 text-zinc-300' : 'bg-zinc-100 text-zinc-400'
                             )}
                           >
