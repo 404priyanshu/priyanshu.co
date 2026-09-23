@@ -7,6 +7,7 @@ import { moderateBookmark } from '@/lib/moderation'
 import { getPagePreview } from '@/lib/page-preview'
 import { getBookmarks } from '@/lib/raindrop'
 import rateLimit from '@/lib/rate-limit'
+import supabase from '@/lib/supabase/private'
 
 const limiter = rateLimit({
   interval: 600 * 1000, // 10 minutes (600 seconds * 1000 ms)
@@ -61,40 +62,24 @@ export async function POST(req) {
       return NextResponse.json({ error: "This link doesn't look like something I'd bookmark." }, { status: 422 })
     }
 
-    // Opt-in, so the submission keeps working against a table without the column.
-    const moderationField = process.env.AIRTABLE_MODERATION_FIELD
-    const response = await fetch(
-      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_BOOKMARKS_TABLE_ID}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.AIRTABLE_PERSONAL_ACCESS_TOKEN}`
-        },
-        body: JSON.stringify({
-          fields: {
-            URL: url,
-            Email: email,
-            Date: new Date().toISOString(),
-            Type: type || moderation?.suggestedCollection || 'Other',
-            ...(moderationField && moderation && { [moderationField]: JSON.stringify(moderation) })
-          }
-        })
-      }
-    )
+    if (!supabase) {
+      console.error('Bookmark submission failed: Supabase is not configured')
+      return NextResponse.json({ error: 'Submissions are unavailable right now.' }, { status: 503 })
+    }
 
-    const res = await response.json().catch(() => null)
+    const { error } = await supabase.from('bookmark_submissions').insert({
+      url,
+      email,
+      type: (type || moderation?.suggestedCollection || 'Other').slice(0, 100),
+      moderation
+    })
 
-    if (!response.ok) {
-      // Airtable reports the cause as `error: "NOT_FOUND"` or
-      // `error: { type, message }`. Log that, not the whole body, so a bad base
-      // or table ID is distinguishable from a token without access.
-      const { type, message } = typeof res?.error === 'string' ? { type: res.error } : (res?.error ?? {})
-      console.error('Airtable bookmark submission failed:', response.status, type ?? 'unknown', message ?? '')
+    if (error) {
+      console.error('Bookmark submission failed:', error.code, error.message)
       return NextResponse.json({ error: 'Error submitting bookmark.' }, { status: 502 })
     }
 
-    return NextResponse.json({ res })
+    return NextResponse.json({ ok: true })
   } catch (error) {
     console.info(error)
     return NextResponse.json({ error: 'Error submitting bookmark.' }, { status: 500 })
