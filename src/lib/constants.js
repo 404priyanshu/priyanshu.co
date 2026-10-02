@@ -66,14 +66,6 @@ export const PROFILES = {
   medium: {
     title: 'Medium',
     url: 'https://404priyanshu.medium.com'
-  },
-  bluesky: {
-    title: 'Bluesky',
-    url: ''
-  },
-  readcv: {
-    title: 'Read.cv',
-    url: 'https://read.cv/'
   }
 }
 
