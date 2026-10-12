@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
 import { HomeCard } from '@/components/home-card'
-import { HomeIntroduction, HomeSkills } from '@/components/home-introduction'
+import { HomeClosing, HomeIntroduction, HomeSkills } from '@/components/home-introduction'
 import { HomeProjects } from '@/components/home-projects'
 import { PageTitle } from '@/components/page-title'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
@@ -59,6 +59,8 @@ export default async function Home() {
               </Suspense>
             </section>
           </HomeCard>
+
+          <HomeClosing />
         </div>
       </div>
     </ScrollArea>

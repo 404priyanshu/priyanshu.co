@@ -3,11 +3,28 @@ import Image from 'next/image'
 
 import { Highlight, HomeCard, InlineChip, LiveSpinner } from '@/components/home-card'
 import { PROFILES } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
+// One pastel tint per area, from the same family as the highlighter marks.
 const SKILLS = [
-  { area: 'Languages', tools: ['TypeScript', 'Python', 'JavaScript'] },
-  { area: 'Frameworks', tools: ['React', 'Next.js', 'Node.js', 'NestJS', 'FastAPI'] },
-  { area: 'Cloud & data', tools: ['AWS', 'PostgreSQL', 'Redis', 'Terraform'] }
+  {
+    area: 'Languages',
+    tools: ['TypeScript', 'Python', 'JavaScript'],
+    dot: 'bg-[#e8794a]',
+    chip: 'bg-[#fdeadf] text-[#9a4a1c] ring-[#f6d5c2]'
+  },
+  {
+    area: 'Frameworks',
+    tools: ['React', 'Next.js', 'Node.js', 'NestJS', 'FastAPI'],
+    dot: 'bg-[#e0b92c]',
+    chip: 'bg-[#fbf1bf] text-[#7a6210] ring-[#efe0a0]'
+  },
+  {
+    area: 'Cloud & data',
+    tools: ['AWS', 'PostgreSQL', 'Redis', 'Terraform'],
+    dot: 'bg-[#5fae78]',
+    chip: 'bg-[#dff0e3] text-[#2f6b45] ring-[#c7e2cd]'
+  }
 ]
 
 const ICON = { size: 14, strokeWidth: 1.75 }
@@ -38,22 +55,33 @@ function OpenToWork() {
   )
 }
 
+function ContactLink({ href, children, secondary }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        'inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full py-2 pr-3 pl-4 text-sm font-medium transition-colors',
+        secondary
+          ? 'bg-white text-gray-700 shadow-[0_1px_2px_rgb(0_0_0/0.05)] ring-1 ring-black/[0.06] hover:text-gray-900'
+          : 'bg-gray-900 text-white hover:bg-gray-700'
+      )}
+    >
+      {children}
+      <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
+    </a>
+  )
+}
+
 function HireStrip() {
   return (
-    <div className="mt-5 flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04)] ring-1 ring-black/[0.04] sm:flex-row sm:items-center sm:justify-between">
+    <div className="mt-5 flex flex-col items-start gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04)] ring-1 ring-black/[0.04] sm:flex-row sm:items-center sm:justify-between">
       <p className="mb-0 text-[15px] leading-snug">
         <span className="font-medium text-gray-900">I&apos;m looking for a full-stack or backend role.</span> Full-time
         or internship, remote or in India.
       </p>
-      <a
-        href={PROFILES.linkedin.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start rounded-full bg-gray-900 py-2 pr-3 pl-4 text-sm font-medium text-white transition-colors hover:bg-gray-700 sm:self-auto"
-      >
-        Get in touch
-        <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
-      </a>
+      <ContactLink href={PROFILES.linkedin.url}>Get in touch</ContactLink>
     </div>
   )
 }
@@ -149,13 +177,13 @@ export function HomeSkills() {
         <div className="space-y-3">
           {SKILLS.map((skill) => (
             <div key={skill.area} className="grid gap-2 text-sm md:grid-cols-[8rem_1fr] md:items-center">
-              <span className="text-gray-500">{skill.area}</span>
+              <span className="flex items-center gap-2 text-gray-500">
+                <span className={cn('size-1.5 rounded-full', skill.dot)} aria-hidden="true" />
+                {skill.area}
+              </span>
               <ul className="flex list-none flex-wrap gap-1.5">
                 {skill.tools.map((tool) => (
-                  <li
-                    key={tool}
-                    className="rounded-full bg-white px-2.5 py-1 text-[13px] text-gray-700 shadow-[0_1px_2px_rgb(0_0_0/0.05)] ring-1 ring-black/[0.05]"
-                  >
+                  <li key={tool} className={cn('rounded-full px-2.5 py-1 text-[13px] ring-1', skill.chip)}>
                     {tool}
                   </li>
                 ))}
@@ -164,6 +192,29 @@ export function HomeSkills() {
           ))}
         </div>
       </section>
+    </HomeCard>
+  )
+}
+
+// The closing card: the same ask as the intro, for whoever reads to the end.
+export function HomeClosing() {
+  return (
+    <HomeCard innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between">
+      <section aria-labelledby="closing-heading" className="space-y-3">
+        <OpenToWork />
+        <h2 id="closing-heading" className="mb-0 text-xl md:text-2xl">
+          Still here? Let&apos;s talk.
+        </h2>
+        <p className="mb-0 max-w-md text-[15px] leading-snug text-gray-500">
+          I&apos;m open to full-stack and backend roles, full-time or internship, remote or in India.
+        </p>
+      </section>
+      <div className="flex shrink-0 flex-wrap gap-2 sm:flex-nowrap">
+        <ContactLink href={PROFILES.linkedin.url}>Get in touch</ContactLink>
+        <ContactLink href={PROFILES.github.url} secondary>
+          GitHub
+        </ContactLink>
+      </div>
     </HomeCard>
   )
 }
