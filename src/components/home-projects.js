@@ -1,7 +1,7 @@
 import { ArrowUpRight, Cloud, FingerprintPattern, GitPullRequest } from 'lucide-react'
 import Image from 'next/image'
 
-import { HomeCard, iconTileClassName, LiveSpinner } from '@/components/home-card'
+import { HomeCard, iconTileClassName, LiveSpinner, rise } from '@/components/home-card'
 import { cn } from '@/lib/utils'
 
 const STATUS = {
@@ -63,13 +63,14 @@ function StatusLabel({ status, className }) {
 }
 
 // The whole card is the link. A pink-to-blue rim fades in behind it on hover.
-function ProjectLink({ href, className, children }) {
+function ProjectLink({ href, className, index, children }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn('group relative block rounded-[26px] p-px', className)}
+      style={rise(index)}
+      className={cn('group rise-in relative block rounded-[26px] p-px', className)}
     >
       <span
         aria-hidden="true"
@@ -96,7 +97,7 @@ function FeaturedProject() {
     'border-0 object-contain object-bottom transition-[opacity,scale] duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100'
 
   return (
-    <ProjectLink href={FEATURED.url} className="sm:col-span-2">
+    <ProjectLink href={FEATURED.url} index={3} className="sm:col-span-2">
       <HomeCard
         className="relative h-full shadow-none"
         innerClassName="relative flex h-full flex-col overflow-hidden bg-white p-0 sm:min-h-[260px]"
@@ -130,9 +131,9 @@ function FeaturedProject() {
   )
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, index }) {
   return (
-    <ProjectLink href={project.url}>
+    <ProjectLink href={project.url} index={index}>
       <HomeCard className="relative h-full shadow-none" innerClassName="flex h-full flex-col gap-4 bg-white p-4">
         <div className="flex items-center justify-between">
           <span aria-hidden="true" className={cn('inline-flex size-9 rounded-xl', iconTileClassName)}>
@@ -158,13 +159,13 @@ function ProjectCard({ project }) {
 export function HomeProjects() {
   return (
     <section aria-labelledby="projects-heading" className="space-y-4">
-      <h2 id="projects-heading" className="px-1">
+      <h2 id="projects-heading" style={rise(2)} className="rise-in px-1">
         Projects
       </h2>
       <div className="grid gap-3 sm:grid-cols-2">
         <FeaturedProject />
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.name} project={project} />
+        {PROJECTS.map((project, i) => (
+          <ProjectCard key={project.name} project={project} index={4 + i} />
         ))}
       </div>
     </section>

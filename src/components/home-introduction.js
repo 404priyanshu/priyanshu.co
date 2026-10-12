@@ -1,7 +1,7 @@
 import { ArrowUpRight, BookOpen, Cloud, GitPullRequest, PenLine } from 'lucide-react'
 import Image from 'next/image'
 
-import { Highlight, HomeCard, InlineChip, LiveSpinner } from '@/components/home-card'
+import { Highlight, HomeCard, InlineChip, LiveSpinner, rise } from '@/components/home-card'
 import { PROFILES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
@@ -31,7 +31,10 @@ const ICON = { size: 14, strokeWidth: 1.75 }
 
 function Greeting() {
   return (
-    <h1 className="mb-0 flex items-center gap-2 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl">
+    <h1
+      style={rise(0)}
+      className="rise-in mb-0 flex items-center gap-2 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl"
+    >
       Hello
       <span className="inline-flex items-center gap-2 rounded-full border-[1.5px] border-dashed border-[#9cc3a4] px-4 py-2 leading-none text-[#3f7a4e]">
         <span className="size-1.5 rounded-full bg-[#3f7a4e]" aria-hidden="true" />
@@ -92,7 +95,11 @@ export function HomeIntroduction() {
       <Greeting />
 
       {/* Each icon stays on the line of the word before it, with its punctuation. */}
-      <HomeCard innerClassName="p-6 text-[15px] leading-[1.8] text-gray-500 md:text-base">
+      <HomeCard
+        style={rise(1)}
+        className="rise-in"
+        innerClassName="p-6 text-[15px] leading-[1.8] text-gray-500 md:text-base"
+      >
         <section aria-label="Introduction">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
             <p className="mb-0 flex items-center gap-2.5 text-gray-900">
@@ -169,7 +176,7 @@ export function HomeIntroduction() {
 
 export function HomeSkills() {
   return (
-    <HomeCard>
+    <HomeCard style={rise(8)} className="rise-in">
       <section aria-labelledby="skills-heading">
         <h2 id="skills-heading" className="mb-3 text-[11px] font-semibold tracking-[0.08em] text-gray-400 uppercase">
           Skills
@@ -199,7 +206,11 @@ export function HomeSkills() {
 // The closing card: the same ask as the intro, for whoever reads to the end.
 export function HomeClosing() {
   return (
-    <HomeCard innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between">
+    <HomeCard
+      style={rise(10)}
+      className="rise-in"
+      innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between"
+    >
       <section aria-labelledby="closing-heading" className="space-y-3">
         <OpenToWork />
         <h2 id="closing-heading" className="mb-0 text-xl md:text-2xl">

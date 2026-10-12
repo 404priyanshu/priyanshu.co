@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
-import { HomeCard } from '@/components/home-card'
+import { HomeCard, rise } from '@/components/home-card'
 import { HomeClosing, HomeIntroduction, HomeSkills } from '@/components/home-introduction'
 import { HomeProjects } from '@/components/home-projects'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
@@ -31,14 +31,14 @@ export default async function Home() {
     <ScrollArea useScrollAreaId>
       <FloatingHeader scrollTitle="Priyanshu Singh" />
       <div className="content-wrapper">
-        <div className="content animate-reveal space-y-10">
+        <div className="content space-y-10">
           <HomeIntroduction />
 
           <HomeProjects />
 
           <HomeSkills />
 
-          <HomeCard innerClassName="bg-white px-5 pt-5 pb-2">
+          <HomeCard style={rise(9)} className="rise-in" innerClassName="bg-white px-5 pt-5 pb-2">
             <section className="space-y-4" aria-labelledby="writing-heading">
               <div className="flex items-baseline justify-between">
                 <h2 id="writing-heading">Writing</h2>

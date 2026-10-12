@@ -1,9 +1,10 @@
 import { cn } from '@/lib/utils'
 
 // Widget card for the home page: a white rim around a soft inner panel.
-export function HomeCard({ className, innerClassName, children }) {
+export function HomeCard({ className, innerClassName, style, children }) {
   return (
     <div
+      style={style}
       className={cn(
         'block rounded-[26px] bg-white p-1.5 shadow-[0_1px_2px_rgb(0_0_0/0.04),0_8px_24px_-8px_rgb(0_0_0/0.08)] ring-1 ring-black/[0.04]',
         className
@@ -16,6 +17,9 @@ export function HomeCard({ className, innerClassName, children }) {
 
 export const iconTileClassName =
   'items-center justify-center border border-gray-200 bg-white text-gray-700 shadow-[0_1px_2px_rgb(0_0_0/0.06),0_2px_6px_rgb(0_0_0/0.04)]'
+
+// Entrance: sections rise in one after another, in index order (.rise-in in globals.css).
+export const rise = (index) => ({ '--rise-index': index })
 
 // Small icon tile that sits inside a line of prose. Decorative: the words carry the meaning.
 export function InlineChip({ children }) {

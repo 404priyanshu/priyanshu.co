@@ -394,3 +394,33 @@
     background-size: 100% 85%;
   }
 }
+
+/* Home: sections rise in one after another. Each sets --rise-index; past the sixth they
+   share a delay, since those start below the fold. Opacity and translate only, so the
+   compositor does the work. Shorter on repeat visits in a session. */
+.rise-in {
+  animation: rise-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(min(var(--rise-index, 0), 6) * 70ms);
+}
+
+.visited .rise-in {
+  animation-duration: 0.35s;
+  animation-delay: calc(min(var(--rise-index, 0), 6) * 35ms);
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in {
+    animation: none;
+  }
+}
