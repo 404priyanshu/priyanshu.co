@@ -44,15 +44,20 @@ const PROJECTS = [
 const linkClassName = 'underline decoration-gray-300 underline-offset-4 hover:decoration-gray-900'
 
 // Same table language as the writing list: a muted header, ruled rows, and the
-// hovered row stays dark while the others fade. The three columns line up with
-// its Year, Title and Views columns.
-const gridClassName = 'grid-cols-[6.5rem_1fr_auto] md:grid-cols-[1fr_4.375fr_0.625fr]'
-const columnClassNames = ['', '', 'text-right']
+// hovered row stays dark while the others fade. The columns line up with its grid.
+// - Phones: 4 columns with 0.5rem gaps (Date 1, Title 2, Views 1). Plain 1fr tracks,
+//   not grid-cols-4's minmax(0, 1fr), let a long label such as "Frameworks" widen
+//   its column on a narrow phone instead of running into the next column.
+// - md and up: Year takes a sixth with no gap, and the rest is 8 columns with 0.5rem
+//   gaps. Views is one of those columns, so the 0.5rem before it is padding here.
+const gridClassName =
+  'grid-cols-[repeat(4,1fr)] gap-x-2 md:grid-cols-[calc(100%/6)_1fr_calc((100%*5/6_-_3.5rem)/8_+_0.5rem)] md:gap-x-0'
+const columnClassNames = ['col-span-1 md:pr-3', 'col-span-2 md:col-span-1', 'col-span-1 text-right md:pl-2']
 
 function HomeTable({ columns, rows }) {
   return (
     <div className="text-sm">
-      <div className={cn('grid gap-x-3 py-2 font-medium text-gray-500', gridClassName)}>
+      <div className={cn('grid py-2 font-medium text-gray-500', gridClassName)}>
         {columns.map((column, index) => (
           <span key={column} className={columnClassNames[index]}>
             {column}
@@ -67,7 +72,7 @@ function HomeTable({ columns, rows }) {
             </span>
           ))
           const rowClassName = cn(
-            'grid items-center gap-x-3 border-t border-gray-200 py-4 transition-colors duration-300 group-hover/list-item:text-gray-900',
+            'grid items-center border-t border-gray-200 py-4 transition-colors duration-300 group-hover/list-item:text-gray-900',
             gridClassName
           )
 
@@ -135,7 +140,8 @@ export function HomeIntroduction() {
             cells: [
               <span key="name" className="inline-flex items-center gap-1">
                 {project.name}
-                <ArrowUpRight size={14} strokeWidth={1.5} aria-hidden="true" />
+                {/* Phones have no room for the icon in the narrow first column; the whole row is the link. */}
+                <ArrowUpRight size={14} strokeWidth={1.5} className="hidden md:block" aria-hidden="true" />
               </span>,
               project.description,
               project.status
