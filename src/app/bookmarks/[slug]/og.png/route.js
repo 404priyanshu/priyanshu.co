@@ -5,7 +5,14 @@ import { OpenGraphImage } from '@/components/og-image'
 import { getBoldFont, getRegularFont } from '@/lib/fonts'
 import { getBookmarks } from '@/lib/raindrop'
 
-export const dynamic = 'force-dynamic'
+// Built once per public collection at build time. Unknown slugs return 404
+// without rendering, so crawlers cannot make each request render an image.
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const bookmarks = await getBookmarks()
+  return bookmarks.map((bookmark) => ({ slug: bookmark.slug }))
+}
 
 export const size = {
   width: sharedMetadata.ogImage.width,

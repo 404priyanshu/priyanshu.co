@@ -1,6 +1,8 @@
 import 'server-only'
 
 import { lookup } from 'node:dns/promises'
+import http from 'node:http'
+import https from 'node:https'
 import { isIP } from 'node:net'
 
 const TIMEOUT = 4000 // 4s
@@ -11,9 +13,8 @@ const EXCERPT_LENGTH = 1500
 // The URL comes straight from a public form, so every hop is checked before it
 // is fetched: http(s) only, default ports only, and no hostname that resolves
 // to a loopback, private, link-local or otherwise non-public address.
-// The response never reaches the submitter, only a moderation decision does,
-// which limits what a DNS-rebinding race between this check and the fetch
-// could leak.
+// The address check runs inside the socket's DNS lookup, so the connection
+// uses the exact addresses that passed it: DNS rebinding has no window.
 const isPrivateIPv4 = (ip) => {
   const [a, b] = ip.split('.').map(Number)
   return (
@@ -47,39 +48,87 @@ const isPrivateAddress = (ip) => {
     return isPrivateIPv4(`${high >> 8}.${high & 255}.${low >> 8}.${low & 255}`)
   }
 
+  const [first, second, third, fourth] = expandIPv6(address)
   return (
     address === '::' ||
     address === '::1' ||
-    address.startsWith('fc') ||
-    address.startsWith('fd') ||
-    /^fe[89ab]/.test(address)
+    [first, second, third, fourth].some(Number.isNaN) ||
+    (first & 0xfe00) === 0xfc00 || // fc00::/7 unique local
+    (first & 0xffc0) === 0xfe80 || // fe80::/10 link-local
+    (first & 0xff00) === 0xff00 || // ff00::/8 multicast
+    first === 0x2002 || // 2002::/16 6to4, embeds any IPv4 address
+    (first === 0x2001 && second === 0) || // 2001::/32 Teredo
+    (first === 0x2001 && second === 0x0db8) || // 2001:db8::/32 documentation
+    (first === 0x0100 && second === 0 && third === 0 && fourth === 0) // 100::/64 discard
   )
 }
 
-async function assertPublicUrl(url) {
+// Expands an IPv6 address to its eight 16-bit groups. A group that is not hex
+// (such as a dotted IPv4 tail) becomes NaN, which the caller treats as private.
+const expandIPv6 = (address) => {
+  const [head, tail] = address.split('::')
+  const headGroups = head ? head.split(':') : []
+  const tailGroups = tail ? tail.split(':') : []
+  const groups =
+    tail === undefined
+      ? headGroups
+      : [...headGroups, ...Array(8 - headGroups.length - tailGroups.length).fill('0'), ...tailGroups]
+  return groups.map((group) => (/^[0-9a-f]{1,4}$/.test(group) ? parseInt(group, 16) : NaN))
+}
+
+function assertAllowedUrl(url) {
   if (url.protocol !== 'https:' && url.protocol !== 'http:') throw new Error('Unsupported protocol')
   if (url.port && url.port !== '80' && url.port !== '443') throw new Error('Unsupported port')
   if (url.username || url.password) throw new Error('Credentials in URL')
 
+  // Sockets skip the DNS lookup for an IP literal, so check it here.
   const hostname = url.hostname.replace(/^\[|\]$/g, '')
-  const addresses = isIP(hostname) ? [{ address: hostname }] : await lookup(hostname, { all: true })
-  if (addresses.length === 0 || addresses.some(({ address }) => isPrivateAddress(address))) {
-    throw new Error('Non-public address')
-  }
+  if (isIP(hostname) && isPrivateAddress(hostname)) throw new Error('Non-public address')
+}
+
+// Used as the socket's lookup, so the connection goes to an address checked here.
+function publicLookup(hostname, options, callback) {
+  lookup(hostname, { all: true }).then((addresses) => {
+    if (addresses.length === 0 || addresses.some(({ address }) => isPrivateAddress(address))) {
+      callback(new Error('Non-public address'))
+    } else if (options.all) {
+      callback(null, addresses)
+    } else {
+      callback(null, addresses[0].address, addresses[0].family)
+    }
+  }, callback)
+}
+
+function request(url) {
+  const client = url.protocol === 'https:' ? https : http
+  return new Promise((resolve, reject) => {
+    client
+      .get(
+        url,
+        {
+          lookup: publicLookup,
+          signal: AbortSignal.timeout(TIMEOUT),
+          headers: {
+            Accept: 'text/html,application/xhtml+xml',
+            'User-Agent': 'priyanshu.co bookmark preview (+https://priyanshu.co/bookmarks)'
+          }
+        },
+        resolve
+      )
+      .on('error', reject)
+  })
 }
 
 async function readCapped(response) {
-  const reader = response.body.getReader()
   const chunks = []
   let size = 0
 
-  while (size < MAX_BYTES) {
-    const { done, value } = await reader.read()
-    if (done) break
-    chunks.push(value)
-    size += value.byteLength
+  for await (const chunk of response) {
+    chunks.push(chunk)
+    size += chunk.byteLength
+    if (size >= MAX_BYTES) break
   }
-  await reader.cancel().catch(() => {})
+  response.destroy()
 
   return new TextDecoder().decode(Buffer.concat(chunks).subarray(0, MAX_BYTES))
 }
@@ -139,28 +188,23 @@ export async function getPagePreview(rawUrl) {
     let url = new URL(rawUrl)
 
     for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-      await assertPublicUrl(url)
+      assertAllowedUrl(url)
 
-      const response = await fetch(url, {
-        redirect: 'manual',
-        cache: 'no-store',
-        signal: AbortSignal.timeout(TIMEOUT),
-        headers: {
-          Accept: 'text/html,application/xhtml+xml',
-          'User-Agent': 'priyanshu.co bookmark preview (+https://priyanshu.co/bookmarks)'
-        }
-      })
+      const response = await request(url)
+      const { statusCode } = response
 
-      const location = response.headers.get('location')
-      if (response.status >= 300 && response.status < 400 && location) {
-        await response.body?.cancel()
+      const { location } = response.headers
+      if (statusCode >= 300 && statusCode < 400 && location) {
+        response.destroy()
         url = new URL(location, url)
         continue
       }
 
-      const contentType = response.headers.get('content-type') ?? ''
-      if (!response.ok || !contentType.includes('html')) {
-        await response.body?.cancel()
+      const contentType = response.headers['content-type'] ?? ''
+      // No Accept-Encoding is sent, so a compressed body is unexpected and unreadable.
+      const encoding = response.headers['content-encoding'] ?? 'identity'
+      if (statusCode < 200 || statusCode >= 300 || !contentType.includes('html') || encoding !== 'identity') {
+        response.destroy()
         return null
       }
 

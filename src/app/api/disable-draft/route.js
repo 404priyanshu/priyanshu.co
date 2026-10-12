@@ -1,16 +1,16 @@
 import { draftMode } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+import { matchesSecret } from '@/lib/secrets'
+
 export const dynamic = 'force-dynamic'
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams
   const secret = searchParams.get('secret')
 
-  // Treat an unconfigured secret as "draft mode is off": without this an
-  // empty DRAFT_MODE_SECRET would match an empty ?secret= and let anyone in.
-  const draftModeSecret = process.env.DRAFT_MODE_SECRET
-  if (!draftModeSecret || secret !== draftModeSecret) {
+  // An unconfigured DRAFT_MODE_SECRET means "draft mode is off".
+  if (!matchesSecret(secret, process.env.DRAFT_MODE_SECRET)) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
   }
 
