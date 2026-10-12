@@ -1,5 +1,3 @@
-'use server'
-
 import 'server-only'
 
 import { COLLECTION_IDS } from '@/lib/constants'
@@ -57,7 +55,9 @@ async function safeFetch(url, opts = {}, retries = 3, backoff = 1000) {
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 
 export const getBookmarkItems = async (id, pageIndex = 0) => {
-  if (!id) throw new Error('Bookmark ID is required')
+  // The server action passes `id` straight from the client. Only allow the
+  // public collections, so a crafted ID cannot reach other Raindrop endpoints.
+  if (!COLLECTION_IDS.includes(id)) throw new Error('Invalid bookmark ID')
   if (typeof pageIndex !== 'number' || pageIndex < 0) {
     throw new Error('Invalid page index')
   }
