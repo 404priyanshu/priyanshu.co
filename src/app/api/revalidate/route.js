@@ -4,7 +4,6 @@ import { CONTENT_TYPES } from '@/lib/constants'
 
 export const dynamic = 'auto'
 
-const secret = `${process.env.NEXT_REVALIDATE_SECRET}`
 const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]{0,120}$/i
 
 export async function POST(request) {
@@ -24,7 +23,10 @@ export async function POST(request) {
 
   const requestHeaders = new Headers(request.headers)
   const revalidateSecret = requestHeaders.get('x-revalidate-secret')
-  if (revalidateSecret !== secret) {
+  // Reject every request when the secret is not configured: an unset or empty
+  // NEXT_REVALIDATE_SECRET must never match a crafted header.
+  const secret = process.env.NEXT_REVALIDATE_SECRET
+  if (!secret || revalidateSecret !== secret) {
     return Response.json(
       {
         revalidated: false,
