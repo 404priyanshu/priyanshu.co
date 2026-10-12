@@ -281,9 +281,13 @@
     transparent 60%
   );
   border: 1px solid transparent;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   mask-composite: exclude;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
 }
 
@@ -314,4 +318,31 @@
   }
 }
 
+/* First-visit hint: a soft blue light passes down the sidebar's number badges
+   (1 to 6) until a number key is pressed. The active page's dark badge is left alone. */
+@keyframes shortcut-wave {
+  0%,
+  34%,
+  100% {
+    border-color: var(--color-gray-200);
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-500);
+  }
+  12%,
+  20% {
+    border-color: var(--color-blue-300);
+    background-color: var(--color-blue-50);
+    color: var(--color-blue-700);
+  }
+}
 
+.hint-nav [data-shortcut=''] {
+  animation: shortcut-wave 2.8s ease-in-out infinite;
+  animation-delay: calc(var(--shortcut-index) * 160ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint-nav [data-shortcut=''] {
+    animation: none;
+  }
+}

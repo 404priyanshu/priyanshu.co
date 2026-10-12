@@ -56,6 +56,8 @@ export const NavigationLink = memo(({ href, label, icon, shortcutNumber }) => {
             isActive && 'border-gray-600 bg-gray-700 text-gray-200 group-hover:border-gray-600'
           )}
           title={`Shortcut key: ${shortcutNumber}`}
+          data-shortcut={isActive ? 'active' : ''}
+          style={{ '--shortcut-index': shortcutNumber }}
         >
           {shortcutNumber}
         </span>
