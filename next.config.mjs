@@ -1,3 +1,6 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 // 'unsafe-inline' is unavoidable in script-src: the App Router serializes RSC
 // payloads into inline <script> tags on every page. Nonces would work, but only
 // by forcing every route to render per-request, which would undo the static
@@ -23,8 +26,18 @@ const contentSecurityPolicy = [
   'upgrade-insecure-requests'
 ].join('; ')
 
+// The proxy counts views only for real posts. It cannot read content/writing at
+// request time, so the slug list is inlined into the bundle at build time.
+const postSlugs = fs
+  .readdirSync(path.join(process.cwd(), 'content/writing'))
+  .filter((file) => file.endsWith('.md'))
+  .map((file) => file.replace(/\.md$/, ''))
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    POST_SLUGS: postSlugs.join(',')
+  },
   logging: {
     fetches: {
       fullUrl: process.env.NODE_ENV === 'development'
