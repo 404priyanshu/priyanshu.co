@@ -22,7 +22,7 @@ export const MenuContent = () => (
           <span className="text-gray-600">Software Engineer</span>
         </div>
       </Link>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1" data-hint-anchor="nav">
         {LINKS.map((link, linkIndex) => (
           <NavigationLink
             key={link.href}

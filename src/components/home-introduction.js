@@ -1,50 +1,179 @@
-import Image from 'next/image'
+import { ArrowUpRight, BadgeCheck } from 'lucide-react'
 
-import styles from './home-introduction.module.css'
+import { cn } from '@/lib/utils'
 
-const STACK = ['Python', 'Node.js', 'AWS', 'PostgreSQL', 'React']
+const CERTIFICATIONS = [
+  {
+    name: 'AWS Certified Cloud Practitioner',
+    issued: 'Apr 2026',
+    validUntil: 'Apr 2029',
+    url: 'https://www.credly.com/earner/earned/badge/c94374d8-1037-4182-8057-36879f1daddd'
+  }
+]
+
+const SKILLS = [
+  { area: 'Languages', tools: 'TypeScript, Python, JavaScript' },
+  { area: 'Frameworks', tools: 'React, Next.js, Node.js, NestJS, FastAPI' },
+  { area: 'Cloud & data', tools: 'AWS, PostgreSQL, Redis, Terraform' }
+]
+
+const PROJECTS = [
+  {
+    name: 'ClassVault',
+    description: 'Notes, past papers and study roadmaps for college students, in one place.',
+    status: 'Building',
+    url: 'https://classvault.in'
+  },
+  {
+    name: 'Vernier',
+    description: 'AI review for pull requests that flags bugs and security vulnerabilities.',
+    status: 'Live',
+    url: 'https://vernier-phi.vercel.app'
+  },
+  {
+    name: 'BlockForge',
+    description: 'NFT marketplace with escrow contracts, its own chain indexer, and AWS infrastructure.',
+    status: 'GitHub',
+    url: 'https://github.com/404priyanshu/BlockForgeNFT'
+  },
+  {
+    name: 'CodeDuel',
+    description: 'Shared code editor with real-time sync, for interviews and pair programming.',
+    status: 'GitHub',
+    url: 'https://github.com/404priyanshu/codeduel'
+  },
+  {
+    name: 'Crumbprint',
+    description: 'Local-first CLI that audits your Instagram data export for privacy risks.',
+    status: 'GitHub',
+    url: 'https://github.com/404priyanshu/crumbprint'
+  }
+]
+
+const linkClassName = 'underline decoration-gray-300 underline-offset-4 hover:decoration-gray-900'
+
+// Same table language as the writing list: a muted header, ruled rows, and the
+// hovered row stays dark while the others fade. The three columns line up with
+// its Year, Title and Views columns.
+const gridClassName = 'grid-cols-[6.5rem_1fr_auto] md:grid-cols-[1fr_4.375fr_0.625fr]'
+const columnClassNames = ['', '', 'text-right']
+
+function HomeTable({ columns, rows }) {
+  return (
+    <div className="text-sm">
+      <div className={cn('grid gap-x-3 py-2 font-medium text-gray-500', gridClassName)}>
+        {columns.map((column, index) => (
+          <span key={column} className={columnClassNames[index]}>
+            {column}
+          </span>
+        ))}
+      </div>
+      <ul className="group/list-wrapper list-none">
+        {rows.map((row) => {
+          const cells = row.cells.map((cell, index) => (
+            <span key={columns[index]} className={columnClassNames[index]}>
+              {cell}
+            </span>
+          ))
+          const rowClassName = cn(
+            'grid items-center gap-x-3 border-t border-gray-200 py-4 transition-colors duration-300 group-hover/list-item:text-gray-900',
+            gridClassName
+          )
+
+          return (
+            <li key={row.key} className="group/list-item p-0 group-hover/list-wrapper:text-gray-300">
+              {row.href ? (
+                <a href={row.href} target="_blank" rel="noopener noreferrer" className={rowClassName}>
+                  {cells}
+                </a>
+              ) : (
+                <div className={rowClassName}>{cells}</div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+function HomeSection({ id, title, children }) {
+  return (
+    <section aria-labelledby={id} className="space-y-4">
+      <h2 id={id}>{title}</h2>
+      {children}
+    </section>
+  )
+}
 
 export function HomeIntroduction() {
   return (
-    <section aria-labelledby="intro-heading" className={styles.intro}>
-      <div className={styles.identity}>
-        {/* The sidebar already shows the photo and name on desktop; phones hide the sidebar. */}
-        <Image
-          src="/assets/me.jpg"
-          alt=""
-          priority
-          width={36}
-          height={36}
-          className={`${styles.portrait} ${styles.mobileOnly}`}
-        />
+    <>
+      <section aria-label="Introduction" className="space-y-5 leading-relaxed text-gray-900">
         <p>
-          <span className={styles.mobileOnly}>Priyanshu Singh</span>
-          <span className={styles.role}>
-            <span className={styles.statusDot} aria-hidden="true" />
-            Based in India · Building ClassVault
-          </span>
+          Hi, I&apos;m Priyanshu Singh, a computer science student at Bennett University and a full-stack developer from
+          India. I build for the web, and for everything that runs behind it.
         </p>
-      </div>
+        <p>
+          Right now that means{' '}
+          <a href="https://classvault.in" target="_blank" rel="noopener noreferrer" className={linkClassName}>
+            ClassVault
+          </a>
+          , a home for the notes, past papers and study plans that usually get lost in group chats. Along the way
+          I&apos;ve built an AI reviewer for pull requests, a real-time room for pair programming, and an NFT
+          marketplace on AWS.
+        </p>
+        <p>
+          I like taking systems apart until I understand why they work. Then I write it up here, usually with a drawing.
+        </p>
+      </section>
 
-      <h1 id="intro-heading" className={styles.headline}>
-        I build for the web.
-        <span>And what runs behind it.</span>
-      </h1>
-      <p className={styles.description}>
-        Curious about how things work. Happiest turning a hard problem into something people can actually use.
-      </p>
+      <HomeSection id="certification-heading" title="Certification">
+        <HomeTable
+          columns={['Issued', 'Certification', '']}
+          rows={CERTIFICATIONS.map((certification) => ({
+            key: certification.name,
+            href: certification.url,
+            cells: [
+              certification.issued,
+              <span key="name" className="inline-flex flex-wrap items-center gap-x-2">
+                <BadgeCheck size={16} strokeWidth={1.5} className="shrink-0 text-gray-400" aria-hidden="true" />
+                {certification.name}
+                <span className="hidden text-gray-400 md:inline">Valid until {certification.validUntil}</span>
+              </span>,
+              <span key="verify" className="inline-flex items-center gap-1">
+                Verify
+                <ArrowUpRight size={14} strokeWidth={1.5} aria-hidden="true" />
+              </span>
+            ]
+          }))}
+        />
+      </HomeSection>
 
-      <div className={styles.work}>
-        <h2>The work I want to do</h2>
-        <div>
-          <p>Build tools people return to, and the systems that keep them running.</p>
-          <ul className={styles.stack} aria-label="Tools I work with">
-            {STACK.map((tool) => (
-              <li key={tool}>{tool}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
+      <HomeSection id="skills-heading" title="Skills">
+        <HomeTable
+          columns={['Area', 'Tools', '']}
+          rows={SKILLS.map((skill) => ({ key: skill.area, cells: [skill.area, skill.tools, null] }))}
+        />
+      </HomeSection>
+
+      <HomeSection id="projects-heading" title="Projects">
+        <HomeTable
+          columns={['Project', 'Description', 'Status']}
+          rows={PROJECTS.map((project) => ({
+            key: project.name,
+            href: project.url,
+            cells: [
+              <span key="name" className="inline-flex items-center gap-1">
+                {project.name}
+                <ArrowUpRight size={14} strokeWidth={1.5} aria-hidden="true" />
+              </span>,
+              project.description,
+              project.status
+            ]
+          }))}
+        />
+      </HomeSection>
+    </>
   )
 }

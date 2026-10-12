@@ -10,6 +10,7 @@ import { draftMode } from 'next/headers'
 import { sharedMetadata } from '@/app/shared-metadata'
 import { CommandPalette } from '@/components/command-palette'
 import { MenuContent } from '@/components/menu-content'
+import { OnboardingHints } from '@/components/onboarding-hints'
 import { SideMenu } from '@/components/side-menu'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { PROFILES } from '@/lib/constants'
@@ -60,6 +61,7 @@ export default async function RootLayout({ children }) {
           </div>
         </main>
         <CommandPalette />
+        <OnboardingHints />
         <TailwindIndicator />
         <Analytics />
         <SpeedInsights />

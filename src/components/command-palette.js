@@ -58,6 +58,7 @@ export const CommandPalette = () => {
     setQuery('')
     setSelectedIndex(0)
     setIsOpen(true)
+    window.dispatchEvent(new Event('palette:open'))
     setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 50)
   }, [])
 
@@ -258,6 +259,7 @@ export const CommandPalette = () => {
         onClick={openPalette}
         className="fixed right-6 bottom-6 z-40 hidden h-11 cursor-pointer items-center gap-2.5 rounded-full border border-zinc-200/80 bg-white/95 pr-2.5 pl-4 font-sans text-zinc-600 shadow-[0_2px_8px_-2px_rgb(0_0_0/0.12)] backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950 hover:shadow-[0_4px_12px_-3px_rgb(0_0_0/0.16)] focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-4 active:bg-zinc-100 lg:flex"
         aria-label="Open Command Palette"
+        data-hint-anchor="search"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
