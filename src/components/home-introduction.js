@@ -1,8 +1,9 @@
-import { ArrowUpRight, BookOpen, Cloud, GitPullRequest, PenLine } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Cloud, GitPullRequest, Mail, PenLine } from 'lucide-react'
 import Image from 'next/image'
 
+import { CopyEmail } from '@/components/copy-email'
 import { Highlight, HomeCard, InlineChip, LiveSpinner, rise } from '@/components/home-card'
-import { PROFILES } from '@/lib/constants'
+import { CONTACT_EMAIL, CONTACT_MAILTO, PROFILES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 // One pastel tint per area, from the same family as the highlighter marks.
@@ -59,11 +60,13 @@ function OpenToWork() {
 }
 
 function ContactLink({ href, children, secondary }) {
+  const isEmail = href.startsWith('mailto:')
+  const Icon = isEmail ? Mail : ArrowUpRight
+
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      {...(!isEmail && { target: '_blank', rel: 'noopener noreferrer' })}
       className={cn(
         'inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full py-2 pr-3 pl-4 text-sm font-medium transition-colors',
         secondary
@@ -72,7 +75,7 @@ function ContactLink({ href, children, secondary }) {
       )}
     >
       {children}
-      <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
+      <Icon size={14} strokeWidth={2} aria-hidden="true" />
     </a>
   )
 }
@@ -84,7 +87,7 @@ function HireStrip() {
         <span className="font-medium text-gray-900">I&apos;m looking for a full-stack or backend role.</span> Full-time
         or internship, remote or in India.
       </p>
-      <ContactLink href={PROFILES.linkedin.url}>Get in touch</ContactLink>
+      <ContactLink href={CONTACT_MAILTO}>Get in touch</ContactLink>
     </div>
   )
 }
@@ -220,11 +223,17 @@ export function HomeClosing() {
           I&apos;m open to full-stack and backend roles, full-time or internship, remote or in India.
         </p>
       </section>
-      <div className="flex shrink-0 flex-wrap gap-2 sm:flex-nowrap">
-        <ContactLink href={PROFILES.linkedin.url}>Get in touch</ContactLink>
-        <ContactLink href={PROFILES.github.url} secondary>
-          GitHub
-        </ContactLink>
+      <div className="flex shrink-0 flex-col items-start gap-2.5 sm:items-end">
+        <div className="flex flex-wrap gap-2 sm:flex-nowrap">
+          <ContactLink href={CONTACT_MAILTO}>Get in touch</ContactLink>
+          <ContactLink href={PROFILES.linkedin.url} secondary>
+            LinkedIn
+          </ContactLink>
+          <ContactLink href={PROFILES.github.url} secondary>
+            GitHub
+          </ContactLink>
+        </div>
+        <CopyEmail email={CONTACT_EMAIL} />
       </div>
     </HomeCard>
   )

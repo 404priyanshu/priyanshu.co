@@ -29,6 +29,9 @@ const LinkedinIcon = () => (
   </svg>
 )
 
+export const CONTACT_EMAIL = 'priyanshu.singhcs11@gmail.com'
+export const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Hello from priyanshu.co')}`
+
 export const PROFILES = {
   twitter: {
     title: 'X (Twitter)',
