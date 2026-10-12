@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { CONTENT_TYPES } from '@/lib/constants'
+import { matchesSecret } from '@/lib/secrets'
 
 export const dynamic = 'auto'
 
@@ -23,10 +24,7 @@ export async function POST(request) {
 
   const requestHeaders = new Headers(request.headers)
   const revalidateSecret = requestHeaders.get('x-revalidate-secret')
-  // Reject every request when the secret is not configured: an unset or empty
-  // NEXT_REVALIDATE_SECRET must never match a crafted header.
-  const secret = process.env.NEXT_REVALIDATE_SECRET
-  if (!secret || revalidateSecret !== secret) {
+  if (!matchesSecret(revalidateSecret, process.env.NEXT_REVALIDATE_SECRET)) {
     return Response.json(
       {
         revalidated: false,
