@@ -42,8 +42,8 @@ function HireStrip() {
   return (
     <div className="mt-5 flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04)] ring-1 ring-black/[0.04] sm:flex-row sm:items-center sm:justify-between">
       <p className="mb-0 text-[15px] leading-snug">
-        <span className="font-medium text-gray-900">I&apos;m looking for my next role.</span> If your team builds for
-        the web, I&apos;d love to hear from you.
+        <span className="font-medium text-gray-900">I&apos;m looking for a full-stack or backend role.</span> Full-time
+        or internship, remote or in India.
       </p>
       <a
         href={PROFILES.linkedin.url}
