@@ -1,15 +1,6 @@
-import { ArrowUpRight, BadgeCheck } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
-
-const CERTIFICATIONS = [
-  {
-    name: 'AWS Certified Cloud Practitioner',
-    issued: 'Apr 2026',
-    validUntil: 'Apr 2029',
-    url: 'https://www.credly.com/earner/earned/badge/c94374d8-1037-4182-8057-36879f1daddd'
-  }
-]
 
 const SKILLS = [
   { area: 'Languages', tools: 'TypeScript, Python, JavaScript' },
@@ -127,28 +118,6 @@ export function HomeIntroduction() {
           I like taking systems apart until I understand why they work. Then I write it up here, usually with a drawing.
         </p>
       </section>
-
-      <HomeSection id="certification-heading" title="Certification">
-        <HomeTable
-          columns={['Issued', 'Certification', '']}
-          rows={CERTIFICATIONS.map((certification) => ({
-            key: certification.name,
-            href: certification.url,
-            cells: [
-              certification.issued,
-              <span key="name" className="inline-flex flex-wrap items-center gap-x-2">
-                <BadgeCheck size={16} strokeWidth={1.5} className="shrink-0 text-gray-400" aria-hidden="true" />
-                {certification.name}
-                <span className="hidden text-gray-400 md:inline">Valid until {certification.validUntil}</span>
-              </span>,
-              <span key="verify" className="inline-flex items-center gap-1">
-                Verify
-                <ArrowUpRight size={14} strokeWidth={1.5} aria-hidden="true" />
-              </span>
-            ]
-          }))}
-        />
-      </HomeSection>
 
       <HomeSection id="skills-heading" title="Skills">
         <HomeTable
