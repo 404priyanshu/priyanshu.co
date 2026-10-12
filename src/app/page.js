@@ -6,7 +6,6 @@ import { FloatingHeader } from '@/components/floating-header'
 import { HomeCard } from '@/components/home-card'
 import { HomeClosing, HomeIntroduction, HomeSkills } from '@/components/home-introduction'
 import { HomeProjects } from '@/components/home-projects'
-import { PageTitle } from '@/components/page-title'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
 import { WritingList } from '@/components/writing-list'
@@ -33,8 +32,6 @@ export default async function Home() {
       <FloatingHeader scrollTitle="Priyanshu Singh" />
       <div className="content-wrapper">
         <div className="content animate-reveal space-y-10">
-          <PageTitle title="Home" className="lg:hidden" />
-
           <HomeIntroduction />
 
           <HomeProjects />

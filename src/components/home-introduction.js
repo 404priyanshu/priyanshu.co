@@ -31,14 +31,14 @@ const ICON = { size: 14, strokeWidth: 1.75 }
 
 function Greeting() {
   return (
-    <p className="mb-0 flex items-center gap-2 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl">
+    <h1 className="mb-0 flex items-center gap-2 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl">
       Hello
       <span className="inline-flex items-center gap-2 rounded-full border-[1.5px] border-dashed border-[#9cc3a4] px-4 py-2 leading-none text-[#3f7a4e]">
         <span className="size-1.5 rounded-full bg-[#3f7a4e]" aria-hidden="true" />
         there
       </span>
       <span className="-ml-1.5">,</span>
-    </p>
+    </h1>
   )
 }
 

@@ -74,8 +74,9 @@ export const WritingList = ({ items }) => {
                   href={`/writing/${slug}`}
                   className="col-span-6 group-hover/list-item:text-gray-900 md:col-span-5"
                 >
-                  <span className="grid grid-cols-4 items-center gap-2 border-t border-gray-200 py-4 md:grid-cols-8">
-                    <span className="col-span-1 text-left tabular-nums">
+                  {/* Phones: the title takes the full width, with the date under it. */}
+                  <span className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 border-t border-gray-200 py-4 md:grid-cols-8 md:gap-2">
+                    <span className="col-start-1 row-start-2 text-left text-[13px] tabular-nums opacity-60 md:col-span-1 md:row-start-1 md:text-sm md:opacity-100">
                       <time dateTime={date} className="hidden md:block">
                         {dateWithDayAndMonth}
                       </time>
@@ -83,9 +84,9 @@ export const WritingList = ({ items }) => {
                         {dateWithMonthAndYear}
                       </time>
                     </span>
-                    <span className="col-span-2 line-clamp-4 md:col-span-6">{title}</span>
+                    <span className="col-start-1 row-start-1 line-clamp-3 md:col-span-6 md:col-start-2">{title}</span>
                     {formattedViewCount && (
-                      <span className="col-span-1">
+                      <span className="col-start-2 row-span-2 row-start-1 md:col-span-1 md:col-start-8 md:row-span-1">
                         <m.span
                           key={`${slug}-views`}
                           className="flex justify-end tabular-nums"
@@ -114,10 +115,10 @@ export const WritingList = ({ items }) => {
           <div className="grid grid-cols-6 py-2 font-medium text-gray-500">
             <span className="col-span-1 hidden text-left md:grid">Year</span>
             <span className="col-span-6 md:col-span-5">
-              <span className="grid grid-cols-4 items-center md:grid-cols-8">
-                <span className="col-span-1 text-left">Date</span>
-                <span className="col-span-2 md:col-span-6">Title</span>
-                <span className="col-span-1 text-right">Views</span>
+              <span className="grid grid-cols-[1fr_auto] items-center md:grid-cols-8">
+                <span className="hidden text-left md:col-span-1 md:block">Date</span>
+                <span className="md:col-span-6">Title</span>
+                <span className="text-right md:col-span-1">Views</span>
               </span>
             </span>
           </div>

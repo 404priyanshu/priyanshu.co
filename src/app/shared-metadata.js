@@ -1,6 +1,6 @@
 export const sharedMetadata = {
   title: 'Priyanshu Singh',
-  description: 'Full Stack Developer, Open Source Enthusiast, based in India',
+  description: 'Full-stack and backend developer from India, open to full-time roles and internships.',
   url: 'https://priyanshu.co',
   ogImage: {
     width: 1200,
