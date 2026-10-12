@@ -5,7 +5,6 @@ import { Suspense } from 'react'
 import { FloatingHeader } from '@/components/floating-header'
 import { HomeIntroduction } from '@/components/home-introduction'
 import { PageTitle } from '@/components/page-title'
-import { ProjectList } from '@/components/project-list'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
 import { WritingList } from '@/components/writing-list'
@@ -34,36 +33,23 @@ export default async function Home() {
 
           <HomeIntroduction />
 
-          {/* Projects Section */}
-          <section className="space-y-4 border-t border-zinc-100 pt-4" aria-labelledby="projects-heading">
-            <h2
-              id="projects-heading"
-              className="font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase select-none"
-            >
-              Projects
-            </h2>
-            <ProjectList />
-          </section>
-
           {/* Writing Section */}
-          <div className="space-y-4 border-t border-zinc-100 pt-4">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] font-semibold tracking-widest text-zinc-400 uppercase select-none">
-                Latest Publications
-              </span>
+          <section className="space-y-4" aria-labelledby="writing-heading">
+            <div className="flex items-baseline justify-between">
+              <h2 id="writing-heading">Writing</h2>
               <Link
                 href="/writing"
-                className="group inline-flex items-center gap-1 font-mono text-xs font-semibold text-zinc-500 transition-colors hover:text-zinc-950"
+                className="group inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900"
               >
                 All posts
-                <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
 
             <Suspense fallback={<ScreenLoadingSpinner />}>
               <WritingList items={items} />
             </Suspense>
-          </div>
+          </section>
         </div>
       </div>
     </ScrollArea>
