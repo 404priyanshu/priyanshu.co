@@ -48,12 +48,12 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
     () => (
       <ScrollArea
         className={cn(
-          'hidden bg-zinc-50 lg:flex lg:flex-col lg:border-r',
+          'bg-canvas hidden lg:flex lg:flex-col lg:border-r',
           isInner ? 'lg:w-80 xl:w-96' : 'lg:w-60 xl:w-72'
         )}
       >
         {title && (
-          <div className="sticky top-0 z-10 border-b bg-zinc-50 px-5 py-3">
+          <div className="bg-canvas sticky top-0 z-10 border-b px-5 py-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold tracking-tight">{title}</span>
               <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
             </div>
           </div>
         )}
-        <div className="bg-zinc-50 p-3">{children}</div>
+        <div className="bg-canvas p-3">{children}</div>
       </ScrollArea>
     ),
     [isInner, title, isWritingPath, isBookmarksPath, bookmarks, currentBookmark, children]

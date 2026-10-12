@@ -24,6 +24,16 @@
   --breakpoint-xl: 1280px;
 
   --animate-reveal: reveal 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Warm paper: the page canvas, and the light end of gray and zinc shifted warm so
+     borders, hovers and tints sit on it without a cool cast. Text grays stay neutral. */
+  --color-canvas: #f2f2ef;
+  --color-gray-50: #f8f8f5;
+  --color-gray-100: #f0efeb;
+  --color-gray-200: #e4e2dc;
+  --color-zinc-50: #f8f8f5;
+  --color-zinc-100: #f0efeb;
+  --color-zinc-200: #e4e2dc;
 }
 
 /*
@@ -49,11 +59,11 @@
 
   html,
   body {
-    @apply bg-white;
+    @apply bg-canvas;
   }
 
   [vaul-drawer-wrapper] {
-    @apply bg-white;
+    @apply bg-canvas;
   }
 
   html {
@@ -344,5 +354,43 @@
 @media (prefers-reduced-motion: reduce) {
   .hint-nav [data-shortcut=''] {
     animation: none;
+  }
+}
+
+/* Home: a highlighter stroke that draws in from the left. Set --highlight and
+   --highlight-delay on the element. */
+.highlight-in {
+  color: inherit;
+  padding: 0 0.15em;
+  margin: 0 -0.05em;
+  border-radius: 0.15em;
+  background: linear-gradient(var(--highlight), var(--highlight)) no-repeat 0 55% / 0% 85%;
+  box-decoration-break: clone;
+  animation: highlight-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) var(--highlight-delay, 0ms) forwards;
+}
+
+@keyframes highlight-in {
+  to {
+    background-size: 100% 85%;
+  }
+}
+
+/* Home: the featured project's art fades out at the edges. On phones it fades on
+   the bottom and both sides; beside the text it fades to the left and bottom. */
+.fade-art {
+  mask-image:
+    linear-gradient(to top, transparent 0%, #000 30%),
+    linear-gradient(to right, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-composite: intersect;
+
+  @variant sm {
+    mask-image: linear-gradient(to top, transparent 0%, #000 35%), linear-gradient(to right, transparent 0%, #000 28%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight-in {
+    animation: none;
+    background-size: 100% 85%;
   }
 }

@@ -257,17 +257,17 @@ export const CommandPalette = () => {
       <button
         type="button"
         onClick={openPalette}
-        className="fixed right-6 bottom-6 z-40 hidden h-11 cursor-pointer items-center gap-2.5 rounded-full border border-zinc-200/80 bg-white/95 pr-2.5 pl-4 font-sans text-zinc-600 shadow-[0_2px_8px_-2px_rgb(0_0_0/0.12)] backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950 hover:shadow-[0_4px_12px_-3px_rgb(0_0_0/0.16)] focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-4 active:bg-zinc-100 lg:flex"
+        className="fixed right-4 bottom-4 z-40 hidden h-8 cursor-pointer items-center gap-1.5 rounded-full border border-zinc-200/80 bg-white/90 pr-1 pl-3 font-sans text-zinc-600 shadow-[0_2px_8px_-2px_rgb(0_0_0/0.12)] backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950 hover:shadow-[0_4px_12px_-3px_rgb(0_0_0/0.16)] focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-4 active:bg-zinc-100 lg:flex"
         aria-label="Open Command Palette"
         data-hint-anchor="search"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
-        <Search size={16} strokeWidth={1.75} aria-hidden="true" />
-        <span className="text-sm font-medium">Search</span>
+        <Search size={14} strokeWidth={1.75} aria-hidden="true" />
+        <span className="text-xs font-medium">Search</span>
         <kbd
           aria-hidden="true"
-          className="ml-1 flex h-6 items-center gap-0.5 rounded-md border border-zinc-200/80 bg-zinc-50 px-1.5 font-sans text-[11px] leading-none font-medium text-zinc-500"
+          className="ml-0.5 flex h-6 items-center gap-0.5 rounded-full border border-zinc-200/80 bg-zinc-50 px-2 font-sans text-[10px] leading-none font-medium text-zinc-500"
         >
           <span>⌘</span>
           <span>K</span>

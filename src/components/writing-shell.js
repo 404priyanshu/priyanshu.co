@@ -32,12 +32,12 @@ export function WritingShell({ posts, children }) {
       <aside
         aria-label="Writing archive"
         className={cn(
-          'h-dvh w-full shrink-0 overflow-y-auto bg-zinc-50/70 lg:w-[290px] lg:border-r lg:border-zinc-200 xl:w-[320px]',
+          'bg-canvas h-dvh w-full shrink-0 overflow-y-auto lg:w-[290px] lg:border-r lg:border-zinc-200 xl:w-[320px]',
           !isIndex && 'hidden lg:block'
         )}
       >
         {isIndex && <FloatingHeader title="Writing" />}
-        <header className="sticky top-0 z-10 hidden h-16 items-center justify-between border-b border-zinc-200 bg-zinc-50 px-5 lg:flex">
+        <header className="bg-canvas sticky top-0 z-10 hidden h-16 items-center justify-between border-b border-zinc-200 px-5 lg:flex">
           <Link href="/writing" className="text-sm font-semibold text-zinc-900">
             Writing
           </Link>
