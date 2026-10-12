@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
+import { GrowOnView } from '@/components/grow-on-view'
 import { HomeCard, rise } from '@/components/home-card'
 import { HomeClosing, HomeIntroduction, HomeSkills } from '@/components/home-introduction'
 import { HomeProjects } from '@/components/home-projects'
@@ -39,24 +40,26 @@ export default async function Home() {
 
           <HomeSkills />
 
-          <HomeCard style={rise(9)} className="rise-in" innerClassName="bg-white px-5 pt-5 pb-2">
-            <section className="space-y-4" aria-labelledby="writing-heading">
-              <div className="flex items-baseline justify-between">
-                <h2 id="writing-heading">Writing</h2>
-                <Link
-                  href="/writing"
-                  className="group inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900"
-                >
-                  All posts
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </div>
+          <GrowOnView>
+            <HomeCard style={rise(9)} className="rise-in" innerClassName="bg-white px-5 pt-5 pb-2">
+              <section className="space-y-4" aria-labelledby="writing-heading">
+                <div className="flex items-baseline justify-between">
+                  <h2 id="writing-heading">Writing</h2>
+                  <Link
+                    href="/writing"
+                    className="group inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+                  >
+                    All posts
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
 
-              <Suspense fallback={<ScreenLoadingSpinner />}>
-                <WritingList items={items} />
-              </Suspense>
-            </section>
-          </HomeCard>
+                <Suspense fallback={<ScreenLoadingSpinner />}>
+                  <WritingList items={items} />
+                </Suspense>
+              </section>
+            </HomeCard>
+          </GrowOnView>
 
           <HomeClosing />
         </div>

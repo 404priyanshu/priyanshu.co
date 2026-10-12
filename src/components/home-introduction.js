@@ -2,6 +2,7 @@ import { ArrowUpRight, BookOpen, Cloud, GitPullRequest, Mail, PenLine } from 'lu
 import Image from 'next/image'
 
 import { CopyEmail } from '@/components/copy-email'
+import { GrowOnView } from '@/components/grow-on-view'
 import { Highlight, HomeCard, InlineChip, LiveSpinner, rise } from '@/components/home-card'
 import { CONTACT_EMAIL, CONTACT_MAILTO, PROFILES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -172,61 +173,65 @@ export function HomeIntroduction() {
 
 export function HomeSkills() {
   return (
-    <HomeCard style={rise(8)} className="rise-in">
-      <section aria-labelledby="skills-heading">
-        <h2 id="skills-heading" className="mb-3 text-[11px] font-semibold tracking-[0.08em] text-gray-400 uppercase">
-          Skills
-        </h2>
-        <div className="space-y-3">
-          {SKILLS.map((skill) => (
-            <div key={skill.area} className="grid gap-2 text-sm md:grid-cols-[8rem_1fr] md:items-center">
-              <span className="flex items-center gap-2 text-gray-500">
-                <span className={cn('size-1.5 rounded-full', skill.dot)} aria-hidden="true" />
-                {skill.area}
-              </span>
-              <ul className="flex list-none flex-wrap gap-1.5">
-                {skill.tools.map((tool) => (
-                  <li key={tool} className={cn('rounded-full px-2.5 py-1 text-[13px] ring-1', skill.chip)}>
-                    {tool}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-    </HomeCard>
+    <GrowOnView>
+      <HomeCard style={rise(8)} className="rise-in">
+        <section aria-labelledby="skills-heading">
+          <h2 id="skills-heading" className="mb-3 text-[11px] font-semibold tracking-[0.08em] text-gray-400 uppercase">
+            Skills
+          </h2>
+          <div className="space-y-3">
+            {SKILLS.map((skill) => (
+              <div key={skill.area} className="grid gap-2 text-sm md:grid-cols-[8rem_1fr] md:items-center">
+                <span className="flex items-center gap-2 text-gray-500">
+                  <span className={cn('size-1.5 rounded-full', skill.dot)} aria-hidden="true" />
+                  {skill.area}
+                </span>
+                <ul className="flex list-none flex-wrap gap-1.5">
+                  {skill.tools.map((tool) => (
+                    <li key={tool} className={cn('rounded-full px-2.5 py-1 text-[13px] ring-1', skill.chip)}>
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      </HomeCard>
+    </GrowOnView>
   )
 }
 
 // The closing card: the same ask as the intro, for whoever reads to the end.
 export function HomeClosing() {
   return (
-    <HomeCard
-      style={rise(10)}
-      className="rise-in"
-      innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between"
-    >
-      <section id="contact" aria-labelledby="closing-heading" className="scroll-mt-24 space-y-2">
-        <h2 id="closing-heading" className="mb-0 text-xl md:text-2xl">
-          Let&apos;s work together
-        </h2>
-        <p className="mb-0 max-w-md text-[15px] leading-snug text-gray-500">
-          I&apos;m looking for a full-stack or backend role: full-time or internship, remote or in India.
-        </p>
-      </section>
-      <div className="flex shrink-0 flex-col items-start gap-2.5 sm:items-end">
-        <div className="flex flex-wrap gap-2 sm:flex-nowrap">
-          <ContactLink href={CONTACT_MAILTO}>Get in touch</ContactLink>
-          <ContactLink href={PROFILES.linkedin.url} secondary>
-            LinkedIn
-          </ContactLink>
-          <ContactLink href={PROFILES.github.url} secondary>
-            GitHub
-          </ContactLink>
+    <GrowOnView>
+      <HomeCard
+        style={rise(10)}
+        className="rise-in"
+        innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <section id="contact" aria-labelledby="closing-heading" className="scroll-mt-24 space-y-2">
+          <h2 id="closing-heading" className="mb-0 text-xl md:text-2xl">
+            Let&apos;s work together
+          </h2>
+          <p className="mb-0 max-w-md text-[15px] leading-snug text-gray-500">
+            I&apos;m looking for a full-stack or backend role: full-time or internship, remote or in India.
+          </p>
+        </section>
+        <div className="flex shrink-0 flex-col items-start gap-2.5 sm:items-end">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap">
+            <ContactLink href={CONTACT_MAILTO}>Get in touch</ContactLink>
+            <ContactLink href={PROFILES.linkedin.url} secondary>
+              LinkedIn
+            </ContactLink>
+            <ContactLink href={PROFILES.github.url} secondary>
+              GitHub
+            </ContactLink>
+          </div>
+          <CopyEmail email={CONTACT_EMAIL} />
         </div>
-        <CopyEmail email={CONTACT_EMAIL} />
-      </div>
-    </HomeCard>
+      </HomeCard>
+    </GrowOnView>
   )
 }

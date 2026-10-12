@@ -411,3 +411,16 @@
     animation: none;
   }
 }
+
+/* Home: big cards grow to full size the first time they scroll into view (see
+   GrowOnView). Scale only, so the compositor does the work. The curve is Apple's soft
+   ease: growth stays visible for most of the 1.2s instead of snapping early. Reduced
+   motion never reaches the waiting state. */
+.grow-on-view[data-grow='waiting'] {
+  scale: 0.92;
+}
+
+.grow-on-view[data-grow='grown'] {
+  scale: 1;
+  transition: scale 1.2s cubic-bezier(0.28, 0.11, 0.32, 1);
+}

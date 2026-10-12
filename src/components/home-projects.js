@@ -1,5 +1,6 @@
 import { ArrowUpRight, Cloud, FingerprintPattern, GitPullRequest, Search } from 'lucide-react'
 
+import { GrowOnView } from '@/components/grow-on-view'
 import { HomeCard, iconTileClassName, LiveSpinner, rise } from '@/components/home-card'
 import { cn } from '@/lib/utils'
 
@@ -144,22 +145,24 @@ function NoteCard({ tag, tagClassName, meta, title, className }) {
 // Text on the left, a small product preview on the right.
 function FeaturedProject() {
   return (
-    <ProjectLink href={FEATURED.url} index={3} className="sm:col-span-2">
-      <HomeCard
-        className="relative h-full shadow-none"
-        innerClassName="relative flex h-full flex-col overflow-hidden bg-white p-0 sm:min-h-[248px]"
-      >
-        <ClassVaultPreview />
-        <div className="relative flex flex-1 flex-col gap-3 p-4 sm:w-1/2 sm:p-6">
-          <StatusLabel status={FEATURED.status} />
-          <ProjectText project={FEATURED} large />
-          <span className="mt-auto inline-flex items-center gap-1.5 self-start rounded-full bg-gray-100 py-1.5 pr-2.5 pl-3 text-xs font-medium text-gray-600 transition-colors group-hover:bg-gray-900 group-hover:text-white sm:mt-6">
-            {FEATURED.label}
-            <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden="true" />
-          </span>
-        </div>
-      </HomeCard>
-    </ProjectLink>
+    <GrowOnView className="sm:col-span-2">
+      <ProjectLink href={FEATURED.url} index={3}>
+        <HomeCard
+          className="relative h-full shadow-none"
+          innerClassName="relative flex h-full flex-col overflow-hidden bg-white p-0 sm:min-h-[248px]"
+        >
+          <ClassVaultPreview />
+          <div className="relative flex flex-1 flex-col gap-3 p-4 sm:w-1/2 sm:p-6">
+            <StatusLabel status={FEATURED.status} />
+            <ProjectText project={FEATURED} large />
+            <span className="mt-auto inline-flex items-center gap-1.5 self-start rounded-full bg-gray-100 py-1.5 pr-2.5 pl-3 text-xs font-medium text-gray-600 transition-colors group-hover:bg-gray-900 group-hover:text-white sm:mt-6">
+              {FEATURED.label}
+              <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+          </div>
+        </HomeCard>
+      </ProjectLink>
+    </GrowOnView>
   )
 }
 
