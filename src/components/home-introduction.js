@@ -31,16 +31,17 @@ const SKILLS = [
 const ICON = { size: 14, strokeWidth: 1.75 }
 
 function Greeting() {
-  // No margin utility here: the page's space-y sets the gap below. Baseline alignment
-  // keeps "Hello", the pill's text and the comma on one line of type.
+  // mb-5 replaces the page's 40px gap so the greeting sits with its card. The pill is
+  // inline-block so its baseline is the text's, and baseline alignment keeps "Hello",
+  // "there" and the comma on one line of type.
   return (
     <h1
       style={rise(0)}
-      className="rise-in flex items-baseline gap-2.5 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl"
+      className="rise-in mb-5 flex items-baseline gap-2.5 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl"
     >
       Hello
-      <span className="inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-dashed border-[#9cc3a4] bg-[#3f7a4e]/[0.04] px-3 py-1 leading-none text-[#3f7a4e]">
-        <span className="size-1.5 rounded-full bg-[#3f7a4e]" aria-hidden="true" />
+      <span className="inline-block rounded-full border-[1.5px] border-dashed border-[#9cc3a4] bg-[#3f7a4e]/[0.04] px-3 py-1.5 leading-none text-[#3f7a4e]">
+        <span className="mr-1.5 inline-block size-1.5 rounded-full bg-[#3f7a4e] align-middle" aria-hidden="true" />
         there
       </span>
       <span className="-ml-2">,</span>
