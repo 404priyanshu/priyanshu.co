@@ -47,7 +47,9 @@ const linkClassName = 'underline decoration-gray-300 underline-offset-4 hover:de
 // hovered row stays dark while the others fade. The columns line up with its grid.
 // - Phones: 4 columns with 0.5rem gaps (Date 1, Title 2, Views 1). Plain 1fr tracks,
 //   not grid-cols-4's minmax(0, 1fr), let a long label such as "Frameworks" widen
-//   its column on a narrow phone instead of running into the next column.
+//   its column on a narrow phone instead of running into the next column. The
+//   columns are set once on the table, and the header, list, items and rows use
+//   them through subgrid, so every row widens together.
 // - md and up: Year takes a sixth with no gap, and the rest is 8 columns with 0.5rem
 //   gaps. Views is one of those columns, so the 0.5rem before it is padding here.
 const gridClassName =
@@ -55,16 +57,20 @@ const gridClassName =
 const columnClassNames = ['col-span-1 md:pr-3', 'col-span-2 md:col-span-1', 'col-span-1 text-right md:pl-2']
 
 function HomeTable({ columns, rows }) {
+  // Each layer between the table and a row's cells spans every column and passes
+  // the table's columns down with subgrid.
+  const subgridClassName = 'col-span-full grid grid-cols-subgrid'
+
   return (
-    <div className="text-sm">
-      <div className={cn('grid py-2 font-medium text-gray-500', gridClassName)}>
+    <div className={cn('grid text-sm', gridClassName)}>
+      <div className={cn(subgridClassName, 'py-2 font-medium text-gray-500')}>
         {columns.map((column, index) => (
           <span key={column} className={columnClassNames[index]}>
             {column}
           </span>
         ))}
       </div>
-      <ul className="group/list-wrapper list-none">
+      <ul className={cn(subgridClassName, 'group/list-wrapper list-none')}>
         {rows.map((row) => {
           const cells = row.cells.map((cell, index) => (
             <span key={columns[index]} className={columnClassNames[index]}>
@@ -72,12 +78,15 @@ function HomeTable({ columns, rows }) {
             </span>
           ))
           const rowClassName = cn(
-            'grid items-center border-t border-gray-200 py-4 transition-colors duration-300 group-hover/list-item:text-gray-900',
-            gridClassName
+            subgridClassName,
+            'items-center border-t border-gray-200 py-4 transition-colors duration-300 group-hover/list-item:text-gray-900'
           )
 
           return (
-            <li key={row.key} className="group/list-item p-0 group-hover/list-wrapper:text-gray-300">
+            <li
+              key={row.key}
+              className={cn(subgridClassName, 'group/list-item p-0 group-hover/list-wrapper:text-gray-300')}
+            >
               {row.href ? (
                 <a href={row.href} target="_blank" rel="noopener noreferrer" className={rowClassName}>
                   {cells}
