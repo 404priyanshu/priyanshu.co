@@ -33,32 +33,35 @@ const ICON = { size: 14, strokeWidth: 1.75 }
 function Greeting() {
   // mb-5 replaces the page's 40px gap so the greeting sits with its card. The pill is
   // inline-block so its baseline is the text's, and baseline alignment keeps "Hello",
-  // "there" and the comma on one line of type.
+  // "there" and the comma on one line of type. "Open to work" sits at the right.
   return (
-    <h1
-      style={rise(0)}
-      className="rise-in mb-5 flex items-baseline gap-2.5 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl"
-    >
-      Hello
-      <span className="inline-block rounded-full border-[1.5px] border-dashed border-[#9cc3a4] bg-[#3f7a4e]/[0.04] px-3 py-1.5 leading-none text-[#3f7a4e]">
-        <span className="mr-1.5 inline-block size-1.5 rounded-full bg-[#3f7a4e] align-middle" aria-hidden="true" />
-        there
-      </span>
-      <span className="-ml-2">,</span>
-    </h1>
+    <div style={rise(0)} className="rise-in mb-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+      <h1 className="mb-0 flex items-baseline gap-2.5 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl">
+        Hello
+        <span className="inline-block rounded-full border-[1.5px] border-dashed border-[#9cc3a4] bg-[#3f7a4e]/[0.04] px-3 py-1.5 leading-none text-[#3f7a4e]">
+          <span className="mr-1.5 inline-block size-1.5 rounded-full bg-[#3f7a4e] align-middle" aria-hidden="true" />
+          there
+        </span>
+        <span className="-ml-2">,</span>
+      </h1>
+      <OpenToWork />
+    </div>
   )
 }
 
-// A live green dot that pings softly, in the greeting's green.
+// A live green dot that pings softly, in the greeting's green. Links to the contact card.
 function OpenToWork() {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full bg-[#e6f1e8] py-1 pr-3 pl-2.5 text-xs leading-5 font-medium text-[#2f6b45] ring-1 ring-[#cfe3d3]">
+    <a
+      href="#contact"
+      className="inline-flex items-center gap-2 rounded-full bg-[#e6f1e8] py-1 pr-3 pl-2.5 text-xs leading-5 font-medium text-[#2f6b45] ring-1 ring-[#cfe3d3] transition-colors hover:bg-[#dcecdf]"
+    >
       <span className="relative flex size-2" aria-hidden="true">
         <span className="absolute inline-flex size-full rounded-full bg-[#4f9a63] opacity-60 motion-safe:animate-ping" />
         <span className="relative inline-flex size-2 rounded-full bg-[#3f8a55]" />
       </span>
       Open to work
-    </span>
+    </a>
   )
 }
 
@@ -83,18 +86,6 @@ function ContactLink({ href, children, secondary }) {
   )
 }
 
-function HireStrip() {
-  return (
-    <div className="mt-5 flex flex-col items-start gap-3 rounded-2xl bg-white p-4 shadow-[0_1px_2px_rgb(0_0_0/0.04)] ring-1 ring-black/[0.04] sm:flex-row sm:items-center sm:justify-between">
-      <p className="mb-0 text-[15px] leading-snug">
-        <span className="font-medium text-gray-900">I&apos;m looking for a full-stack or backend role.</span> Full-time
-        or internship, remote or in India.
-      </p>
-      <ContactLink href={CONTACT_MAILTO}>Get in touch</ContactLink>
-    </div>
-  )
-}
-
 export function HomeIntroduction() {
   return (
     <>
@@ -107,7 +98,8 @@ export function HomeIntroduction() {
         innerClassName="p-6 text-[15px] leading-[1.8] text-gray-500 md:text-base"
       >
         <section aria-label="Introduction">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          {/* The sidebar shows the name and photo on desktop; phones have no sidebar. */}
+          <div className="mb-4 lg:hidden">
             <p className="mb-0 flex items-center gap-2.5 text-gray-900">
               <Image
                 src="/assets/me.jpg"
@@ -118,7 +110,6 @@ export function HomeIntroduction() {
               />
               <span className="font-medium">Priyanshu Singh</span>
             </p>
-            <OpenToWork />
           </div>
           <p className="mb-4">
             <span className="font-medium text-gray-900">A computer science student</span> at Bennett University and a
@@ -173,7 +164,6 @@ export function HomeIntroduction() {
               </InlineChip>
             </span>
           </p>
-          <HireStrip />
         </section>
       </HomeCard>
     </>
@@ -217,13 +207,12 @@ export function HomeClosing() {
       className="rise-in"
       innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between"
     >
-      <section aria-labelledby="closing-heading" className="space-y-3">
-        <OpenToWork />
+      <section id="contact" aria-labelledby="closing-heading" className="scroll-mt-24 space-y-2">
         <h2 id="closing-heading" className="mb-0 text-xl md:text-2xl">
-          Still here? Let&apos;s talk.
+          Let&apos;s work together
         </h2>
         <p className="mb-0 max-w-md text-[15px] leading-snug text-gray-500">
-          I&apos;m open to full-stack and backend roles, full-time or internship, remote or in India.
+          I&apos;m looking for a full-stack or backend role: full-time or internship, remote or in India.
         </p>
       </section>
       <div className="flex shrink-0 flex-col items-start gap-2.5 sm:items-end">

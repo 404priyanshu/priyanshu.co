@@ -31,7 +31,8 @@ export default async function Home() {
     <ScrollArea useScrollAreaId>
       <FloatingHeader scrollTitle="Priyanshu Singh" />
       <div className="content-wrapper">
-        <div className="content space-y-10">
+        {/* A little wider than other pages: the home page is cards, not long reading. */}
+        <div className="content space-y-10 lg:max-w-4xl!">
           <HomeIntroduction />
 
           <HomeProjects />

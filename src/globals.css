@@ -375,19 +375,6 @@
   }
 }
 
-/* Home: the featured project's art fades out at the edges. On phones it fades on
-   the bottom and both sides; beside the text it fades to the left and bottom. */
-.fade-art {
-  mask-image:
-    linear-gradient(to top, transparent 0%, #000 30%),
-    linear-gradient(to right, transparent 0%, #000 22%, #000 78%, transparent 100%);
-  mask-composite: intersect;
-
-  @variant sm {
-    mask-image: linear-gradient(to top, transparent 0%, #000 35%), linear-gradient(to right, transparent 0%, #000 28%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .highlight-in {
     animation: none;

@@ -1,5 +1,4 @@
-import { ArrowUpRight, Cloud, FingerprintPattern, GitPullRequest } from 'lucide-react'
-import Image from 'next/image'
+import { ArrowUpRight, Cloud, FingerprintPattern, GitPullRequest, Search } from 'lucide-react'
 
 import { HomeCard, iconTileClassName, LiveSpinner, rise } from '@/components/home-card'
 import { cn } from '@/lib/utils'
@@ -89,36 +88,69 @@ function ProjectText({ project, large }) {
   )
 }
 
-// Text on the left, the whole drawing on the right. The pencil sketch is multiplied into
-// the card so its paper-white disappears, the art fades out to the left and bottom
-// (.fade-art in globals.css), and on hover it crossfades into the color dithered version.
-function FeaturedProject() {
-  const artClassName =
-    'border-0 object-contain object-bottom transition-[opacity,scale] duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100'
+// A small, quiet mock of ClassVault: a search bar over two note cards, in a window
+// that bleeds off the card's right and bottom edges. Decorative; the text says what it is.
+function ClassVaultPreview() {
+  const motionClassName = 'transition-transform duration-500 ease-out motion-reduce:transition-none'
 
+  return (
+    <div aria-hidden="true" className="relative h-52 sm:absolute sm:inset-y-0 sm:right-0 sm:h-auto sm:w-1/2">
+      <div className="absolute top-4 right-0 bottom-0 left-4 space-y-2.5 rounded-tl-2xl bg-gray-50 [mask-image:linear-gradient(to_bottom,#000_65%,transparent)] p-4 ring-1 ring-black/[0.05] sm:top-7 sm:left-0">
+        <div className="flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs text-gray-400 shadow-[0_1px_2px_rgb(0_0_0/0.04)] ring-1 ring-black/[0.06]">
+          <Search size={12} strokeWidth={2} />
+          Search notes and past papers
+          <span className="ml-auto rounded border border-gray-200 px-1 font-mono text-[10px] leading-4">/</span>
+        </div>
+        <NoteCard
+          tag="Past paper"
+          tagClassName="bg-[#fdeadf] text-[#9a4a1c]"
+          meta="2024"
+          title="DBMS · End-term"
+          className={cn(motionClassName, 'group-hover:-translate-y-0.5')}
+        />
+        <NoteCard
+          tag="Notes"
+          tagClassName="bg-[#dff0e3] text-[#2f6b45]"
+          meta="Unit 3"
+          title="Operating Systems"
+          className={cn(motionClassName, 'ml-6 group-hover:-translate-x-1.5')}
+        />
+      </div>
+    </div>
+  )
+}
+
+function NoteCard({ tag, tagClassName, meta, title, className }) {
+  return (
+    <div
+      className={cn(
+        'rounded-xl bg-white p-3 shadow-[0_1px_2px_rgb(0_0_0/0.04),0_6px_16px_-8px_rgb(0_0_0/0.1)] ring-1 ring-black/[0.05]',
+        className
+      )}
+    >
+      <div className="flex items-center justify-between text-[10px]">
+        <span className={cn('rounded-full px-1.5 py-0.5 font-medium', tagClassName)}>{tag}</span>
+        <span className="text-gray-400">{meta}</span>
+      </div>
+      <p className="mt-2 mb-2 text-[13px] leading-tight font-medium text-gray-800">{title}</p>
+      <div className="space-y-1.5">
+        <div className="h-1.5 rounded-full bg-gray-100" />
+        <div className="h-1.5 w-2/3 rounded-full bg-gray-100" />
+      </div>
+    </div>
+  )
+}
+
+// Text on the left, a small product preview on the right.
+function FeaturedProject() {
   return (
     <ProjectLink href={FEATURED.url} index={3} className="sm:col-span-2">
       <HomeCard
         className="relative h-full shadow-none"
-        innerClassName="relative flex h-full flex-col overflow-hidden bg-white p-0 sm:min-h-[260px]"
+        innerClassName="relative flex h-full flex-col overflow-hidden bg-white p-0 sm:min-h-[248px]"
       >
-        <div className="fade-art relative h-56 sm:absolute sm:top-2 sm:-right-4 sm:-bottom-10 sm:h-auto sm:w-[55%]">
-          <Image
-            src="/assets/classvault-paper-archive.avif"
-            alt=""
-            fill
-            sizes="(min-width: 435px) 400px, 100vw"
-            className={cn(artClassName, 'mix-blend-multiply group-hover:opacity-0')}
-          />
-          <Image
-            src="/assets/classvault-paper-archive-color-dithered.avif"
-            alt=""
-            fill
-            sizes="(min-width: 435px) 400px, 100vw"
-            className={cn(artClassName, 'opacity-0 group-hover:opacity-100')}
-          />
-        </div>
-        <div className="relative flex flex-1 flex-col gap-3 p-4 sm:w-[52%] sm:p-6">
+        <ClassVaultPreview />
+        <div className="relative flex flex-1 flex-col gap-3 p-4 sm:w-1/2 sm:p-6">
           <StatusLabel status={FEATURED.status} />
           <ProjectText project={FEATURED} large />
           <span className="mt-auto inline-flex items-center gap-1.5 self-start rounded-full bg-gray-100 py-1.5 pr-2.5 pl-3 text-xs font-medium text-gray-600 transition-colors group-hover:bg-gray-900 group-hover:text-white sm:mt-6">
