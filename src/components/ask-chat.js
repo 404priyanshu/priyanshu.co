@@ -20,6 +20,11 @@ const MAX_QUESTION_CHARS = 1000
 // Follow the stream only while the reader is this close to the bottom.
 const STICK_THRESHOLD_PX = 120
 
+// Some models (gpt-oss on Groq) add citation markers such as 【3†L1-L4】 even
+// when told not to. The page lists sources itself, so drop them, including a
+// half-streamed one at the end of the text.
+const stripCitations = (text) => text.replace(/\s*【[^】]*】/g, '').replace(/\s*【[^】]*$/, '')
+
 let nextId = 0
 const createId = () => `m${++nextId}`
 
@@ -88,7 +93,7 @@ function Message({ message, isStreaming }) {
         ) : message.error ? (
           <p className="m-0">{message.error}</p>
         ) : (
-          <Markdown options={MARKDOWN_OPTIONS}>{message.content}</Markdown>
+          <Markdown options={MARKDOWN_OPTIONS}>{stripCitations(message.content)}</Markdown>
         )}
       </div>
       {!isStreaming && message.sources?.length > 0 && (
@@ -156,7 +161,8 @@ export function AskChat() {
       // Failed or empty answers are not sent back: the API needs real turns.
       const history = [...messages, userMessage]
         .filter((message) => !message.error && message.content)
-        .map(({ role, content }) => ({ role, content }))
+        // Markers go back without citations, so the model does not copy them.
+        .map(({ role, content }) => ({ role, content: role === 'assistant' ? stripCitations(content) : content }))
         .slice(-MAX_HISTORY)
       while (history[0]?.role !== 'user') history.shift()
 
