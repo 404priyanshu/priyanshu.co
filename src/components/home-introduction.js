@@ -1,4 +1,4 @@
-import { ArrowUpRight, BookOpen, Cloud, GitPullRequest, Mail, PenLine } from 'lucide-react'
+import { ArrowUpRight, BookOpen, BriefcaseBusiness, Cloud, GitPullRequest, Mail, PenLine } from 'lucide-react'
 import Image from 'next/image'
 
 import { CopyEmail } from '@/components/copy-email'
@@ -119,8 +119,20 @@ export function HomeIntroduction() {
           <p className="mb-4">
             <span className="font-medium text-gray-900">Right now that means</span>{' '}
             <span className="whitespace-nowrap">
+              <a href="https://callaaya.fun" target="_blank" rel="noopener noreferrer" className="hover:opacity-70">
+                <Highlight delay={400} color="#cdebd4">
+                  CallAaya
+                </Highlight>
+              </a>
+              <InlineChip>
+                <BriefcaseBusiness {...ICON} />
+              </InlineChip>
+              ,
+            </span>{' '}
+            which ranks live jobs by how well your skills fit and tailors your resume to each one, and{' '}
+            <span className="whitespace-nowrap">
               <a href="https://classvault.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-70">
-                <Highlight delay={400} color="#ffd6c2">
+                <Highlight delay={700} color="#ffd6c2">
                   ClassVault
                 </Highlight>
               </a>
@@ -132,7 +144,7 @@ export function HomeIntroduction() {
             a home for the notes, past papers and study plans that usually get lost in group chats. Along the way
             I&apos;ve built an{' '}
             <span className="whitespace-nowrap">
-              <Highlight delay={700}>AI reviewer for pull requests</Highlight>
+              <Highlight delay={1000}>AI reviewer for pull requests</Highlight>
               <InlineChip>
                 <GitPullRequest {...ICON} />
               </InlineChip>
@@ -159,7 +171,7 @@ export function HomeIntroduction() {
             <span className="font-medium text-gray-900">I like taking systems apart</span> until I understand why they
             work. Then I write it up here,{' '}
             <span className="whitespace-nowrap">
-              <Highlight delay={1000}>usually with a drawing</Highlight>
+              <Highlight delay={1300}>usually with a drawing</Highlight>
               <InlineChip>
                 <PenLine {...ICON} />
               </InlineChip>
