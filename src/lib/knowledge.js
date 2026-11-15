@@ -13,6 +13,10 @@ import { parse } from 'yaml'
 
 const KNOWLEDGE_DIR = path.join(process.cwd(), 'content/knowledge')
 const KEYWORDS_PATTERN = /<!--\s*keywords:([\s\S]*?)-->/gi
+// Follow-up questions this chunk can answer, separated by `|`. Shown as
+// suggestions after an answer that used the chunk, and indexed like keywords:
+// they are the exact questions the chunk answers, so they sharpen matches.
+const QUESTIONS_PATTERN = /<!--\s*questions:([\s\S]*?)-->/gi
 
 // BM25 constants. These are the usual defaults; the corpus is too small to tune them.
 const K1 = 1.2
@@ -21,6 +25,10 @@ const B = 0.75
 const HEADING_WEIGHT = 2
 // Chunks below this share of the best score are noise for this query.
 const RELATIVE_CUTOFF = 0.25
+// Follow-up questions come only from chunks this close to the best match, so
+// a weak match (ClassVault's phone OTP for "phone number") adds no off-topic
+// suggestions.
+const SUGGEST_CUTOFF = 0.5
 
 const STOPWORDS = new Set(
   (
@@ -77,12 +85,17 @@ function parseFile(fileName) {
       const heading = (newline === -1 ? section : section.slice(0, newline)).trim()
       const rawBody = newline === -1 ? '' : section.slice(newline + 1)
       const keywords = [...rawBody.matchAll(KEYWORDS_PATTERN)].map((m) => m[1]).join(' ')
-      const text = rawBody.replace(KEYWORDS_PATTERN, '').trim()
+      const questions = [...rawBody.matchAll(QUESTIONS_PATTERN)]
+        .flatMap((m) => m[1].split('|'))
+        .map((question) => question.trim())
+        .filter(Boolean)
+      const text = rawBody.replace(KEYWORDS_PATTERN, '').replace(QUESTIONS_PATTERN, '').trim()
 
       const headingTokens = tokenize(`${topic} ${heading}`)
       const tokens = [
         ...Array.from({ length: HEADING_WEIGHT }, () => headingTokens).flat(),
         ...tokenize(keywords),
+        ...tokenize(questions.join(' ')),
         ...tokenize(text)
       ]
 
@@ -92,6 +105,7 @@ function parseFile(fileName) {
         heading,
         text,
         pinned: data.pinned === true,
+        questions,
         tokens
       }
     })
@@ -141,7 +155,14 @@ function bm25(chunk, queryTokens, { documentFrequency, averageLength, chunks }) 
   return score
 }
 
-const publicChunk = ({ id, topic, heading, text }) => ({ id, topic, heading, text })
+const publicChunk = ({ id, topic, heading, text, pinned, questions }) => ({
+  id,
+  topic,
+  heading,
+  text,
+  pinned,
+  questions
+})
 
 /**
  * Returns the pinned chunks plus up to `limit` chunks that best match `query`.
@@ -165,4 +186,41 @@ export function retrieve(query, { limit = 4 } = {}) {
     .map(({ chunk, score }) => ({ ...publicChunk(chunk), score: Number(score.toFixed(3)) }))
 
   return [...pinned, ...matches]
+}
+
+const normalizeQuestion = (question) =>
+  question
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+
+/**
+ * Picks up to `limit` follow-up questions for the chunks `retrieve` returned.
+ * It takes the first question of each matched chunk in rank order, then the
+ * second, and so on, so the suggestions cover several topics. Pinned chunks
+ * fill any gap. Questions already in `asked` are skipped.
+ */
+export function suggestQuestions(chunks, { asked = [], limit = 3 } = {}) {
+  const seen = new Set(asked.map(normalizeQuestion))
+  const picks = []
+  const take = (question) => {
+    const key = normalizeQuestion(question)
+    if (picks.length >= limit || seen.has(key)) return
+    seen.add(key)
+    picks.push(question)
+  }
+
+  const ranked = chunks.filter((chunk) => !chunk.pinned)
+  const best = Math.max(0, ...ranked.map((chunk) => chunk.score ?? 0))
+  // Asked questions are dropped first, so a chunk whose first question was
+  // just asked offers its next one in the same round.
+  const queues = ranked
+    .filter((chunk) => (chunk.score ?? 0) >= best * SUGGEST_CUTOFF)
+    .map((chunk) => chunk.questions.filter((question) => !seen.has(normalizeQuestion(question))))
+  const depth = Math.max(0, ...queues.map((queue) => queue.length))
+  for (let round = 0; round < depth; round++) {
+    for (const queue of queues) if (queue[round]) take(queue[round])
+  }
+  for (const chunk of chunks.filter((chunk) => chunk.pinned)) chunk.questions.forEach(take)
+  return picks
 }

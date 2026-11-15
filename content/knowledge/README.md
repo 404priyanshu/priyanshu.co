@@ -10,6 +10,9 @@ The chat at `/ask` answers questions about Priyanshu from the files in this fold
 - Write each chunk so it makes sense alone. The model sees only the few chunks that match a question.
 - An optional `<!-- keywords: a, b, c -->` line inside a chunk adds search words. The model does not see them. Use it
   for words a visitor may type that the chunk does not contain (for example "college" for an education chunk).
+- An optional `<!-- questions: First question? | Second question? -->` line lists questions the chunk answers. After an
+  answer that used the chunk, the page offers them as "Ask next" buttons, and search uses their words too. Write only
+  questions the chunk itself answers.
 - `pinned: true` in the frontmatter sends every chunk of that file with every question. Keep pinned files short.
 
 ## Privacy
@@ -19,4 +22,5 @@ anything you do not want on the open web.
 
 ## Check
 
-Run `bun run knowledge:check -- "your question"` to see which chunks a question retrieves.
+Run `bun run knowledge:check -- "your question"` to see which chunks a question retrieves and which next questions the
+page would suggest.

@@ -5,6 +5,7 @@ title: Projects
 ## Project overview
 
 <!-- keywords: projects, project, portfolio, built, build, side, work, products, shipped, apps, list, best, favorite -->
+<!-- questions: Tell me about LexIQ | Tell me about CallAaya | Tell me about Tandem -->
 
 Priyanshu's main projects are:
 
@@ -17,6 +18,7 @@ Priyanshu's main projects are:
 ## LexIQ — eval-driven RAG platform
 
 <!-- keywords: lexiq, rag, retrieval, search, hybrid, bm25, pgvector, vector, embeddings, reranking, reranker, cross-encoder, citations, cited, streaming, abstention, evaluation, eval, golden, recall, faithfulness, llm-judge, latency, p95, nextjs, fastapi, redis -->
+<!-- questions: How is LexIQ evaluated? | How does LexIQ retrieve and rerank documents? | How fast and cheap is LexIQ? -->
 
 LexIQ is an evaluation-driven RAG platform built with Next.js, FastAPI, pgvector, and Redis. Repository:
 https://github.com/404priyanshu/lexiq
@@ -30,6 +32,7 @@ https://github.com/404priyanshu/lexiq
 ## CallAaya — AI job-fit engine
 
 <!-- keywords: callaaya, jobs, job, search, matching, fit, resume, resumes, tailored, ranking, claude, turso, razorpay, payments, paid, users, greenhouse, lever, ashby, workday, adzuna, seo, ingestion -->
+<!-- questions: How does CallAaya tailor resumes? | Which job boards does CallAaya pull from? -->
 
 CallAaya (https://callaaya.fun) is an AI job-fit engine built with Next.js, Turso, the Claude API, and Razorpay. It has
 paying users.
@@ -40,9 +43,10 @@ paying users.
 - It ingests jobs from Greenhouse, Lever, Ashby, Workday, and Adzuna on a 6-hour refresh.
 - It includes 3,000+ SEO job pages.
 
-## ClassVault — study platform for college students
+## ClassVault — notes platform for college students
 
-<!-- keywords: classvault, notes, study, students, college, university, supabase, postgresql, rls, row level security, auth, authentication, otp, oauth, pgtap, vitest, playwright, testing, realtime, pomodoro, chat, pdf, search -->
+<!-- keywords: classvault, notes, students, college, university, supabase, postgresql, rls, row level security, auth, authentication, otp, oauth, pgtap, vitest, playwright, testing, realtime, pomodoro, chat, pdf, search -->
+<!-- questions: How does ClassVault enforce access control? | What features does ClassVault have? -->
 
 ClassVault (https://classvault.in) is a notes and study platform for college students, built with Next.js, Supabase, and
 PostgreSQL.
@@ -56,6 +60,7 @@ PostgreSQL.
 ## Tandem — multi-agent research copilot
 
 <!-- keywords: tandem, multi-agent, multiagent, agents, agent, langgraph, research, copilot, planner, researcher, critic, writer, celery, langfuse, tracing, checkpoints, human-in-the-loop, approval, tools, token budgets -->
+<!-- questions: Which agents make up Tandem? | How does Tandem keep agents safe and traceable? -->
 
 Tandem is a multi-agent research copilot built with LangGraph, FastAPI, Celery, and Langfuse.
 
@@ -65,5 +70,6 @@ Tandem is a multi-agent research copilot built with LangGraph, FastAPI, Celery, 
 ## Zed editor themes
 
 <!-- keywords: zed, editor, theme, themes, open source, open-source, downloads, design, light, dark -->
+<!-- questions: How popular are his Zed editor themes? -->
 
 Priyanshu published two Zed editor themes with four light and dark variants. They have 59k+ downloads.

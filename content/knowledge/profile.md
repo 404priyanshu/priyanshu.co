@@ -6,6 +6,7 @@ pinned: true
 ## Summary
 
 <!-- keywords: who, about, yourself, introduce, intro, bio, overview, role, location, based, remote, hire, hiring, available, availability, open, looking, job, jobs, internship, full-time -->
+<!-- questions: What is Priyanshu working on right now? | Which projects has he built? | Is he open to remote roles? -->
 
 Priyanshu Singh is a full-stack AI engineer based in Bengaluru, India, and open to remote work. He is available
 immediately for AI Engineer roles, either an internship or full-time.
