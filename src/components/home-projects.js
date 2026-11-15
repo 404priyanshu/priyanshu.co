@@ -1,4 +1,4 @@
-import { ArrowUpRight, Cloud, FingerprintPattern, GitPullRequest, Search } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Cloud, FingerprintPattern, GitPullRequest, Search } from 'lucide-react'
 
 import { GrowOnView } from '@/components/grow-on-view'
 import { HomeCard, iconTileClassName, LiveSpinner, rise } from '@/components/home-card'
@@ -14,14 +14,21 @@ const STATUS = {
 const ICON = { size: 16, strokeWidth: 1.75 }
 
 const FEATURED = {
-  name: 'ClassVault',
-  description: 'Notes, past papers and study roadmaps for college students, in one place.',
-  status: 'Building',
-  url: 'https://classvault.in',
-  label: 'Visit classvault.in'
+  name: 'CallAaya',
+  description: 'Ranks 22,000+ live jobs by how well your skills fit, then tailors your resume to each one.',
+  status: 'Live',
+  url: 'https://callaaya.fun',
+  label: 'Visit callaaya.fun'
 }
 
 const PROJECTS = [
+  {
+    name: 'ClassVault',
+    description: 'Notes, past papers and study roadmaps for college students, in one place.',
+    status: 'Building',
+    url: 'https://classvault.in',
+    icon: <BookOpen {...ICON} />
+  },
   {
     name: 'Vernier',
     description: 'AI review for pull requests that flags bugs and security vulnerabilities.',
@@ -89,9 +96,10 @@ function ProjectText({ project, large }) {
   )
 }
 
-// A small, quiet mock of ClassVault: a search bar over two note cards, in a window
-// that bleeds off the card's right and bottom edges. Decorative; the text says what it is.
-function ClassVaultPreview() {
+// A small, quiet mock of CallAaya: a search bar over two job cards ranked by fit,
+// in a window that bleeds off the card's right and bottom edges. Decorative; the
+// text says what it is.
+function CallAayaPreview() {
   const motionClassName = 'transition-transform duration-500 ease-out motion-reduce:transition-none'
 
   return (
@@ -99,21 +107,20 @@ function ClassVaultPreview() {
       <div className="absolute top-4 right-0 bottom-0 left-4 space-y-2.5 rounded-tl-2xl bg-gray-50 [mask-image:linear-gradient(to_bottom,#000_65%,transparent)] p-4 ring-1 ring-black/[0.05] sm:top-7 sm:left-0">
         <div className="flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs text-gray-400 shadow-[0_1px_2px_rgb(0_0_0/0.04)] ring-1 ring-black/[0.06]">
           <Search size={12} strokeWidth={2} />
-          Search notes and past papers
-          <span className="ml-auto rounded border border-gray-200 px-1 font-mono text-[10px] leading-4">/</span>
+          AI Engineer · India or remote
+          <span className="ml-auto rounded border border-gray-200 px-1 font-mono text-[10px] leading-4">22k</span>
         </div>
-        <NoteCard
-          tag="Past paper"
-          tagClassName="bg-[#fdeadf] text-[#9a4a1c]"
-          meta="2024"
-          title="DBMS · End-term"
+        <JobCard
+          fit={94}
+          meta="Remote · Greenhouse"
+          title="AI Engineer"
+          note="Tailored resume ready"
           className={cn(motionClassName, 'group-hover:-translate-y-0.5')}
         />
-        <NoteCard
-          tag="Notes"
-          tagClassName="bg-[#dff0e3] text-[#2f6b45]"
-          meta="Unit 3"
-          title="Operating Systems"
+        <JobCard
+          fit={86}
+          meta="Bengaluru · Lever"
+          title="ML Platform Engineer"
           className={cn(motionClassName, 'ml-6 group-hover:-translate-x-1.5')}
         />
       </div>
@@ -121,7 +128,7 @@ function ClassVaultPreview() {
   )
 }
 
-function NoteCard({ tag, tagClassName, meta, title, className }) {
+function JobCard({ fit, meta, title, note, className }) {
   return (
     <div
       className={cn(
@@ -130,14 +137,14 @@ function NoteCard({ tag, tagClassName, meta, title, className }) {
       )}
     >
       <div className="flex items-center justify-between text-[10px]">
-        <span className={cn('rounded-full px-1.5 py-0.5 font-medium', tagClassName)}>{tag}</span>
+        <span className="rounded-full bg-[#dff0e3] px-1.5 py-0.5 font-medium text-[#2f6b45]">{fit}% fit</span>
         <span className="text-gray-400">{meta}</span>
       </div>
       <p className="mt-2 mb-2 text-[13px] leading-tight font-medium text-gray-800">{title}</p>
-      <div className="space-y-1.5">
-        <div className="h-1.5 rounded-full bg-gray-100" />
-        <div className="h-1.5 w-2/3 rounded-full bg-gray-100" />
+      <div className="h-1.5 rounded-full bg-gray-100">
+        <div className="h-full rounded-full bg-[#9fd0ad]" style={{ width: `${fit}%` }} />
       </div>
+      {note && <p className="mt-2 mb-0 text-[10px] leading-none text-[#9a4a1c]">{note}</p>}
     </div>
   )
 }
@@ -151,7 +158,7 @@ function FeaturedProject() {
           className="relative h-full shadow-none"
           innerClassName="relative flex h-full flex-col overflow-hidden bg-white p-0 sm:min-h-[248px]"
         >
-          <ClassVaultPreview />
+          <CallAayaPreview />
           <div className="relative flex flex-1 flex-col gap-3 p-4 sm:w-1/2 sm:p-6">
             <StatusLabel status={FEATURED.status} />
             <ProjectText project={FEATURED} large />
