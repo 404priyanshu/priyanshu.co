@@ -1,4 +1,12 @@
-import { ArmchairIcon, BookmarkIcon, BookOpenIcon, PencilLineIcon, SparklesIcon, Wand2Icon } from 'lucide-react'
+import {
+  ArmchairIcon,
+  BookmarkIcon,
+  BookOpenIcon,
+  MessageCircleIcon,
+  PencilLineIcon,
+  SparklesIcon,
+  Wand2Icon
+} from 'lucide-react'
 
 // lucide-react dropped its brand icons in v1, so the GitHub and LinkedIn marks
 // are inlined with lucide's own paths and stroke attributes to stay drop-in.
@@ -106,6 +114,11 @@ export const LINKS = [
     href: '/books',
     label: 'Books',
     icon: <BookOpenIcon size={16} />
+  },
+  {
+    href: '/ask',
+    label: 'Ask',
+    icon: <MessageCircleIcon size={16} />
   }
 ]
 

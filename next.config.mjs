@@ -179,7 +179,9 @@ const nextConfig = {
   // og.png reads these at request time through a relative path the tracer
   // cannot follow, so they would not otherwise reach the serverless bundle.
   outputFileTracingIncludes: {
-    '/bookmarks/[slug]/og.png': ['./src/assets/fonts/Geist-Regular.otf', './src/assets/fonts/Geist-Medium.otf']
+    '/bookmarks/[slug]/og.png': ['./src/assets/fonts/Geist-Regular.otf', './src/assets/fonts/Geist-Medium.otf'],
+    // The chat's knowledge base is read with fs at request time.
+    '/api/chat': ['./content/knowledge/**/*.md']
   },
   transpilePackages: ['geist']
 }

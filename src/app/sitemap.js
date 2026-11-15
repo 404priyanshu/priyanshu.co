@@ -70,6 +70,12 @@ export default async function sitemap() {
         priority: 0.7
       },
       {
+        url: `${siteURL}/ask`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7
+      },
+      {
         url: `${siteURL}/bookmarks`,
         lastModified: new Date(),
         changeFrequency: 'daily',
