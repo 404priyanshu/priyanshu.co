@@ -114,6 +114,37 @@ function Message({ message, isStreaming }) {
   )
 }
 
+function QuestionChips({ label, questions, onSelect }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-xs font-medium text-zinc-500">{label}</span>
+      <div className="flex flex-wrap gap-2">
+        {questions.map((question) => (
+          <button
+            key={question}
+            type="button"
+            onClick={() => onSelect(question)}
+            className="rounded-full border bg-white px-3 py-1.5 text-left text-[12.5px] text-zinc-700 shadow-xs transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:ring-1 focus-visible:ring-zinc-900"
+          >
+            {question}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// The route sends sources and next questions as URL-encoded JSON headers.
+// Both are extras: a bad header just means the answer shows without them.
+function readJsonHeader(response, name) {
+  try {
+    const value = JSON.parse(decodeURIComponent(response.headers.get(name) ?? '[]'))
+    return Array.isArray(value) ? value : []
+  } catch {
+    return []
+  }
+}
+
 export function AskChat() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -141,7 +172,8 @@ export function AskChat() {
     // Scroll the page itself: the input bar is sticky, so scrolling it into view moves nothing.
     const scrollArea = document.getElementById(SCROLL_AREA_ID)
     scrollArea?.scrollTo({ top: scrollArea.scrollHeight })
-  }, [messages])
+    // streamingId too: the next-question chips appear when an answer ends.
+  }, [messages, streamingId])
 
   useEffect(() => () => abortRef.current?.abort(), [])
 
@@ -188,13 +220,10 @@ export function AskChat() {
           throw new Error(data?.error ?? 'Something went wrong. Please try again.')
         }
 
-        let sources = []
-        try {
-          sources = JSON.parse(decodeURIComponent(response.headers.get('X-Chat-Sources') ?? '[]'))
-        } catch {
-          // Sources are a nice-to-have; the answer still renders without them.
-        }
-        updateMessage(assistantId, () => ({ sources }))
+        updateMessage(assistantId, () => ({
+          sources: readJsonHeader(response, 'X-Chat-Sources'),
+          suggestions: readJsonHeader(response, 'X-Chat-Suggestions').filter((item) => typeof item === 'string')
+        }))
 
         const reader = response.body.getReader()
         const decoder = new TextDecoder()
@@ -242,29 +271,21 @@ export function AskChat() {
     inputRef.current?.focus()
   }
 
+  // Next questions show only under the newest answer, once it has finished.
+  const lastMessage = messages.at(-1)
+  const followUps =
+    !isStreaming && lastMessage?.role === 'assistant' && !lastMessage.error ? (lastMessage.suggestions ?? []) : []
+
   return (
     <div className="mt-6 flex flex-col gap-6">
       {messages.length === 0 ? (
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-medium text-zinc-500">Try one of these</span>
-          <div className="flex flex-wrap gap-2">
-            {SUGGESTIONS.map((suggestion) => (
-              <button
-                key={suggestion}
-                type="button"
-                onClick={() => send(suggestion)}
-                className="rounded-full border bg-white px-3 py-1.5 text-left text-[12.5px] text-zinc-700 shadow-xs transition-colors hover:border-zinc-300 hover:bg-zinc-50 focus-visible:ring-1 focus-visible:ring-zinc-900"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        </div>
+        <QuestionChips label="Try one of these" questions={SUGGESTIONS} onSelect={send} />
       ) : (
         <div className="flex flex-col gap-5" aria-label="Conversation" aria-busy={isStreaming}>
           {messages.map((message) => (
             <Message key={message.id} message={message} isStreaming={message.id === streamingId} />
           ))}
+          {followUps.length > 0 && <QuestionChips label="Ask next" questions={followUps} onSelect={send} />}
         </div>
       )}
 

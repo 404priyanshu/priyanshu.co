@@ -5,7 +5,7 @@ import OpenAI from 'openai'
 import { z } from 'zod'
 
 import { CONTACT_EMAIL } from '@/lib/constants'
-import { retrieve } from '@/lib/knowledge'
+import { retrieve, suggestQuestions } from '@/lib/knowledge'
 import rateLimit from '@/lib/rate-limit'
 
 // Both providers speak the OpenAI Chat Completions API, so one SDK covers
@@ -242,12 +242,18 @@ export async function POST(req) {
   })
 
   const sources = chunks.map(({ id, topic, heading }) => ({ id, topic, heading }))
+  // Next questions the page offers as one-click chips. They come from the
+  // knowledge files, so each one has an answer, and skip what was asked.
+  const suggestions = suggestQuestions(chunks, {
+    asked: history.filter((message) => message.role === 'user').map((message) => message.content)
+  })
   return new Response(body, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'no-store',
       // Headers must be ASCII, and the headings contain em dashes.
-      'X-Chat-Sources': encodeURIComponent(JSON.stringify(sources))
+      'X-Chat-Sources': encodeURIComponent(JSON.stringify(sources)),
+      'X-Chat-Suggestions': encodeURIComponent(JSON.stringify(suggestions))
     }
   })
 }
