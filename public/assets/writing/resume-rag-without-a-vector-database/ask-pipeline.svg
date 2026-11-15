@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 440" width="520" height="440" role="img" aria-labelledby="title desc">
+  <title id="title">How one question moves through the Ask page</title>
+  <desc id="desc">Five steps. 1: a visitor asks a question. 2: validate, bot check and rate limit: at most 12 messages, a question of up to 1,000 characters, and 20 questions per 10 minutes per IP. 3: BM25 picks up to four of the 19 resume sections plus the pinned profile summary, searching with the question and the previous one. 4: build the messages: the system prompt, earlier turns, the sources as their own system message, and the question as the only user message. 5: stream the answer from Groq's openai/gpt-oss-120b. The page receives three things: the answer text in the body, the sources used in an X-Chat-Sources header, and up to three next questions in an X-Chat-Suggestions header.</desc>
+  <style>
+    text { font-family: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #18181b; }
+    .num, .tag { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; letter-spacing: 0.06em; }
+    .num { font-size: 11px; fill: #8a8a92; }
+    .step { font-size: 15px; font-weight: 500; }
+    .sub { font-size: 13px; fill: #71717a; }
+    .tag { font-size: 9.5px; fill: #8a8a92; }
+    .chip { font-size: 13px; fill: #3f3f46; }
+    .out { font-size: 13.5px; font-weight: 500; }
+    .card { fill: #ffffff; stroke: #e4e4e7; stroke-width: 1; }
+    .key { fill: #ffffff; stroke: #a1a1aa; stroke-width: 1.25; }
+    .dot { fill: #ffffff; stroke: #a1a1aa; stroke-width: 1.25; }
+    .progress { fill: none; stroke: #18181b; stroke-width: 1.5; stroke-dasharray: 260; stroke-dashoffset: 260; animation: rail 7s ease-in-out infinite; }
+    .reached { fill: #18181b; opacity: 0; animation: 7s ease-in-out infinite; }
+    .d1 { animation-name: d1; } .d2 { animation-name: d2; } .d3 { animation-name: d3; } .d4 { animation-name: d4; } .d5 { animation-name: d5; }
+    @keyframes rail { 0% { stroke-dashoffset: 260; opacity: 1; } 55% { stroke-dashoffset: 0; } 85% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+    @keyframes d1 { 0% { opacity: 0; } 2%, 85% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes d2 { 0%, 8% { opacity: 0; } 10%, 85% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes d3 { 0%, 20% { opacity: 0; } 22%, 85% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes d4 { 0%, 33% { opacity: 0; } 35%, 85% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes d5 { 0%, 53% { opacity: 0; } 55%, 85% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .progress, .reached { animation: none; opacity: 0; }
+    }
+  </style>
+
+  <rect width="520" height="440" fill="#fafafa" />
+
+  <!-- Rail -->
+  <line x1="50" y1="35" x2="50" y2="295" stroke="#e4e4e7" stroke-width="1.5" />
+  <path class="progress" d="M50 35 V295" />
+  <circle class="dot" cx="50" cy="35" r="3.5" />
+  <circle class="dot" cx="50" cy="81" r="3.5" />
+  <circle class="dot" cx="50" cy="145" r="3.5" />
+  <circle class="dot" cx="50" cy="209" r="3.5" />
+  <circle class="dot" cx="50" cy="295" r="3.5" />
+  <circle class="reached d1" cx="50" cy="35" r="3.5" />
+  <circle class="reached d2" cx="50" cy="81" r="3.5" />
+  <circle class="reached d3" cx="50" cy="145" r="3.5" />
+  <circle class="reached d4" cx="50" cy="209" r="3.5" />
+  <circle class="reached d5" cx="50" cy="295" r="3.5" />
+
+  <!-- 01 -->
+  <text class="num" x="20" y="40">01</text>
+  <text class="step" x="66" y="40">A visitor asks a question</text>
+
+  <!-- 02 -->
+  <text class="num" x="20" y="86">02</text>
+  <text class="step" x="66" y="86">Validate, bot check, rate limit</text>
+  <text class="sub" x="66" y="106">12 messages max · 1,000-char question · 20 per 10 min</text>
+
+  <!-- 03 -->
+  <text class="num" x="20" y="150">03</text>
+  <text class="step" x="66" y="150">BM25 picks the sections</text>
+  <text class="sub" x="66" y="170">Pinned summary + up to 4 of 19, searched with</text>
+  <text class="sub" x="66" y="188">the question and the previous one</text>
+
+  <!-- 04 -->
+  <text class="num" x="20" y="214">04</text>
+  <text class="step" x="66" y="214">Build the messages</text>
+  <rect class="card" x="66" y="226" width="100" height="44" rx="7" />
+  <text class="tag" x="76" y="243">SYSTEM</text>
+  <text class="chip" x="76" y="261">Prompt</text>
+  <rect class="card" x="174" y="226" width="100" height="44" rx="7" />
+  <text class="tag" x="184" y="243">HISTORY</text>
+  <text class="chip" x="184" y="261">Earlier turns</text>
+  <rect class="key" x="282" y="226" width="100" height="44" rx="7" />
+  <text class="tag" x="292" y="243">SYSTEM</text>
+  <text class="chip" x="292" y="261">Sources</text>
+  <rect class="key" x="390" y="226" width="100" height="44" rx="7" />
+  <text class="tag" x="400" y="243">USER</text>
+  <text class="chip" x="400" y="261">Question</text>
+
+  <!-- 05 -->
+  <text class="num" x="20" y="300">05</text>
+  <text class="step" x="66" y="300">Stream the answer</text>
+  <text class="sub" x="66" y="320">Groq · openai/gpt-oss-120b · plain text</text>
+
+  <rect class="card" x="66" y="340" width="124" height="62" rx="8" />
+  <text class="tag" x="78" y="358">BODY</text>
+  <text class="out" x="78" y="378">Answer text</text>
+  <text class="sub" x="78" y="394" style="font-size: 12px">streams in</text>
+
+  <rect class="card" x="198" y="340" width="140" height="62" rx="8" />
+  <text class="tag" x="210" y="358">X-CHAT-SOURCES</text>
+  <text class="out" x="210" y="378">Source chips</text>
+  <text class="sub" x="210" y="394" style="font-size: 12px">sections used</text>
+
+  <rect class="card" x="346" y="340" width="160" height="62" rx="8" />
+  <text class="tag" x="358" y="358">X-CHAT-SUGGESTIONS</text>
+  <text class="out" x="358" y="378">Ask next</text>
+  <text class="sub" x="358" y="394" style="font-size: 12px">up to 3 questions</text>
+</svg>
