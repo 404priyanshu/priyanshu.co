@@ -11,6 +11,7 @@ import {
   ExternalLink,
   FileText,
   Laptop,
+  MessageCircle,
   Search,
   Sparkles,
   Wand2
@@ -100,7 +101,8 @@ export const CommandPalette = () => {
       { id: 'stack', title: 'Stack & Tools', url: '/stack', icon: <Wand2 size={16} />, category: 'Pages' },
       { id: 'workspace', title: 'Workspace Specs', url: '/workspace', icon: <Laptop size={16} />, category: 'Pages' },
       { id: 'bookmarks', title: 'Bookmarks List', url: '/bookmarks', icon: <Bookmark size={16} />, category: 'Pages' },
-      { id: 'books', title: 'Bookshelf', url: '/books', icon: <BookOpen size={16} />, category: 'Pages' }
+      { id: 'books', title: 'Bookshelf', url: '/books', icon: <BookOpen size={16} />, category: 'Pages' },
+      { id: 'ask', title: 'Ask About Me', url: '/ask', icon: <MessageCircle size={16} />, category: 'Pages' }
     ],
     []
   )
