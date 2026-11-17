@@ -103,6 +103,11 @@ export const metadata = {
     site: `@${PROFILES.twitter.username}`,
     creator: `@${PROFILES.twitter.username}`
   },
+  // Google Search Console ownership, as a backup to public/google74f57d79d5206299.html.
+  // Keep both: removing every method makes Search Console drop the verification.
+  verification: {
+    google: '4hG-JNk9CJBSqUPRWONPXG5RqiL_2nXwvDpOoz7HRTA'
+  },
   other: {
     pinterest: 'nopin'
   }
