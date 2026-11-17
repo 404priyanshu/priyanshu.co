@@ -88,6 +88,13 @@ const STACK_ITEMS = [
     desc: 'Where I run and test local LLMs on my own machine.'
   },
   {
+    name: 'Docker',
+    link: 'https://www.docker.com/products/docker-desktop/',
+    icon: 'docker.png',
+    frame: 'app',
+    desc: 'I run databases and other services in containers with it, so my machine stays clean.'
+  },
+  {
     name: 'Nstlgy Dark',
     link: 'https://zed.dev/extensions/nstlgy-dark',
     // The theme has no logo: this tile uses its background and syntax colors.
@@ -129,6 +136,13 @@ const STACK_ITEMS = [
     icon: 'raycast.png',
     frame: 'app',
     desc: 'My launcher: a faster, more capable Spotlight.'
+  },
+  {
+    name: 'Wispr Flow',
+    link: 'https://wisprflow.ai',
+    icon: 'wispr-flow.png',
+    frame: 'app',
+    desc: 'Voice dictation that turns what I say into clean text in any app.'
   },
   {
     name: 'BetterTouchTool',
