@@ -329,7 +329,7 @@
 }
 
 /* First-visit hint: a soft blue light passes down the sidebar's number badges
-   (1 to 6) until a number key is pressed. The active page's dark badge is left alone. */
+   (1 to 8) until a number key is pressed. The active page's dark badge is left alone. */
 @keyframes shortcut-wave {
   0%,
   34%,
@@ -474,5 +474,90 @@
   .new-badge path {
     animation: none;
     stroke-dashoffset: 0;
+  }
+}
+
+/* Peel sticker (see PeelSticker). --peel is 1 when the sticker lies flat and shrinks as
+   the top-right corner folds down and to the left. The fold runs from (peel, 0) to
+   (1, 1 - peel), as fractions of the sticker. The front clips the folded corner away.
+   The flap is that corner mirrored across the fold, painted as the sticker's pale back.
+   Registered as a number so it can transition; the curve overshoots a little, like paper
+   springing back. */
+@property --peel {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+/* In the components layer, so utility classes such as absolute can place the sticker. */
+@layer components {
+  .peel-sticker {
+    --peel: 1;
+    position: relative;
+    display: inline-flex;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      --peel 0.5s cubic-bezier(0.34, 1.4, 0.64, 1),
+      translate 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  @media (hover: hover) {
+    .peel-sticker:hover {
+      --peel: 0.5;
+      translate: 0 -1px;
+    }
+  }
+
+  .peel-sticker[data-peeked] {
+    --peel: 0.55;
+  }
+
+  .peel-sticker[data-dragging] {
+    cursor: grabbing;
+    transition: none;
+  }
+
+  .peel-sticker-shadow,
+  .peel-sticker-front,
+  .peel-sticker-flap {
+    display: flex;
+  }
+
+  /* The shadow wraps the clipped front, so it follows the fold. */
+  .peel-sticker-shadow {
+    filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.22));
+  }
+
+  .peel-sticker-front {
+    clip-path: polygon(0 0, calc(var(--peel) * 100%) 0, 100% calc((1 - var(--peel)) * 100%), 100% 100%, 0 100%);
+  }
+
+  .peel-sticker-back {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    filter: drop-shadow(-1px 2px 2px rgb(0 0 0 / 0.28));
+  }
+
+  /* Mirror across the fold: (x, y) becomes (y + peel, x - peel). */
+  .peel-sticker-flap {
+    transform-origin: 0 0;
+    transform: translate(calc(var(--size) * var(--peel) * 1px), calc(var(--size) * var(--peel) * -1px)) rotate(-90deg)
+      scaleX(-1);
+    clip-path: polygon(calc(var(--peel) * 100%) 0, 100% 0, 100% calc((1 - var(--peel)) * 100%));
+  }
+
+  .peel-sticker-flap > svg {
+    filter: brightness(0) invert(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peel-sticker {
+    transition: none;
   }
 }

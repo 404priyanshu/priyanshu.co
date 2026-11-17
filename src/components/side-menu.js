@@ -23,11 +23,12 @@ import { cn } from '@/lib/utils'
 const keyCodePathnameMapping = {
   Digit1: '/',
   Digit2: '/writing',
-  Digit3: '/stack',
-  Digit4: '/workspace',
-  Digit5: '/bookmarks',
-  Digit6: '/books',
-  Digit7: '/ask'
+  Digit3: '/projects',
+  Digit4: '/stack',
+  Digit5: '/workspace',
+  Digit6: '/bookmarks',
+  Digit7: '/books',
+  Digit8: '/ask'
 }
 
 export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {

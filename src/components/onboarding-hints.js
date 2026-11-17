@@ -5,7 +5,7 @@ import { XIcon } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 
 const STORAGE_KEY = 'pv_hints'
-const NAV_KEY_CODES = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7']
+const NAV_KEY_CODES = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8']
 // The number shortcuts and the floating search button only exist on desktop.
 const DESKTOP_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine)'
 
@@ -188,7 +188,7 @@ export function OnboardingHints() {
                 {isNav ? (
                   <p className="m-0">
                     Each page has a number. Press <Key>2</Key> to open Writing, or try any key from <Key>1</Key> to{' '}
-                    <Key>7</Key>.
+                    <Key>8</Key>.
                   </p>
                 ) : (
                   <p className="m-0">
