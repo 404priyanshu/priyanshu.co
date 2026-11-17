@@ -44,12 +44,3 @@ export function Highlight({ children, delay = 0, color = '#fff2a8' }) {
     </mark>
   )
 }
-
-// A spinning ring, the icon for anything real-time.
-export function LiveSpinner({ className }) {
-  return (
-    <span
-      className={cn('size-3 rounded-full border-2 border-sky-100 border-t-sky-500 motion-safe:animate-spin', className)}
-    />
-  )
-}

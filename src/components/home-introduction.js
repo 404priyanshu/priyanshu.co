@@ -1,9 +1,9 @@
-import { ArrowUpRight, BookOpen, BriefcaseBusiness, Cloud, GitPullRequest, Mail, PenLine } from 'lucide-react'
+import { ArrowUpRight, BookOpen, BriefcaseBusiness, GitPullRequest, Mail, PenLine } from 'lucide-react'
 import Image from 'next/image'
 
 import { CopyEmail } from '@/components/copy-email'
 import { GrowOnView } from '@/components/grow-on-view'
-import { Highlight, HomeCard, InlineChip, LiveSpinner, rise } from '@/components/home-card'
+import { Highlight, HomeCard, InlineChip, rise } from '@/components/home-card'
 import { CONTACT_EMAIL, CONTACT_MAILTO, PROFILES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
@@ -147,22 +147,6 @@ export function HomeIntroduction() {
               <Highlight delay={1000}>AI reviewer for pull requests</Highlight>
               <InlineChip>
                 <GitPullRequest {...ICON} />
-              </InlineChip>
-              ,
-            </span>{' '}
-            a real-time room for pair{' '}
-            <span className="whitespace-nowrap">
-              programming
-              <InlineChip>
-                <LiveSpinner />
-              </InlineChip>
-              ,
-            </span>{' '}
-            and an NFT marketplace on{' '}
-            <span className="whitespace-nowrap">
-              AWS
-              <InlineChip>
-                <Cloud {...ICON} className="fill-gray-600 text-gray-600" />
               </InlineChip>
               .
             </span>

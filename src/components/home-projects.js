@@ -1,7 +1,7 @@
-import { ArrowUpRight, BookOpen, Cloud, FingerprintPattern, GitPullRequest, Search } from 'lucide-react'
+import { ArrowUpRight, BookOpen, FingerprintPattern, GitPullRequest, Search } from 'lucide-react'
 
 import { GrowOnView } from '@/components/grow-on-view'
-import { HomeCard, iconTileClassName, LiveSpinner, rise } from '@/components/home-card'
+import { HomeCard, iconTileClassName, rise } from '@/components/home-card'
 import { cn } from '@/lib/utils'
 
 const STATUS = {
@@ -35,20 +35,6 @@ const PROJECTS = [
     status: 'Live',
     url: 'https://vernier-phi.vercel.app',
     icon: <GitPullRequest {...ICON} />
-  },
-  {
-    name: 'BlockForge',
-    description: 'NFT marketplace with escrow contracts, its own chain indexer, and AWS infrastructure.',
-    status: 'GitHub',
-    url: 'https://github.com/404priyanshu/BlockForgeNFT',
-    icon: <Cloud {...ICON} className="fill-gray-600 text-gray-600" />
-  },
-  {
-    name: 'CodeDuel',
-    description: 'Shared code editor with real-time sync, for interviews and pair programming.',
-    status: 'GitHub',
-    url: 'https://github.com/404priyanshu/codeduel',
-    icon: <LiveSpinner className="size-3.5" />
   },
   {
     name: 'Crumbprint',
