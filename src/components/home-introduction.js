@@ -103,19 +103,23 @@ export function HomeIntroduction() {
 
       <div className="flex max-w-[62ch] flex-col gap-4 text-[15px] leading-[1.75] text-zinc-500">
         <p className="mb-0">
-          <span className="text-zinc-900">A computer science student</span> at Bennett University and a full-stack
-          developer from India. I build for the web, and for everything that runs behind it.
+          <span className="text-zinc-900">
+            I&apos;m a CS student at Bennett University who would rather ship than sit on an idea.
+          </span>{' '}
+          I build full-stack products end to end: the interface you click, and the databases, queues and models doing
+          the real work behind it.
         </p>
         <p className="mb-0">
-          <span className="text-zinc-900">Right now that means</span>{' '}
-          <TextLink href="https://callaaya.fun">CallAaya</TextLink>, which ranks live jobs by how well your skills fit
-          and tailors your resume to each one, and <TextLink href="https://classvault.in">ClassVault</TextLink>, a home
-          for the notes, past papers and study plans that usually get lost in group chats. Along the way I&apos;ve built
-          an AI reviewer for pull requests.
+          <span className="text-zinc-900">Some of it already has paying users.</span>{' '}
+          <TextLink href="https://callaaya.fun">CallAaya</TextLink> ranks 22,000+ live jobs by how well your skills
+          actually fit, then tailors your resume to each one and checks every line against the real thing, so nothing
+          gets made up. <TextLink href="https://classvault.in">ClassVault</TextLink> rescues the notes, past papers and
+          study plans that usually die in college group chats. Along the way I built an AI reviewer that catches bugs
+          and security holes in pull requests, and two Zed editor themes with 63k+ downloads.
         </p>
         <p className="mb-0">
-          <span className="text-zinc-900">I like taking systems apart</span> until I understand why they work. Then I
-          write it up here, usually with a drawing.
+          <span className="text-zinc-900">I like taking systems apart until they stop feeling like magic.</span> Then I
+          write up how they work here, usually with a drawing.
         </p>
       </div>
 
