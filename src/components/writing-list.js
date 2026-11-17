@@ -4,6 +4,7 @@ import { domAnimation, LazyMotion, m } from 'framer-motion'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
+import { NewBadge } from '@/components/new-badge'
 import { useViewData } from '@/hooks/useViewData'
 import { cn, dateWithDayAndMonthFormatter, dateWithMonthAndYearFormatter, viewCountFormatter } from '@/lib/utils'
 
@@ -42,6 +43,7 @@ export const WritingList = ({ items }) => {
               title,
               slug,
               date,
+              isNew,
               sys = {} // Add default empty object to prevent errors
             } = item
 
@@ -84,7 +86,12 @@ export const WritingList = ({ items }) => {
                         {dateWithMonthAndYear}
                       </time>
                     </span>
-                    <span className="col-start-1 row-start-1 line-clamp-3 md:col-span-6 md:col-start-2">{title}</span>
+                    {/* The badge sits beside the title, not inside it: line-clamp clips
+                        overflow, and that would cut off the drawn loop. */}
+                    <span className="col-start-1 row-start-1 flex items-center gap-2.5 md:col-span-6 md:col-start-2">
+                      <span className="line-clamp-3">{title}</span>
+                      {isNew && <NewBadge className="shrink-0" />}
+                    </span>
                     {formattedViewCount && (
                       <span className="col-start-2 row-span-2 row-start-1 md:col-span-1 md:col-start-8 md:row-span-1">
                         <m.span

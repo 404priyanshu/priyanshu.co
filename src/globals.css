@@ -424,3 +424,55 @@
   scale: 1;
   transition: scale 0.75s cubic-bezier(0.28, 0.11, 0.32, 1);
 }
+
+/* "New" badge on the newest post (see NewBadge). The loop draws itself in once, after the
+   section rises in. In a home card that waits below the fold, the drawing waits too, so
+   the reader sees it happen. Reduced motion shows the finished loop. The rules sit in the
+   components layer, so utility classes such as text-pink-400 can override them. */
+@layer components {
+  .new-badge {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.4em;
+    color: var(--color-pink-600);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    white-space: nowrap;
+  }
+
+  .new-badge svg {
+    position: absolute;
+    inset: -0.3em -0.3em -0.3em -0.35em;
+    width: calc(100% + 0.65em);
+    height: calc(100% + 0.6em);
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .new-badge path {
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: new-badge-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.5s forwards;
+  }
+
+  .grow-on-view[data-grow='waiting'] .new-badge path {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes new-badge-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .new-badge path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

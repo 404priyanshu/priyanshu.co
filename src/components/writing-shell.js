@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
+import { NewBadge } from '@/components/new-badge'
 import { cn } from '@/lib/utils'
 
 export function WritingShell({ posts, children }) {
@@ -50,7 +51,7 @@ export function WritingShell({ posts, children }) {
         </header>
         <nav aria-label="Articles" className="p-3">
           <ul className="space-y-1">
-            {posts.map((post) => (
+            {posts.map((post, index) => (
               <li key={post.slug}>
                 <Link
                   href={`/writing/${post.slug}`}
@@ -60,7 +61,14 @@ export function WritingShell({ posts, children }) {
                     selected === post.slug ? 'bg-zinc-950 text-white' : 'text-zinc-800 hover:bg-zinc-200/60'
                   )}
                 >
-                  <span className="block text-sm leading-snug font-medium">{post.title}</span>
+                  <span className="block text-sm leading-snug font-medium">
+                    {post.title}
+                    {/* The newest post gets a hand-drawn "New" badge. Pink-600 is too dark on
+                        the black selected row, so that row uses a lighter pink. */}
+                    {index === 0 && (
+                      <NewBadge className={cn('ml-2 font-normal', selected === post.slug && 'text-pink-400')} />
+                    )}
+                  </span>
                   <time
                     dateTime={post.date}
                     className={cn('mt-1.5 block text-xs', selected === post.slug ? 'text-zinc-400' : 'text-zinc-500')}

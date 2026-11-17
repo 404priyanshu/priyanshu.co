@@ -20,7 +20,10 @@ async function fetchData() {
   // Only the fields the list renders: passing whole posts to a client component
   // would serialize every article's Markdown into the page.
   const allPosts = (await getAllPosts()).map(({ slug, title, date, sys }) => ({ slug, title, date, sys }))
-  const latestPosts = getSortedPosts(allPosts).slice(0, LATEST_POST_COUNT)
+  // The newest post gets a hand-drawn "New" badge.
+  const latestPosts = getSortedPosts(allPosts)
+    .slice(0, LATEST_POST_COUNT)
+    .map((post, index) => ({ ...post, isNew: index === 0 }))
   const items = getItemsByYear(latestPosts)
   return { items }
 }
