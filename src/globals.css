@@ -357,77 +357,8 @@
   }
 }
 
-/* Home: a highlighter stroke that draws in from the left. Set --highlight and
-   --highlight-delay on the element. */
-.highlight-in {
-  color: inherit;
-  padding: 0 0.15em;
-  margin: 0 -0.05em;
-  border-radius: 0.15em;
-  background: linear-gradient(var(--highlight), var(--highlight)) no-repeat 0 55% / 0% 85%;
-  box-decoration-break: clone;
-  animation: highlight-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) var(--highlight-delay, 0ms) forwards;
-}
-
-@keyframes highlight-in {
-  to {
-    background-size: 100% 85%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .highlight-in {
-    animation: none;
-    background-size: 100% 85%;
-  }
-}
-
-/* Home: sections rise in one after another. Each sets --rise-index; past the sixth they
-   share a delay, since those start below the fold. Opacity and translate only, so the
-   compositor does the work. Shorter on repeat visits in a session. */
-.rise-in {
-  animation: rise-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  animation-delay: calc(min(var(--rise-index, 0), 6) * 70ms);
-}
-
-.visited .rise-in {
-  animation-duration: 0.35s;
-  animation-delay: calc(min(var(--rise-index, 0), 6) * 35ms);
-}
-
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rise-in {
-    animation: none;
-  }
-}
-
-/* Home: big cards grow to full size the first time they scroll into view (see
-   GrowOnView). Scale only, so the compositor does the work. The curve is Apple's soft
-   ease: growth stays visible for most of the 0.75s instead of snapping early. Reduced
-   motion never reaches the waiting state. */
-.grow-on-view[data-grow='waiting'] {
-  scale: 0.92;
-}
-
-.grow-on-view[data-grow='grown'] {
-  scale: 1;
-  transition: scale 0.75s cubic-bezier(0.28, 0.11, 0.32, 1);
-}
-
 /* "New" badge on the newest post (see NewBadge). The loop draws itself in once, after the
-   section rises in. In a home card that waits below the fold, the drawing waits too, so
-   the reader sees it happen. Reduced motion shows the finished loop. The rules sit in the
+   page settles. Reduced motion shows the finished loop. The rules sit in the
    components layer, so utility classes such as text-pink-400 can override them. */
 @layer components {
   .new-badge {
@@ -458,10 +389,6 @@
     stroke-dashoffset: 1;
     animation: new-badge-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.5s forwards;
   }
-
-  .grow-on-view[data-grow='waiting'] .new-badge path {
-    animation-play-state: paused;
-  }
 }
 
 @keyframes new-badge-draw {
@@ -472,6 +399,45 @@
 
 @media (prefers-reduced-motion: reduce) {
   .new-badge path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Home: a pen stroke under the name (see PenUnderline). Two passes, the second shorter,
+   drawn once like the "New" badge's loop. Reduced motion shows the finished stroke. */
+@layer components {
+  .pen-underline {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .pen-underline svg {
+    position: absolute;
+    left: -0.06em;
+    bottom: -0.32em;
+    width: calc(100% + 0.12em);
+    height: 0.42em;
+    overflow: visible;
+    pointer-events: none;
+    color: var(--color-pink-400);
+  }
+
+  .pen-underline path {
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: new-badge-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pen-underline path {
     animation: none;
     stroke-dashoffset: 0;
   }

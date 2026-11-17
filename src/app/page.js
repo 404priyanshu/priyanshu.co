@@ -1,11 +1,7 @@
-import { ArrowRight } from 'lucide-react'
-import Link from 'next/link'
 import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
-import { GrowOnView } from '@/components/grow-on-view'
-import { HomeCard, rise } from '@/components/home-card'
-import { HomeClosing, HomeIntroduction, HomeSkills } from '@/components/home-introduction'
+import { HomeClosing, HomeIntroduction, HomeSkills, SectionHeading, SectionLink } from '@/components/home-introduction'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
 import { WritingList } from '@/components/writing-list'
@@ -34,30 +30,21 @@ export default async function Home() {
     <ScrollArea useScrollAreaId>
       <FloatingHeader scrollTitle="Priyanshu Singh" />
       <div className="content-wrapper">
-        {/* A little wider than other pages: the home page is cards, not long reading. */}
-        <div className="content space-y-10 lg:max-w-4xl!">
+        <div className="content animate-reveal space-y-16">
           <HomeIntroduction />
 
-          <GrowOnView>
-            <HomeCard style={rise(2)} className="rise-in" innerClassName="bg-white px-5 pt-5 pb-2">
-              <section className="space-y-4" aria-labelledby="writing-heading">
-                <div className="flex items-baseline justify-between">
-                  <h2 id="writing-heading">Writing</h2>
-                  <Link
-                    href="/writing"
-                    className="group inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900"
-                  >
-                    All posts
-                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                </div>
-
-                <Suspense fallback={<ScreenLoadingSpinner />}>
-                  <WritingList items={items} />
-                </Suspense>
-              </section>
-            </HomeCard>
-          </GrowOnView>
+          <section aria-labelledby="writing-heading">
+            <SectionHeading
+              id="writing-heading"
+              index="01"
+              action={<SectionLink href="/writing">All posts</SectionLink>}
+            >
+              Writing
+            </SectionHeading>
+            <Suspense fallback={<ScreenLoadingSpinner />}>
+              <WritingList items={items} />
+            </Suspense>
+          </section>
 
           <HomeSkills />
 

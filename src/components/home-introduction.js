@@ -1,233 +1,191 @@
-import { ArrowUpRight, BookOpen, BriefcaseBusiness, GitPullRequest, Mail, PenLine } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { CopyEmail } from '@/components/copy-email'
-import { GrowOnView } from '@/components/grow-on-view'
-import { Highlight, HomeCard, InlineChip, rise } from '@/components/home-card'
 import { CONTACT_EMAIL, CONTACT_MAILTO, PROFILES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-// One pastel tint per area, from the same family as the highlighter marks.
 const SKILLS = [
-  {
-    area: 'Languages',
-    tools: ['TypeScript', 'Python', 'JavaScript'],
-    dot: 'bg-[#e8794a]',
-    chip: 'bg-[#fdeadf] text-[#9a4a1c] ring-[#f6d5c2]'
-  },
-  {
-    area: 'Frameworks',
-    tools: ['React', 'Next.js', 'Node.js', 'NestJS', 'FastAPI'],
-    dot: 'bg-[#e0b92c]',
-    chip: 'bg-[#fbf1bf] text-[#7a6210] ring-[#efe0a0]'
-  },
-  {
-    area: 'Cloud & data',
-    tools: ['AWS', 'PostgreSQL', 'Redis', 'Terraform'],
-    dot: 'bg-[#5fae78]',
-    chip: 'bg-[#dff0e3] text-[#2f6b45] ring-[#c7e2cd]'
-  }
+  { area: 'Languages', tools: ['TypeScript', 'Python', 'JavaScript'] },
+  { area: 'Frameworks', tools: ['React', 'Next.js', 'Node.js', 'NestJS', 'FastAPI'] },
+  { area: 'Cloud & data', tools: ['AWS', 'PostgreSQL', 'Redis', 'Terraform'] }
 ]
 
-const ICON = { size: 14, strokeWidth: 1.75 }
-
-function Greeting() {
-  // mb-5 replaces the page's 40px gap so the greeting sits with its card. The pill is
-  // inline-block so its baseline is the text's, and baseline alignment keeps "Hello",
-  // "there" and the comma on one line of type. "Open to work" sits at the right.
+// A section opens with a small numbered label over a hairline, like the index of a
+// notebook. `action` sits at the right end of the line.
+export function SectionHeading({ id, index, action, children }) {
   return (
-    <div style={rise(0)} className="rise-in mb-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
-      <h1 className="mb-0 flex items-baseline gap-2.5 text-3xl font-medium tracking-tight text-gray-900 md:text-4xl">
-        Hello
-        <span className="inline-block rounded-full border-[1.5px] border-dashed border-[#9cc3a4] bg-[#3f7a4e]/[0.04] px-3 py-1.5 leading-none text-[#3f7a4e]">
-          <span className="mr-1.5 inline-block size-1.5 rounded-full bg-[#3f7a4e] align-middle" aria-hidden="true" />
-          there
-        </span>
-        <span className="-ml-2">,</span>
-      </h1>
-      <OpenToWork />
+    <div className="border-zinc-150 mb-1 flex items-baseline justify-between border-b pb-2.5">
+      <h2
+        id={id}
+        className="mb-0 flex items-baseline gap-2.5 font-mono text-[11px] font-medium tracking-widest text-zinc-500 uppercase"
+      >
+        <span className="text-zinc-300 tabular-nums">{index}</span>
+        {children}
+      </h2>
+      {action}
     </div>
   )
 }
 
-// A live green dot that pings softly, in the greeting's green. Links to the contact card.
+export function SectionLink({ href, children }) {
+  return (
+    <Link
+      href={href}
+      className="group inline-flex items-center gap-1 text-[12.5px] font-medium text-zinc-500 hover:text-zinc-900"
+    >
+      {children}
+      <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+    </Link>
+  )
+}
+
+function TextLink({ href, children }) {
+  const isExternal = href.startsWith('http')
+  return (
+    <a
+      href={href}
+      {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+      className="decoration-zinc-350 font-medium text-zinc-900 underline underline-offset-4 hover:decoration-zinc-900"
+    >
+      {children}
+    </a>
+  )
+}
+
+// The one flourish: a pen stroke under the name that draws itself once, in the pink of
+// the "New" badge (see .pen-underline in globals.css). Decorative.
+function PenUnderline({ children }) {
+  return (
+    <span className="pen-underline">
+      {children}
+      <svg viewBox="0 0 200 14" fill="none" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path pathLength="1" d="M3 9.5C38 4.5 92 3 140 5.5C164 6.8 184 8.5 197 6.5M24 12C70 9 128 8.6 168 10.2" />
+      </svg>
+    </span>
+  )
+}
+
 function OpenToWork() {
   return (
     <a
       href="#contact"
-      className="inline-flex items-center gap-2 rounded-full bg-[#e6f1e8] py-1 pr-3 pl-2.5 text-xs leading-5 font-medium text-[#2f6b45] ring-1 ring-[#cfe3d3] transition-colors hover:bg-[#dcecdf]"
+      className="inline-flex items-center gap-2 font-mono text-[11px] tracking-widest text-zinc-500 uppercase hover:text-zinc-900"
     >
-      <span className="relative flex size-2" aria-hidden="true">
-        <span className="absolute inline-flex size-full rounded-full bg-[#4f9a63] opacity-60 motion-safe:animate-ping" />
-        <span className="relative inline-flex size-2 rounded-full bg-[#3f8a55]" />
+      <span className="relative flex size-1.5" aria-hidden="true">
+        <span className="absolute inline-flex size-full rounded-full bg-emerald-400 opacity-70 motion-safe:animate-ping" />
+        <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
       </span>
       Open to work
     </a>
   )
 }
 
-function ContactLink({ href, children, secondary }) {
-  const isEmail = href.startsWith('mailto:')
-  const Icon = isEmail ? Mail : ArrowUpRight
-
-  return (
-    <a
-      href={href}
-      {...(!isEmail && { target: '_blank', rel: 'noopener noreferrer' })}
-      className={cn(
-        'inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full py-2 pr-3 pl-4 text-sm font-medium transition-colors',
-        secondary
-          ? 'bg-white text-gray-700 shadow-[0_1px_2px_rgb(0_0_0/0.05)] ring-1 ring-black/[0.06] hover:text-gray-900'
-          : 'bg-gray-900 text-white hover:bg-gray-700'
-      )}
-    >
-      {children}
-      <Icon size={14} strokeWidth={2} aria-hidden="true" />
-    </a>
-  )
-}
-
 export function HomeIntroduction() {
   return (
-    <>
-      <Greeting />
+    <section aria-labelledby="intro-heading" className="flex flex-col items-start gap-5">
+      <div className="flex items-center gap-3">
+        {/* The sidebar shows the photo on desktop; phones have no sidebar. */}
+        <Image
+          src="/assets/me.jpg"
+          alt=""
+          width={40}
+          height={40}
+          className="size-10 rounded-full border-0 object-cover shadow-[0_0_0_2px_white,0_1px_4px_rgb(0_0_0/0.15)] lg:hidden"
+        />
+        <OpenToWork />
+      </div>
 
-      {/* Each icon stays on the line of the word before it, with its punctuation. */}
-      <HomeCard
-        style={rise(1)}
-        className="rise-in"
-        innerClassName="p-6 text-[15px] leading-[1.8] text-gray-500 md:text-base"
-      >
-        <section aria-label="Introduction">
-          {/* The sidebar shows the name and photo on desktop; phones have no sidebar. */}
-          <div className="mb-4 lg:hidden">
-            <p className="mb-0 flex items-center gap-2.5 text-gray-900">
-              <Image
-                src="/assets/me.jpg"
-                alt=""
-                width={28}
-                height={28}
-                className="size-7 rounded-full border-0 object-cover shadow-[0_0_0_2px_white,0_2px_6px_rgb(0_0_0/0.15)]"
-              />
-              <span className="font-medium">Priyanshu Singh</span>
-            </p>
-          </div>
-          <p className="mb-4">
-            <span className="font-medium text-gray-900">A computer science student</span> at Bennett University and a
-            full-stack developer from India. I build for the web, and for everything that runs behind it.
-          </p>
-          <p className="mb-4">
-            <span className="font-medium text-gray-900">Right now that means</span>{' '}
-            <span className="whitespace-nowrap">
-              <a href="https://callaaya.fun" target="_blank" rel="noopener noreferrer" className="hover:opacity-70">
-                <Highlight delay={400} color="#cdebd4">
-                  CallAaya
-                </Highlight>
-              </a>
-              <InlineChip>
-                <BriefcaseBusiness {...ICON} />
-              </InlineChip>
-              ,
-            </span>{' '}
-            which ranks live jobs by how well your skills fit and tailors your resume to each one, and{' '}
-            <span className="whitespace-nowrap">
-              <a href="https://classvault.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-70">
-                <Highlight delay={700} color="#ffd6c2">
-                  ClassVault
-                </Highlight>
-              </a>
-              <InlineChip>
-                <BookOpen {...ICON} />
-              </InlineChip>
-              ,
-            </span>{' '}
-            a home for the notes, past papers and study plans that usually get lost in group chats. Along the way
-            I&apos;ve built an{' '}
-            <span className="whitespace-nowrap">
-              <Highlight delay={1000}>AI reviewer for pull requests</Highlight>
-              <InlineChip>
-                <GitPullRequest {...ICON} />
-              </InlineChip>
-              .
-            </span>
-          </p>
-          <p className="mb-0">
-            <span className="font-medium text-gray-900">I like taking systems apart</span> until I understand why they
-            work. Then I write it up here,{' '}
-            <span className="whitespace-nowrap">
-              <Highlight delay={1300}>usually with a drawing</Highlight>
-              <InlineChip>
-                <PenLine {...ICON} />
-              </InlineChip>
-            </span>
-          </p>
-        </section>
-      </HomeCard>
-    </>
+      <h1 id="intro-heading" className="mb-0">
+        Hello, I&apos;m <PenUnderline>Priyanshu</PenUnderline>.
+      </h1>
+
+      <div className="flex max-w-[62ch] flex-col gap-4 text-[15px] leading-[1.75] text-zinc-500">
+        <p className="mb-0">
+          <span className="text-zinc-900">A computer science student</span> at Bennett University and a full-stack
+          developer from India. I build for the web, and for everything that runs behind it.
+        </p>
+        <p className="mb-0">
+          <span className="text-zinc-900">Right now that means</span>{' '}
+          <TextLink href="https://callaaya.fun">CallAaya</TextLink>, which ranks live jobs by how well your skills fit
+          and tailors your resume to each one, and <TextLink href="https://classvault.in">ClassVault</TextLink>, a home
+          for the notes, past papers and study plans that usually get lost in group chats. Along the way I&apos;ve built
+          an AI reviewer for pull requests.
+        </p>
+        <p className="mb-0">
+          <span className="text-zinc-900">I like taking systems apart</span> until I understand why they work. Then I
+          write it up here, usually with a drawing.
+        </p>
+      </div>
+
+      <SectionLink href="/projects">See what I&apos;ve built</SectionLink>
+    </section>
   )
 }
 
 export function HomeSkills() {
   return (
-    <GrowOnView>
-      <HomeCard style={rise(8)} className="rise-in">
-        <section aria-labelledby="skills-heading">
-          <h2 id="skills-heading" className="mb-3 text-[11px] font-semibold tracking-[0.08em] text-gray-400 uppercase">
-            Skills
-          </h2>
-          <div className="space-y-3">
-            {SKILLS.map((skill) => (
-              <div key={skill.area} className="grid gap-2 text-sm md:grid-cols-[8rem_1fr] md:items-center">
-                <span className="flex items-center gap-2 text-gray-500">
-                  <span className={cn('size-1.5 rounded-full', skill.dot)} aria-hidden="true" />
-                  {skill.area}
-                </span>
-                <ul className="flex list-none flex-wrap gap-1.5">
-                  {skill.tools.map((tool) => (
-                    <li key={tool} className={cn('rounded-full px-2.5 py-1 text-[13px] ring-1', skill.chip)}>
-                      {tool}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+    <section aria-labelledby="skills-heading">
+      <SectionHeading id="skills-heading" index="02">
+        Skills
+      </SectionHeading>
+      <dl className="mb-0 divide-y divide-zinc-100 text-sm">
+        {SKILLS.map((skill) => (
+          <div key={skill.area} className="grid gap-1 py-3.5 md:grid-cols-[10rem_1fr] md:gap-4">
+            <dt className="text-zinc-500">{skill.area}</dt>
+            <dd className="m-0 text-zinc-900">{skill.tools.join(' · ')}</dd>
           </div>
-        </section>
-      </HomeCard>
-    </GrowOnView>
+        ))}
+      </dl>
+    </section>
   )
 }
 
-// The closing card: the same ask as the intro, for whoever reads to the end.
+function ContactLink({ href, children, primary }) {
+  const isEmail = href.startsWith('mailto:')
+  return (
+    <a
+      href={href}
+      {...(!isEmail && { target: '_blank', rel: 'noopener noreferrer' })}
+      className={cn(
+        'inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-medium transition-colors',
+        primary
+          ? 'bg-zinc-900 text-white hover:bg-zinc-700'
+          : 'border-zinc-150 border bg-white text-zinc-700 shadow-xs hover:border-zinc-300 hover:text-zinc-900'
+      )}
+    >
+      {children}
+      {!isEmail && (
+        <span className="text-[10px] font-normal text-zinc-400 select-none" aria-hidden="true">
+          ↗
+        </span>
+      )}
+    </a>
+  )
+}
+
+// The closing section: the same ask as the intro, for whoever reads to the end.
 export function HomeClosing() {
   return (
-    <GrowOnView>
-      <HomeCard
-        style={rise(10)}
-        className="rise-in"
-        innerClassName="flex flex-col gap-5 p-6 sm:flex-row sm:items-end sm:justify-between"
-      >
-        <section id="contact" aria-labelledby="closing-heading" className="scroll-mt-24 space-y-2">
-          <h2 id="closing-heading" className="mb-0 text-xl md:text-2xl">
-            Let&apos;s work together
-          </h2>
-          <p className="mb-0 max-w-md text-[15px] leading-snug text-gray-500">
-            I&apos;m looking for a full-stack or backend role: full-time or internship, remote or in India.
-          </p>
-        </section>
-        <div className="flex shrink-0 flex-col items-start gap-2.5 sm:items-end">
-          <div className="flex flex-wrap gap-2 sm:flex-nowrap">
-            <ContactLink href={CONTACT_MAILTO}>Get in touch</ContactLink>
-            <ContactLink href={PROFILES.linkedin.url} secondary>
-              LinkedIn
-            </ContactLink>
-            <ContactLink href={PROFILES.github.url} secondary>
-              GitHub
-            </ContactLink>
-          </div>
-          <CopyEmail email={CONTACT_EMAIL} />
+    <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-24">
+      <SectionHeading id="contact-heading" index="03">
+        Contact
+      </SectionHeading>
+      <div className="flex flex-col items-start gap-4 pt-3">
+        <p className="mb-0 max-w-[62ch] text-[15px] leading-[1.75] text-zinc-500">
+          <span className="text-zinc-900">Let&apos;s work together.</span> I&apos;m looking for a full-stack or backend
+          role: full-time or internship, remote or in India.
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <ContactLink href={CONTACT_MAILTO} primary>
+            Get in touch
+          </ContactLink>
+          <ContactLink href={PROFILES.linkedin.url}>LinkedIn</ContactLink>
+          <ContactLink href={PROFILES.github.url}>GitHub</ContactLink>
+          <CopyEmail email={CONTACT_EMAIL} className="ml-1 text-zinc-500" />
         </div>
-      </HomeCard>
-    </GrowOnView>
+      </div>
+    </section>
   )
 }
