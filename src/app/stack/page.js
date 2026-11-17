@@ -5,7 +5,7 @@ import { SpotlightCard } from '@/components/ui/spotlight-card'
 
 export const metadata = {
   title: 'Stack',
-  description: 'My go-to list of tools, hardware, and software I use daily to build systems.'
+  description: 'My go-to list of tools and software I use daily to build systems.'
 }
 
 const STACK_ITEMS = [
@@ -27,7 +27,7 @@ const STACK_ITEMS = [
   {
     name: 'Dia',
     link: 'https://www.diabrowser.com',
-    desc: "A browser I'm testing right now. It'll probably become my main browser in the near future."
+    desc: 'The AI browser from The Browser Company, now part of Atlassian. I use it for everyday browsing.'
   },
   {
     name: 'Cloudflare WARP',
@@ -45,24 +45,19 @@ const STACK_ITEMS = [
     desc: 'An open-source AI coding agent I use in the terminal.'
   },
   {
-    name: 'One Hunter',
-    link: 'https://github.com/one-hunter/theme',
-    desc: 'My most recently used theme, inspired by Vercel Theme ▲ and One Dark Pro.'
+    name: 'Nstlgy Dark',
+    link: 'https://zed.dev/extensions/nstlgy-dark',
+    desc: "My own Zed theme, inspired by Josh W. Comeau's code playground. It has 63k+ downloads."
   },
   {
     name: '1Password',
     link: 'https://1password.com',
-    desc: 'Best tool for password management.'
-  },
-  {
-    name: 'CodeWhisperer',
-    link: 'https://aws.amazon.com/codewhisperer',
-    desc: 'It adds autocompletion to your existing terminal.'
+    desc: 'Where I keep my passwords and secrets.'
   },
   {
     name: 'Raycast',
     link: 'https://www.raycast.com',
-    desc: "It's like macOS Spotlight on steroids."
+    desc: 'My launcher: a faster, more capable Spotlight.'
   },
   {
     name: 'BetterTouchTool',
@@ -72,12 +67,12 @@ const STACK_ITEMS = [
   {
     name: 'MonitorControl',
     link: 'https://github.com/MonitorControl/MonitorControl',
-    desc: "A great tool to control your display's brightness & volume."
+    desc: "Controls my external display's brightness and volume from the keyboard."
   },
   {
     name: 'MeetingBar',
     link: 'https://meetingbar.app',
-    desc: 'The best way to track and manage your meetings.'
+    desc: 'Shows my next meeting in the menu bar, so I can join it in one click.'
   },
   {
     name: 'Bartender',
@@ -86,18 +81,18 @@ const STACK_ITEMS = [
   },
   {
     name: 'Captin',
-    link: 'https://captinhq.com',
-    desc: "If you'd like to see the capslock status on click, Captin is the tool you're looking for."
+    link: 'https://captin.nl',
+    desc: 'Shows the Caps Lock status on screen when I press it.'
   },
   {
     name: 'Switchbar',
-    link: 'https://switchbar.app',
+    link: 'https://webcatalog.io/en/switchbar',
     desc: 'Allows you to select which browser, browser profile, or email client to use when you click on a link.'
   },
   {
     name: 'Raindrop',
     link: 'https://raindrop.io',
-    desc: "The best all-in-one bookmark manager I've ever seen and used."
+    desc: 'My bookmark manager. It also feeds the Bookmarks page on this site.'
   },
   {
     name: 'Hand Mirror',
@@ -114,7 +109,7 @@ export default function StackPage() {
         <div className="content animate-reveal space-y-6">
           <PageTitle title="Stack" />
           <p className="text-[13.5px] leading-relaxed text-zinc-500">
-            Here is my go-to list of tools & software that I enjoy using and have helped me level up my skills.
+            Here is my go-to list of tools and software that I enjoy using and that have helped me level up my skills.
           </p>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

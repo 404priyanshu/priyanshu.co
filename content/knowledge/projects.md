@@ -13,7 +13,7 @@ Priyanshu's main projects are:
 - CallAaya, an AI job-fit engine with paying users (https://callaaya.fun).
 - ClassVault, a study platform for college students (https://classvault.in).
 - Tandem, a multi-agent research copilot.
-- Two published Zed editor themes with 59k+ downloads.
+- Two published Zed editor themes with 63k+ downloads.
 
 ## LexIQ — eval-driven RAG platform
 
@@ -72,4 +72,4 @@ Tandem is a multi-agent research copilot built with LangGraph, FastAPI, Celery, 
 <!-- keywords: zed, editor, theme, themes, open source, downloads, design, light, dark -->
 <!-- questions: How popular are his Zed editor themes? -->
 
-Priyanshu published two Zed editor themes with four light and dark variants. They have 59k+ downloads.
+Priyanshu published two Zed editor themes with four light and dark variants. They have 63k+ downloads.
