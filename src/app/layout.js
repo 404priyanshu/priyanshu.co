@@ -14,6 +14,7 @@ import { OnboardingHints } from '@/components/onboarding-hints'
 import { SideMenu } from '@/components/side-menu'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { PROFILES } from '@/lib/constants'
+import { rssAlternates } from '@/lib/seo'
 
 export const fetchCache = 'default-cache'
 
@@ -92,11 +93,11 @@ export const metadata = {
     type: 'website',
     url: 'https://priyanshu.co',
     siteName: sharedMetadata.title,
-    locale: 'en_IE'
+    locale: 'en_IN'
   },
-  alternates: {
-    canonical: '/'
-  },
+  // No canonical here: every page inherits this object, so a root canonical would
+  // mark each page as a copy of the home page. Pages set their own with pageMetadata().
+  alternates: rssAlternates,
   twitter: {
     card: 'summary_large_image',
     site: `@${PROFILES.twitter.username}`,

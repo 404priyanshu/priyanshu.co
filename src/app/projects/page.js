@@ -4,12 +4,15 @@ import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { GithubIcon } from '@/lib/constants'
+import { pageMetadata } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Projects',
-  description: 'Things I have built: an AI job-fit engine, a study platform, a pull-request reviewer and a privacy CLI.'
-}
+  description:
+    'Things I have built: an AI job-fit engine, a study platform, a pull-request reviewer and a privacy CLI.',
+  path: '/projects'
+})
 
 const STATUS = {
   Live: { label: 'Live', dot: 'bg-emerald-500' },

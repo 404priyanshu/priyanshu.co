@@ -3,11 +3,13 @@ import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
 import { WORKSPACE_ITEMS } from '@/lib/constants'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Workspace',
-  description: 'My daily coding workspace gear, developer environment, and hardware setup.'
-}
+  description: 'My daily coding workspace gear, developer environment, and hardware setup.',
+  path: '/workspace'
+})
 
 export default function WorkspacePage() {
   return (

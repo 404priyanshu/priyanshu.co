@@ -4,11 +4,13 @@ import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Books',
-  description: 'A curated list of books that have shaped my technical thinking and problem-solving.'
-}
+  description: 'A curated list of books that have shaped my technical thinking and problem-solving.',
+  path: '/books'
+})
 
 const BOOKS = [
   {

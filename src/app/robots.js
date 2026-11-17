@@ -4,7 +4,6 @@ export default function robots() {
       userAgent: '*',
       allow: '/'
     },
-    sitemap: 'https://priyanshu.co/sitemap.xml',
-    host: 'https://priyanshu.co'
+    sitemap: 'https://priyanshu.co/sitemap.xml'
   }
 }

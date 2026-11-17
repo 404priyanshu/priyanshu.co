@@ -2,11 +2,13 @@ import { AskChat } from '@/components/ask-chat'
 import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Ask',
-  description: 'Ask an AI assistant about my experience, projects, and skills. Answers come from my resume.'
-}
+  description: 'Ask an AI assistant about my experience, projects, and skills. Answers come from my resume.',
+  path: '/ask'
+})
 
 export default function AskPage() {
   return (

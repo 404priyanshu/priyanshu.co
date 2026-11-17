@@ -4,12 +4,14 @@ import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
 import { SpotlightCard } from '@/components/ui/spotlight-card'
+import { pageMetadata } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Stack',
-  description: 'My go-to list of tools and software I use daily to build systems.'
-}
+  description: 'My go-to list of tools and software I use daily to build systems.',
+  path: '/stack'
+})
 
 // Each icon is the tool's official app icon or logo, in public/assets/stack.
 // `frame` says how it is drawn, so they all look the same size:

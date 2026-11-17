@@ -7,6 +7,7 @@ import { PageTitle } from '@/components/page-title'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
+import { pageMetadata } from '@/lib/seo'
 import { sortByProperty } from '@/lib/utils'
 
 async function fetchData(slug) {
@@ -80,24 +81,12 @@ export async function generateMetadata(props) {
   const seoTitle = `${currentBookmark.title} | Bookmarks`
   const seoDescription = `A curated selection of various handpicked ${currentBookmark.title.toLowerCase()} bookmarks by Priyanshu Singh`
 
-  return {
+  return pageMetadata({
     title: seoTitle,
     description: seoDescription,
-    keywords: [
-      currentBookmark.title,
-      'bookmarks',
-      `${currentBookmark.title} bookmarks`,
-      'collection',
-      `${currentBookmark.title} collection`
-    ],
+    path: siteUrl,
     openGraph: {
-      title: seoTitle,
-      description: seoDescription,
-      url: siteUrl,
-      images: siteUrl + '/og.png'
-    },
-    alternates: {
-      canonical: siteUrl
+      images: [{ url: `${siteUrl}/og.png`, width: 1200, height: 630, alt: seoTitle }]
     }
-  }
+  })
 }

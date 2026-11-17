@@ -7,12 +7,14 @@ import { ArticleFigure } from '@/components/article-figure'
 import { ArticleToc } from '@/components/article-toc'
 import { BiasVarianceEquation, BiasVarianceTradeoff } from '@/components/bias-variance-visuals'
 import { FloatingHeader } from '@/components/floating-header'
+import { JsonLd } from '@/components/json-ld'
 import { Pre } from '@/components/mdx/pre'
 import { PostNavigation } from '@/components/post-navigation'
 import { ScrollArea } from '@/components/scroll-area'
 import { ScrollProgress } from '@/components/scroll-progress'
 import { ShareButton, SharePost } from '@/components/share-post'
 import { getAllPosts, getAllPostSlugs, getPostBySlug } from '@/lib/markdown'
+import { pageMetadata, PERSON_ID, personJsonLd, SITE_URL } from '@/lib/seo'
 import { getDateTimeFormat, getSortedPosts } from '@/lib/utils'
 
 // Posts are markdown files in the repo, so generateStaticParams below already
@@ -34,15 +36,35 @@ export async function generateMetadata({ params }) {
     return { title: 'Post Not Found' }
   }
 
-  return {
+  const path = `/writing/${post.slug}`
+
+  return pageMetadata({
     title: post.title,
     description: post.description || post.title,
+    path,
     openGraph: {
-      title: post.title,
-      description: post.description || post.title,
       type: 'article',
-      publishedTime: new Date(post.date).toISOString()
+      publishedTime: new Date(post.date).toISOString(),
+      authors: [SITE_URL],
+      images: [{ url: `${path}/og.png`, width: 1200, height: 630, alt: post.title }]
     }
+  })
+}
+
+function postJsonLd(post) {
+  const url = `${SITE_URL}/writing/${post.slug}`
+  return {
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    headline: post.title,
+    description: post.description || post.title,
+    url,
+    mainEntityOfPage: url,
+    image: `${url}/og.png`,
+    datePublished: new Date(post.date).toISOString(),
+    inLanguage: 'en',
+    author: personJsonLd,
+    publisher: { '@id': PERSON_ID }
   }
 }
 
@@ -148,6 +170,7 @@ export default async function WritingSlug({ params }) {
 
   return (
     <ScrollArea className="min-w-0 bg-white text-zinc-950" useScrollAreaId>
+      <JsonLd data={postJsonLd(post)} />
       <ScrollProgress />
       <FloatingHeader scrollTitle={post.title} goBackLink="/writing" backLabel="Writing" />
       <div className="content-wrapper lg:pt-12">

@@ -1,11 +1,13 @@
 import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Journey',
-  description: 'My professional journey, milestones, and career timeline.'
-}
+  description: 'My professional journey, milestones, and career timeline.',
+  path: '/journey'
+})
 
 export default async function JourneyPage() {
   return (
