@@ -25,6 +25,14 @@ const STICK_THRESHOLD_PX = 120
 // half-streamed one at the end of the text.
 const stripCitations = (text) => text.replace(/\s*【[^】]*】/g, '').replace(/\s*【[^】]*$/, '')
 
+// Now and then the model stutters on the name: it starts "Pri", then writes the
+// whole word again ("Pri Priyanshu"). Drop a cut-off start of the name when the
+// full name follows it. The full name itself never matches.
+const fixNameStutter = (text) => text.replace(/\bP(?:r(?:i(?:y(?:a(?:n(?:s(?:h)?)?)?)?)?)?)?[\s-]*(?=Priyanshu\b)/g, '')
+
+// Model text as the page shows it and sends it back in the history.
+const cleanAnswer = (text) => fixNameStutter(stripCitations(text))
+
 let nextId = 0
 const createId = () => `m${++nextId}`
 
@@ -93,7 +101,7 @@ function Message({ message, isStreaming }) {
         ) : message.error ? (
           <p className="m-0">{message.error}</p>
         ) : (
-          <Markdown options={MARKDOWN_OPTIONS}>{stripCitations(message.content)}</Markdown>
+          <Markdown options={MARKDOWN_OPTIONS}>{cleanAnswer(message.content)}</Markdown>
         )}
       </div>
       {!isStreaming && message.sources?.length > 0 && (
@@ -193,8 +201,9 @@ export function AskChat() {
       // Failed or empty answers are not sent back: the API needs real turns.
       const history = [...messages, userMessage]
         .filter((message) => !message.error && message.content)
-        // Markers go back without citations, so the model does not copy them.
-        .map(({ role, content }) => ({ role, content: role === 'assistant' ? stripCitations(content) : content }))
+        // Answers go back cleaned (no citation markers, no name stutter), so the
+        // model does not copy those mistakes.
+        .map(({ role, content }) => ({ role, content: role === 'assistant' ? cleanAnswer(content) : content }))
         .slice(-MAX_HISTORY)
       while (history[0]?.role !== 'user') history.shift()
 
