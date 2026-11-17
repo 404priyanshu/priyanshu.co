@@ -4,8 +4,8 @@ title: Projects
 
 ## Project overview
 
-<!-- keywords: projects, project, portfolio, built, build, side, work, products, shipped, apps, list, best, favorite -->
-<!-- questions: Tell me about LexIQ | Tell me about CallAaya | Tell me about Tandem -->
+<!-- keywords: projects, project, portfolio, built, build, side, work, products, shipped, apps, list, best, favorite, rag, agent, agents, agentic, systems, ai -->
+<!-- questions: Tell me about LexIQ | Tell me about Tandem | Tell me about CallAaya | What RAG and agent systems has he built? -->
 
 Priyanshu's main projects are:
 
@@ -17,7 +17,7 @@ Priyanshu's main projects are:
 
 ## LexIQ — eval-driven RAG platform
 
-<!-- keywords: lexiq, rag, retrieval, search, hybrid, bm25, pgvector, vector, embeddings, reranking, reranker, cross-encoder, citations, cited, streaming, abstention, evaluation, eval, golden, recall, faithfulness, llm-judge, latency, p95, nextjs, fastapi, redis -->
+<!-- keywords: lexiq, rag, retrieval, systems, evaluate, evaluating, evals, llm, quality, testing, search, hybrid, bm25, pgvector, vector, embeddings, reranking, reranker, cross-encoder, citations, cited, streaming, abstention, evaluation, eval, golden, recall, faithfulness, llm-judge, latency, p95, nextjs, fastapi, redis -->
 <!-- questions: How is LexIQ evaluated? | How does LexIQ retrieve and rerank documents? | How fast and cheap is LexIQ? -->
 
 LexIQ is an evaluation-driven RAG platform built with Next.js, FastAPI, pgvector, and Redis. Repository:
@@ -59,7 +59,7 @@ PostgreSQL.
 
 ## Tandem — multi-agent research copilot
 
-<!-- keywords: tandem, multi-agent, multiagent, agents, agent, langgraph, research, copilot, planner, researcher, critic, writer, celery, langfuse, tracing, checkpoints, human-in-the-loop, approval, tools, token budgets -->
+<!-- keywords: tandem, systems, agentic, multi-agent, multiagent, agents, agent, langgraph, research, copilot, planner, researcher, critic, writer, celery, langfuse, tracing, checkpoints, human-in-the-loop, approval, tools, token budgets -->
 <!-- questions: Which agents make up Tandem? | How does Tandem keep agents safe and traceable? -->
 
 Tandem is a multi-agent research copilot built with LangGraph, FastAPI, Celery, and Langfuse.
@@ -69,7 +69,7 @@ Tandem is a multi-agent research copilot built with LangGraph, FastAPI, Celery, 
 
 ## Zed editor themes
 
-<!-- keywords: zed, editor, theme, themes, open source, open-source, downloads, design, light, dark -->
+<!-- keywords: zed, editor, theme, themes, open source, downloads, design, light, dark -->
 <!-- questions: How popular are his Zed editor themes? -->
 
 Priyanshu published two Zed editor themes with four light and dark variants. They have 59k+ downloads.

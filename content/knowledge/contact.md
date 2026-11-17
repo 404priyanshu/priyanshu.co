@@ -4,7 +4,7 @@ title: Contact
 
 ## Contact details and links
 
-<!-- keywords: contact, reach, email, mail, phone, number, call, message, connect, hire, github, linkedin, twitter, x, website, socials, profile, resume, cv, talk -->
+<!-- keywords: contact, reach, email, mail, phone, number, call, message, connect, hire, github, linkedin, twitter, x, website, socials, profile, resume, cv, talk, open, role, roles, opportunity, opportunities, recruiter, recruiters, hiring, interview, remote, relocate, relocation -->
 <!-- questions: How can I contact him? -->
 
 The best way to contact Priyanshu is by email: priyanshu.singhcs11@gmail.com.

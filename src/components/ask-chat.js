@@ -7,10 +7,15 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { CONTACT_EMAIL, SCROLL_AREA_ID } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
+// Starter questions, aimed at people who hire AI engineers. When a starter is
+// also listed in content/knowledge, keep the wording the same: the page skips
+// "Ask next" questions that were already asked, and it compares the words.
 const SUGGESTIONS = [
   'What is Priyanshu working on right now?',
-  'Which RAG projects has he built?',
-  'What is his tech stack?',
+  'What RAG and agent systems has he built?',
+  'How does he evaluate LLM systems?',
+  'Has he fine-tuned language models?',
+  'Is he open to AI engineer roles?',
   'How can I contact him?'
 ]
 

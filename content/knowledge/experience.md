@@ -4,7 +4,7 @@ title: Work experience
 
 ## AI Research Intern, Applied LLM Systems — Sidecar (Bennett University Hatchery), Jun 2026 to present
 
-<!-- keywords: current, currently, now, job, work, experience, intern, internship, research, sidecar, hatchery, startup, noida, fine-tuning, finetuned, qlora, triage, support, tickets, classification, eval, ci, gate, gpt-4o-mini, cost, latency, self-hosted -->
+<!-- keywords: current, currently, now, right, working, job, work, experience, intern, internship, research, sidecar, hatchery, startup, noida, fine-tuning, finetuned, qlora, triage, support, tickets, classification, eval, evals, evaluate, evaluating, llm, ci, gate, gpt-4o-mini, cost, latency, self-hosted -->
 <!-- questions: How did his fine-tuned model compare to GPT-4o-mini? | How does his CI eval gate block bad models? -->
 
 Priyanshu is an AI Research Intern working on applied LLM systems, based in Noida, since June 2026. He joined Sidecar, a
