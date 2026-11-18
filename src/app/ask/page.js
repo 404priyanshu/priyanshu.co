@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo'
 
 export const metadata = pageMetadata({
   title: 'Ask',
-  description: 'Ask an AI assistant about my experience, projects, and skills. Answers come from my resume.',
+  description: 'Ask an AI assistant about my experience, projects, skills, and writing. Answers come from my notes.',
   path: '/ask'
 })
 
@@ -18,8 +18,8 @@ export default function AskPage() {
         <div className="content animate-reveal">
           <PageTitle title="Ask" />
           <p className="text-[13.5px] leading-relaxed text-zinc-500">
-            Ask about my work, projects, skills, or how to reach me. A small RAG pipeline finds the matching parts of my
-            resume, and an AI model answers from them.
+            Ask about my work, projects, skills, writing, or how to reach me. A small RAG pipeline finds the matching
+            notes and blog sections, and an AI model answers from them.
           </p>
           <AskChat />
         </div>

@@ -1,7 +1,7 @@
-// Shows which knowledge chunks the /ask chat retrieves for a question.
+// Shows which chunks the /ask chat retrieves for a question.
 // Usage: bun run knowledge:check -- "What did he build with RAG?"
 
-import { retrieve, suggestQuestions } from '../src/lib/knowledge.js'
+import { retrieveDetailed, suggestQuestions } from '../src/lib/knowledge.js'
 
 const query = process.argv.slice(2).join(' ').trim()
 if (!query) {
@@ -9,10 +9,13 @@ if (!query) {
   process.exit(1)
 }
 
-const chunks = retrieve(query)
+const { mode, chunks } = await retrieveDetailed(query)
+console.error(`retrieval: ${mode}`)
 for (const chunk of chunks) {
-  const score = chunk.score === undefined ? 'pinned' : chunk.score.toFixed(2)
-  console.log(`${score.padStart(6)}  ${chunk.id}  (${chunk.topic} — ${chunk.heading})`)
+  // BM25 scores are larger than 1. RRF scores sit near 0.03, so they need more digits.
+  const score =
+    chunk.score === undefined ? 'pinned' : chunk.score >= 0.1 ? chunk.score.toFixed(2) : chunk.score.toFixed(4)
+  console.log(`${score.padStart(8)}  ${chunk.id}  (${chunk.topic} — ${chunk.heading})`)
 }
 console.log('\nSuggested next:')
 for (const question of suggestQuestions(chunks, { asked: [query] })) console.log(`  - ${question}`)

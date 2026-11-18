@@ -1,0 +1,146 @@
+{
+  "k": [4, 8],
+  "questions": [
+    {
+      "question": "Where did he study?",
+      "relevant": ["education#education"]
+    },
+    {
+      "question": "What is his CGPA?",
+      "relevant": ["education#education"]
+    },
+    {
+      "question": "How can I contact him?",
+      "relevant": ["contact#contact-details-and-links"]
+    },
+    {
+      "question": "How is LexIQ evaluated?",
+      "relevant": ["projects#lexiq-eval-driven-rag-platform"]
+    },
+    {
+      "question": "Which job boards does CallAaya pull from?",
+      "relevant": ["projects#callaaya-ai-job-fit-engine"]
+    },
+    {
+      "question": "What did he work on at PepCoding?",
+      "relevant": ["experience#full-stack-web-developer-pepcoding-sep-2023-to-aug-2024"]
+    },
+    {
+      "question": "Which programming languages does he use?",
+      "relevant": ["skills#programming-languages"]
+    },
+    {
+      "question": "How popular are his Zed editor themes?",
+      "relevant": ["projects#zed-editor-themes"]
+    },
+    {
+      "question": "What did he do at the AWS Cloud Club?",
+      "relevant": ["education#leadership-aws-cloud-club-bennett-university"]
+    },
+    {
+      "question": "Which agents make up Tandem?",
+      "relevant": ["projects#tandem-multi-agent-research-copilot"]
+    },
+    {
+      "question": "How did his fine-tuned model compare to GPT-4o-mini?",
+      "relevant": [
+        "experience#ai-research-intern-applied-llm-systems-sidecar-bennett-university-hatchery-jun-2026-to-present"
+      ]
+    },
+    {
+      "question": "How does ClassVault enforce access control?",
+      "relevant": ["projects#classvault-notes-platform-for-college-students"]
+    },
+    {
+      "question": "What did he build for Technofame Research Journal?",
+      "relevant": ["experience#freelance-full-stack-developer-technofame-research-journal-feb-2025-to-jun-2025"]
+    },
+    {
+      "question": "What is he learning right now?",
+      "relevant": ["focus#current-focus-agentic-rag"]
+    },
+    {
+      "question": "Is he AWS certified?",
+      "relevant": ["education#certifications", "skills#web-data-and-infrastructure"]
+    },
+    {
+      "question": "Why does a React onError handler miss an image that 404s before hydration?",
+      "relevant": ["writing/react-onerror-before-hydration#the-image-failed-before-react-got-there"]
+    },
+    {
+      "question": "How can the page tell a cover image already failed without waiting for another error event?",
+      "relevant": ["writing/react-onerror-before-hydration#the-browser-still-knows-the-image-is-broken"]
+    },
+    {
+      "question": "What number shows whether a GPU is waiting on memory or on math?",
+      "relevant": ["writing/splitting-prefill-and-decode#the-back-of-the-envelope"]
+    },
+    {
+      "question": "Why does a long prompt make streaming replies stutter when prefill and decode share a GPU?",
+      "relevant": ["writing/splitting-prefill-and-decode#what-goes-wrong-on-a-shared-gpu"]
+    },
+    {
+      "question": "What happens to a bookmark submission if the moderation service is down?",
+      "relevant": ["writing/moderating-bookmarks-with-jev#if-jev-is-down-nothing-changes"]
+    },
+    {
+      "question": "How does the bookmark preview fetch avoid requesting internal network addresses?",
+      "relevant": ["writing/moderating-bookmarks-with-jev#the-part-that-wasn-t-about-ai"]
+    },
+    {
+      "question": "What project policy does he suggest for when Codex should spawn subagents?",
+      "relevant": ["writing/codex-subagents#make-the-habit-explicit-in-agents-md"]
+    },
+    {
+      "question": "How do I make Next.js fetch a hero image at high priority?",
+      "relevant": ["writing/optimizing-nextjs-lcp#implementation-in-next-js"]
+    },
+    {
+      "question": "Why do CSS scroll-driven animations keep running when the main thread is busy?",
+      "relevant": ["writing/css-scroll-timelines#performance-benefits"]
+    },
+    {
+      "question": "Which three terms make up expected squared error?",
+      "relevant": ["writing/bias-and-variance#the-equation-earns-its-keep"]
+    },
+    {
+      "question": "What is double descent, and how does it complicate the bias-variance curve?",
+      "relevant": ["writing/bias-and-variance#where-complexity-helps-then-hurts"]
+    },
+    {
+      "question": "How did moving retrieved notes into their own system message stop a fake-sources prompt injection?",
+      "relevant": ["writing/resume-rag-without-a-vector-database#then-i-tried-to-break-it"]
+    },
+    {
+      "question": "Where did he go to college?",
+      "relevant": ["education#education"]
+    },
+    {
+      "question": "Which internship tracked GitHub collaboration for students?",
+      "relevant": ["experience#full-stack-developer-intern-bcs-infallible-sep-2024-to-mar-2025"]
+    },
+    {
+      "question": "How are CSS scroll timelines declared without giving them a name?",
+      "relevant": ["writing/css-scroll-timelines#creating-an-anonymous-timeline"]
+    },
+    {
+      "question": "What should I check in DevTools after marking a Next.js image as priority?",
+      "relevant": ["writing/optimizing-nextjs-lcp#verifying-the-impact"]
+    },
+    {
+      "question": "When is splitting prefill and decode across GPUs not worth the handoff?",
+      "relevant": ["writing/splitting-prefill-and-decode#when-it-s-not-worth-it"]
+    },
+    {
+      "question": "How does he decide whether a submitted bookmark URL is spam?",
+      "relevant": ["writing/moderating-bookmarks-with-jev#three-questions-one-request"]
+    },
+    {
+      "question": "How do I attach a CSS animation to scrolling without a JavaScript scroll listener?",
+      "relevant": [
+        "writing/css-scroll-timelines#introduction",
+        "writing/css-scroll-timelines#creating-an-anonymous-timeline"
+      ]
+    }
+  ]
+}

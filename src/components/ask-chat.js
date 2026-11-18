@@ -112,15 +112,22 @@ function Message({ message, isStreaming }) {
       {!isStreaming && message.sources?.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 pl-1">
           <span className="text-[11px] text-zinc-400">Sources:</span>
-          {message.sources.map((source) => (
-            <span
-              key={source.id}
-              title={`${source.topic} — ${source.heading}`}
-              className="max-w-56 truncate rounded-full border bg-white px-2 py-0.5 text-[11px] text-zinc-500"
-            >
-              {source.topic}: {source.heading}
-            </span>
-          ))}
+          {message.sources.map((source) => {
+            const className = 'max-w-56 truncate rounded-full border bg-white px-2 py-0.5 text-[11px] text-zinc-500'
+            const label = `${source.topic}: ${source.heading}`
+            // href is attached by the route from the corpus, not from the model.
+            const href =
+              typeof source.href === 'string' && /^\/writing\/[a-z0-9-]+$/.test(source.href) ? source.href : ''
+            return href ? (
+              <a key={source.id} href={href} title={label} className={cn(className, 'hover:text-zinc-800')}>
+                {label}
+              </a>
+            ) : (
+              <span key={source.id} title={label} className={className}>
+                {label}
+              </span>
+            )
+          })}
         </div>
       )}
     </div>
