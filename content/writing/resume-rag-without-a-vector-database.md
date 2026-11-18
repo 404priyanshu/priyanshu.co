@@ -16,12 +16,12 @@ cost, and what happens when someone types something you didn't plan for. Four ru
 - **Be cheap enough to leave on a public page.**
 - **Stay small enough that I understand every line.**
 
-The last rule ended up shaping everything else. Here's the whole path a question takes.
+The last rule ended up shaping everything else. Here's the path a question took in the first version.
 
 <ArticleFigure
   src="/assets/writing/resume-rag-without-a-vector-database/ask-pipeline.svg"
-  alt="The path of one question through the Ask page in five steps. 1: a visitor asks a question. 2: the route validates it, checks for bots and applies a rate limit of 20 questions per 10 minutes per IP. 3: BM25 picks up to four of the 19 resume sections, plus the pinned profile summary, using the question and the previous one. 4: the route builds the messages: the system prompt, earlier turns, the sources as their own system message, and the question as the only user message. 5: the model's answer streams back as plain text, while two headers carry the sources used and up to three suggested next questions."
-  caption="Everything before step 5 is ordinary JavaScript. Only the last step calls a model."
+  alt="Diagram of the original Ask pipeline, before the blog was added to the index. 1: a visitor asks a question. 2: the route validates it, checks for bots and applies a rate limit of 20 questions per 10 minutes per IP. 3: BM25 picks up to four of the 19 resume sections, plus the pinned profile summary, using the question and the previous one. 4: the route builds the messages: the system prompt, earlier turns, the sources as their own system message, and the question as the only user message. 5: the model's answer streams back as plain text, while two headers carry the sources used and up to three suggested next questions."
+  caption="The original pipeline. Everything before the model call was ordinary JavaScript. The update at the end is what runs now."
   width="520"
   height="440"
   size="compact"
@@ -32,13 +32,13 @@ The last rule ended up shaping everything else. Here's the whole path a question
 The usual RAG recipe is: split your documents, embed every chunk, store the vectors, embed each question, and fetch the
 nearest chunks.
 
-My whole knowledge base is about 12 KB of Markdown in 19 sections. At that size, embeddings buy very little and cost a
-lot of moving parts: an embedding API call for every question, somewhere to keep the vectors, and a ranking I can't
-easily explain when it picks the wrong section.
+The knowledge base I started with was about 12 KB of Markdown in 19 sections, plus the pinned profile summary. At that
+size, embeddings buy very little and cost a lot of moving parts: an embedding API call for every question, somewhere to
+keep the vectors, and a ranking I can't easily explain when it picks the wrong section.
 
 **BM25** is the opposite trade. It's a keyword ranking function from the 1990s, still the baseline that search papers
-compare against. It needs no model, it ranks all 19 chunks in about 17 microseconds, and when it picks the wrong section
-I can see exactly which words caused it.
+compare against. It needs no model. On those 19 sections it ranked every chunk in about 17 microseconds, and when it
+picked the wrong section I could see exactly which words caused it.
 
 Its weakness is vocabulary. If someone asks about "college" and my resume only says "university", BM25 has nothing to
 match. I handle that in the content rather than the code, as you'll see next.
@@ -278,6 +278,8 @@ At that price, a thousand questions cost about twenty cents. The spend limit on 
 
 ## What I'd do next
 
+This was the list before the notes grew past the resume.
+
 **A real evaluation set.** I tested this by hand: a couple of dozen questions, the injection attacks, and the "boring
 failures" like "What's his salary expectation?", which should get "I don't know, email him" rather than a confident
 guess. That doesn't scale. The next step is a small golden set that runs in CI and checks both retrieval (did the right
@@ -289,5 +291,32 @@ section come back?) and the answer (does it stay inside the sources?).
 next to it, then merge the two rankings. Keyword search would still catch the exact names, like "QLoRA" or "pgvector",
 that embeddings tend to blur.
 
-Until then, 19 Markdown sections and a few dozen lines of BM25 do the job. [Go and ask it something](/ask), and if you
-find a way to make it lie about me, I'd genuinely like to know.
+## Update: blog posts, hybrid retrieval, still no vector database
+
+The index now includes `content/writing/` as well as the resume notes. The same rule applies: one chunk per `##`
+heading, and the lead-in before the first heading is its own chunk. A fenced code sample can contain a `##` line, so the
+splitter ignores headings inside fences. Each blog chunk keeps the post title and a URL, and the source tag the model
+sees is labelled `Blog post:`, so an answer can name the post it used.
+
+Ranking is hybrid. BM25 still runs on every question. A small local model, `all-MiniLM-L6-v2`, scores the same chunks by
+meaning. The route takes the top 20 from each list and merges them with reciprocal rank fusion: a chunk at rank `r` adds
+`1 / (60 + r)`. The top four fused chunks go to the model, with the pinned profile summary. Keyword search still catches
+exact names. The embedding list is what pulls Education above the ClassVault "college students" heading when the
+question says "college".
+
+There is still no vector database. `bun run knowledge:embed` writes one JSON file of document vectors, and that file is
+committed. A request embeds only the question, then dots it with those vectors. A few hundred dots do not need a
+service.
+
+BM25 is the fallback, not a mode you turn on. The route keeps the keyword ranking when the file is missing, when its
+hash no longer matches the Markdown, when the local model fails to load, or when the index was built with
+`EMBEDDING_PROVIDER=openai` and `OPENAI_API_KEY` is missing or the call fails. Chat can stay on Groq. The default index
+does not call OpenAI at all. Rebuilding with `text-embedding-3-small` (256 dimensions) is there for anyone who wants
+that model instead, and it reuses the OpenAI key the chat already understands.
+
+`bun run knowledge:eval` runs the labelled questions in `evals/ask-retrieval.json` and prints recall@k and MRR for BM25
+and for the fusion. It checks whether the right section came back. It does not check whether the answer stayed inside
+those sections. The shared rate limit is still open too.
+
+Blog sections are longer than resume notes, so a question that retrieves a post sends more tokens than the cost table
+above. The embedding step itself adds no API charge on the committed index. [Go and ask it something](/ask).

@@ -10,6 +10,7 @@ bookmarks.
 - **🛠️ Stack** - Technologies and tools I use
 - **💼 Workspace** - My desk setup and gear
 - **🔖 Bookmarks** - Curated collection of useful links via Raindrop.io
+- **💬 Ask** - RAG chat over the resume notes and blog posts
 - **📊 Analytics** - View counts and visitor tracking with Supabase
 - **🎨 Modern UI** - Clean, responsive design with Tailwind CSS
 
@@ -59,6 +60,15 @@ RAINDROP_TOKEN=your_raindrop_token
 
 # Tinybird (optional - for analytics)
 NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_token
+
+# Ask chat (/ask). See .env.example. Hybrid retrieval uses the committed
+# local embedding index and does not need a key. BM25 answers if that index
+# is missing. EMBEDDING_PROVIDER=openai rebuilds it with text-embedding-3-small
+# and then needs OPENAI_API_KEY at request time.
+CHAT_PROVIDER=
+OPENAI_API_KEY=
+GROQ_API_KEY=
+EMBEDDING_PROVIDER=
 ```
 
 ## 📝 Adding Blog Posts

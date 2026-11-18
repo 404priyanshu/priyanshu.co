@@ -176,12 +176,24 @@ const nextConfig = {
     optimizePackageImports: ['framer-motion', '@supabase/supabase-js', 'react-tweet'],
     webVitalsAttribution: ['FCP', 'LCP', 'CLS', 'FID', 'TTFB', 'INP']
   },
+  // The native ONNX runtime and the transformers package load files from
+  // node_modules at request time. Bundling them breaks the .node addon.
+  serverExternalPackages: ['@huggingface/transformers', 'onnxruntime-node'],
   // og.png reads these at request time through a relative path the tracer
   // cannot follow, so they would not otherwise reach the serverless bundle.
   outputFileTracingIncludes: {
     '/bookmarks/[slug]/og.png': ['./src/assets/fonts/Geist-Regular.otf', './src/assets/fonts/Geist-Medium.otf'],
-    // The chat's knowledge base is read with fs at request time.
-    '/api/chat': ['./content/knowledge/**/*.md']
+    // The chat reads the corpus, the embedding index, and the local model
+    // with fs at request time. Dynamic paths are otherwise invisible to the tracer.
+    '/api/chat': [
+      './content/knowledge/**/*.md',
+      './content/writing/**/*.md',
+      './data/ask-embeddings.json',
+      './data/models/all-MiniLM-L6-v2/**',
+      // The .node addon dlopens libonnxruntime from this directory. The tracer
+      // follows the require(), not that dlopen, so name the directory.
+      './node_modules/onnxruntime-node/bin/napi-v3/linux/x64/**'
+    ]
   },
   transpilePackages: ['geist']
 }
