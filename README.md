@@ -51,8 +51,8 @@ Create a `.env.local` file in the root directory:
 
 ```bash
 # Supabase (for view counting)
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 
 # Raindrop (for bookmarks)
 RAINDROP_TOKEN=your_raindrop_token
