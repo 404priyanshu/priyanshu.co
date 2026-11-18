@@ -8,6 +8,7 @@ import {
   reciprocalRankFusion,
   retrieveBm25,
   retrieveDetailed,
+  splitSections,
   suggestQuestions
 } from './knowledge.js'
 
@@ -56,6 +57,20 @@ describe('corpus', () => {
     assert.equal(chunks[0].pinned, true)
     assert.ok(chunks.some((chunk) => chunk.id === 'education#education'))
     assert.ok(suggestQuestions(chunks, { asked: ['Where did he study?'] }).length > 0)
+  })
+})
+
+describe('section splitting', () => {
+  it('keeps a shorter fence from closing a longer one', () => {
+    const { sections } = splitSections(
+      ['## Real', '````md', '## Not a heading', '```', 'still in the fence', '````', '## After'].join('\n')
+    )
+    assert.deepEqual(
+      sections.map((section) => section.heading),
+      ['Real', 'After']
+    )
+    assert.match(sections[0].body, /## Not a heading/)
+    assert.match(sections[0].body, /still in the fence/)
   })
 })
 

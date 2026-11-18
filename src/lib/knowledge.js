@@ -101,8 +101,9 @@ export function cleanText(raw) {
 }
 
 // `##` inside a fenced code sample is not a section. The resume post quotes
-// the education chunk this way.
-function splitSections(body) {
+// the education chunk this way. A closing fence must use the same character
+// and be at least as long as the opening one, so ``` does not end a ```` fence.
+export function splitSections(body) {
   const lines = body.split(/\r?\n/)
   let fence = null
   const preamble = []
@@ -111,11 +112,12 @@ function splitSections(body) {
   const push = (line) => (current ? current.lines.push(line) : preamble.push(line))
 
   for (const line of lines) {
-    const marker = line.match(/^\s*(`{3,}|~{3,})/)
+    const marker = line.match(/^\s*(`{3,}|~{3,})(.*)$/)
     if (marker) {
-      const token = marker[1][0]
-      if (!fence) fence = token
-      else if (token === fence) fence = null
+      const token = marker[1]
+      const rest = marker[2]
+      if (!fence) fence = { char: token[0], length: token.length }
+      else if (token[0] === fence.char && token.length >= fence.length && rest.trim() === '') fence = null
       push(line)
       continue
     }
@@ -276,8 +278,7 @@ function publicChunk({ id, topic, heading, text, pinned, questions, source, href
  * Non-pinned chunks with a positive BM25 score, best first.
  * Each row is `{ chunk, score }`.
  */
-export function rankBm25(query) {
-  const index = getIndex()
+export function rankBm25(query, index = getIndex()) {
   const queryTokens = tokenize(query)
   return index.chunks
     .filter((chunk) => !chunk.pinned)
@@ -338,10 +339,9 @@ function resolveStore(hash, store) {
  * Pinned chunks plus up to `limit` BM25 matches. The relative cutoff drops
  * weak scores. This is the result the chat uses whenever embeddings are off.
  */
-export function retrieveBm25(query, { limit = 4 } = {}) {
-  const index = getIndex()
+export function retrieveBm25(query, { limit = 4, index = getIndex() } = {}) {
   const pinned = index.chunks.filter((chunk) => chunk.pinned).map(publicChunk)
-  const ranked = rankBm25(query)
+  const ranked = rankBm25(query, index)
   const best = ranked[0]?.score ?? 0
   const matches = ranked
     .filter(({ score }) => score >= best * RELATIVE_CUTOFF)
@@ -350,11 +350,10 @@ export function retrieveBm25(query, { limit = 4 } = {}) {
   return [...pinned, ...matches]
 }
 
-function hybridChunks(query, queryVector, store, limit) {
-  const index = getIndex()
+function hybridChunks(query, queryVector, store, limit, index) {
   const pinned = index.chunks.filter((chunk) => chunk.pinned).map(publicChunk)
   const byId = new Map(index.chunks.map((chunk) => [chunk.id, chunk]))
-  const lexicalIds = rankBm25(query).map(({ chunk }) => chunk.id)
+  const lexicalIds = rankBm25(query, index).map(({ chunk }) => chunk.id)
   const denseIds = rankByEmbedding(
     queryVector,
     store,
@@ -379,8 +378,10 @@ function hybridChunks(query, queryVector, store, limit) {
  * forces the BM25 path. Pass `embedQuery` to replace the network or model call.
  */
 export async function retrieveDetailed(query, { limit = 4, embeddings, embedQuery: embedOverride } = {}) {
-  const lexical = retrieveBm25(query, { limit })
+  // One index for the whole request. In development getIndex rebuilds on every
+  // call, so a second call could hash a different corpus than the one just ranked.
   const index = getIndex()
+  const lexical = retrieveBm25(query, { limit, index })
   const store = resolveStore(index.corpusHash, embeddings === undefined ? loadEmbeddingStore() : embeddings)
   if (!store) return { mode: 'bm25', chunks: lexical }
 
@@ -403,7 +404,7 @@ export async function retrieveDetailed(query, { limit = 4, embeddings, embedQuer
     return { mode: 'bm25', chunks: lexical }
   }
 
-  return { mode: 'hybrid', chunks: hybridChunks(query, queryVector, store, limit) }
+  return { mode: 'hybrid', chunks: hybridChunks(query, queryVector, store, limit, index) }
 }
 
 export async function retrieve(query, options) {
