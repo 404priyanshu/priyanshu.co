@@ -34,6 +34,11 @@
   --color-zinc-50: #f8f8f5;
   --color-zinc-100: #f0efeb;
   --color-zinc-200: #e4e2dc;
+  /* In-between shades that Tailwind does not ship: hairline borders (150) and link
+     underlines (350). 150 sits halfway between the warm 100 and 200; 350 sits halfway
+     between the default zinc-300 and zinc-400. */
+  --color-zinc-150: #eae9e4;
+  --color-zinc-350: oklch(78.8% 0.0105 286.2);
 }
 
 /*
